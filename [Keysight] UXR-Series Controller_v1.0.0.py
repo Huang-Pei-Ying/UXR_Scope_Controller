@@ -9,7 +9,7 @@ import time
 import sys
 import numpy as np
 
-window_name= '[Keysight] MXR/EXR-Series Controller_v4.6.4'
+window_name= '[Keysight] UXR-Series Controller_v1.0.0'
 
 # 第一個視窗取得scope id並開啟主視窗
 def show_main_window(old_scope_ips):
