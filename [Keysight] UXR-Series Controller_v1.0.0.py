@@ -63,8 +63,14 @@ def main_window(scope_ip):
         RealTimeMemoryDepth = config_initial['Real_Time_Selected_Values']['RealTimeMemoryDepth']
         RealTimeHistogram = config_initial['Real_Time_Selected_Values']['RealTimeHistogram']
         RealTimeVoltageMeas = config_initial['Real_Time_Selected_Values']['RealTimeVoltageMeas']
+        RealTimeEyeWidth = config_initial['Real_Time_Selected_Values']['RealTimeEyeWidth']
+        RealTimeEyeHeight = config_initial['Real_Time_Selected_Values']['RealTimeEyeHeight']
+        RealTimeCDRFrequency = config_initial['Real_Time_Selected_Values']['RealTimeCDRFrequency']
         RealTimeMask = config_initial['Real_Time_Selected_Values']['RealTimeMask']
         RealTimeMaskPath = config_initial['Real_Time_Selected_Values']['RealTimeMaskPath']
+
+        SignalType = config_initial['100MHz_PCIE_CLK_Config']['SignalType']
+        SignalLength = config_initial['100MHz_PCIE_CLK_Config']['SignalLength']
 
         SamplingRate = config_initial['Acquisition']['SamplingRate']
         MemoryDepth = config_initial['Acquisition']['MemoryDepth']
@@ -73,27 +79,32 @@ def main_window(scope_ip):
         ChanLabel2 = config_initial['Lable_Setup_Config']['ChanLabel2']
         ChanLabel3 = config_initial['Lable_Setup_Config']['ChanLabel3']
         ChanLabel4 = config_initial['Lable_Setup_Config']['ChanLabel4']
-        WMeLabel1 = config_initial['Lable_Setup_Config']['WMeLabel1']
-        WMeLabel2 = config_initial['Lable_Setup_Config']['WMeLabel2']
-        WMeLabel3 = config_initial['Lable_Setup_Config']['WMeLabel3']
-        WMeLabel4 = config_initial['Lable_Setup_Config']['WMeLabel4']
+        # WMeLabel1 = config_initial['Lable_Setup_Config']['WMeLabel1']
+        # WMeLabel2 = config_initial['Lable_Setup_Config']['WMeLabel2']
+        # WMeLabel3 = config_initial['Lable_Setup_Config']['WMeLabel3']
+        # WMeLabel4 = config_initial['Lable_Setup_Config']['WMeLabel4']
 
         ChanSingle = config_initial['Chan_Delta']['ChanSingle']
 
-        SaveImgFolder = config_initial['Save_Setup_Config']['SaveImgFolder']
-        SaveImgLocation = config_initial['Save_Setup_Config']['SaveImgLocation']
-        SaveImgPCFolder = config_initial['Save_Setup_Config']['SaveImgPCFolder']
-        SaveImgName = config_initial['Save_Setup_Config']['SaveImgName']
-        SaveWMeFolder = config_initial['Save_Setup_Config']['SaveWMeFolder']
-        SaveWMeLocation = config_initial['Save_Setup_Config']['SaveWMeLocation']
-        SaveWMePCFolder = config_initial['Save_Setup_Config']['SaveWMePCFolder']
-        SaveWMeName = config_initial['Save_Setup_Config']['SaveWMeName']
+        SaveFileType = config_initial['Save_Setup_Config']['SaveFileType']
+        SaveLocation = config_initial['Save_Setup_Config']['SaveLocation']
+        SaveFolder = config_initial['Save_Setup_Config']['SaveFolder']
+        # SaveImgPCFolder = config_initial['Save_Setup_Config']['SaveImgPCFolder']
+        SaveFileName = config_initial['Save_Setup_Config']['SaveFileName']
+        # SaveWMeFolder = config_initial['Save_Setup_Config']['SaveWMeFolder']
+        # SaveWMeLocation = config_initial['Save_Setup_Config']['SaveWMeLocation']
+        # SaveWMePCFolder = config_initial['Save_Setup_Config']['SaveWMePCFolder']
+        # SaveWMeName = config_initial['Save_Setup_Config']['SaveWMeName']
 
-        LoadWMe1 = config_initial['Load_WMemory_Setup_Config']['LoadWMe1']
-        LoadWMe2 = config_initial['Load_WMemory_Setup_Config']['LoadWMe2']
-        LoadWMe3 = config_initial['Load_WMemory_Setup_Config']['LoadWMe3']
-        LoadWMe4 = config_initial['Load_WMemory_Setup_Config']['LoadWMe4']
-        LoadSetup = config_initial['Load_WMemory_Setup_Config']['LoadSetup']
+        # LoadWMe1 = config_initial['Load_Config']['LoadWMe1']
+        # LoadWMe2 = config_initial['Load_Config']['LoadWMe2']
+        # LoadWMe3 = config_initial['Load_Config']['LoadWMe3']
+        # LoadWMe4 = config_initial['Load_Config']['LoadWMe4']
+        LoadFolder = config_initial['Load_Config']['LoadFolder']
+        LoadLocation = config_initial['Load_Config']['LoadLocation']
+        LoadFileName = config_initial['Load_Config']['LoadFileName']
+        LoadTimeBase = config_initial['Load_Config']['LoadTimeBase']
+        LoadLabel = config_initial['Load_Config']['LoadLabel']
 
         str_volt_scale.set(value= select_VoltScale)
         str_volt_offset.set(value= select_VoltOffset)
@@ -116,8 +127,14 @@ def main_window(scope_ip):
         str_realtime_memory_depth.set(value= RealTimeMemoryDepth)
         boolvar_histogram.set(value= RealTimeHistogram)
         boolvar_voltage_meas.set(value= RealTimeVoltageMeas)
+        boolvar_eyewidth.set(value= RealTimeEyeWidth)
+        boolvar_eyeheight.set(value= RealTimeEyeHeight)
+        boolvar_cdrfrequency.set(value= RealTimeCDRFrequency)
         boolvar_mask_test.set(value= RealTimeMask)
         str_mask.set(value= RealTimeMaskPath)
+
+        int_signal_type.set(value= SignalType)
+        int_signal_length.set(value= SignalLength)
 
         str_sampling_rate.set(value= SamplingRate)
         str_memory_depth.set(value= MemoryDepth)
@@ -126,30 +143,34 @@ def main_window(scope_ip):
         str_label_2.set(value= ChanLabel2)
         str_label_3.set(value= ChanLabel3)
         str_label_4.set(value= ChanLabel4)
-        str_label_5.set(value= WMeLabel1)
-        str_label_6.set(value= WMeLabel2)
-        str_label_7.set(value= WMeLabel3)
-        str_label_8.set(value= WMeLabel4)
+        # str_label_5.set(value= WMeLabel1)
+        # str_label_6.set(value= WMeLabel2)
+        # str_label_7.set(value= WMeLabel3)
+        # str_label_8.set(value= WMeLabel4)
 
         str_ch.set(value= str(ChanSingle))
         # int_ch_delta_start.set(value= int(ChanStart))
         # int_ch_delta_stop.set(value= int(ChanStop))
 
-        str_image_folder.set(value= SaveImgFolder)
-        int_img_path_choice.set(value= SaveImgLocation)
-        str_image_pc_folder.set(value= SaveImgPCFolder)
-        str_image.set(value= SaveImgName)
-        str_WMe_folder.set(value= SaveWMeFolder)
-        int_wme_path_choice.set(value= SaveWMeLocation)
-        str_WMe_pc_folder.set(value= SaveWMePCFolder)
-        str_other_file.set(value= SaveWMeName)
+        int_file_type.set(value= SaveFileType)
+        int_save_location_choice.set(value= SaveLocation)
+        str_save_folder.set(value= SaveFolder)
+        # str_image_pc_folder.set(value= SaveImgPCFolder)
+        str_save_filename.set(value= SaveFileName)
+        # str_WMe_folder.set(value= SaveWMeFolder)
+        # int_wme_path_choice.set(value= SaveWMeLocation)
+        # str_WMe_pc_folder.set(value= SaveWMePCFolder)
+        # str_other_file.set(value= SaveWMeName)
 
-        str_WMe1.set(value= LoadWMe1)
-        str_WMe2.set(value= LoadWMe2)
-        str_WMe3.set(value= LoadWMe3)
-        str_WMe4.set(value= LoadWMe4)
-        str_setup.set(value= LoadSetup)
-
+        # str_WMe1.set(value= LoadWMe1)
+        # str_WMe2.set(value= LoadWMe2)
+        # str_WMe3.set(value= LoadWMe3)
+        # str_WMe4.set(value= LoadWMe4)
+        int_load_location_choice.set(value= int(LoadLocation))
+        str_load_folder.set(value= LoadFolder)
+        str_load_filename.set(value= LoadFileName)
+        boolvar_load_timebase.set(value= LoadTimeBase)
+        boolvar_load_label.set(value= LoadLabel)
 
     class UXR:
 
@@ -193,17 +214,17 @@ def main_window(scope_ip):
         #         time.sleep(0.05)
         
         ## Threshold Reslated ###
-        def RF_threshold(self, rf_top, rf_base, rf_top_percent, rf_base_percent):
-            if int_rf_thres.get() == 1:
-                self.inst.write(f':MEASure:THResholds:RFALl:METHod ALL,PERCent')
-                time.sleep(0.05)
-                self.inst.write(f':MEASure:THResholds:RFALl:PERCent ALL,{rf_top_percent},{(float(rf_top_percent)+float(rf_base_percent))/2},{rf_base_percent}')
-                time.sleep(0.05)
-            elif int_rf_thres.get() == 2:
-                self.inst.write(f':MEASure:THResholds:RFALl:METHod ALL,ABSolute')
-                time.sleep(0.05)
-                self.inst.write(f':MEASure:THResholds:RFALl:ABSolute ALL,{rf_top},{(float(rf_top)+float(rf_base))/2},{rf_base}')
-                time.sleep(0.05)
+        # def RF_threshold(self, rf_top, rf_base, rf_top_percent, rf_base_percent):
+        #     if int_rf_thres.get() == 1:
+        #         self.inst.write(f':MEASure:THResholds:RFALl:METHod ALL,PERCent')
+        #         time.sleep(0.05)
+        #         self.inst.write(f':MEASure:THResholds:RFALl:PERCent ALL,{rf_top_percent},{(float(rf_top_percent)+float(rf_base_percent))/2},{rf_base_percent}')
+        #         time.sleep(0.05)
+        #     elif int_rf_thres.get() == 2:
+        #         self.inst.write(f':MEASure:THResholds:RFALl:METHod ALL,ABSolute')
+        #         time.sleep(0.05)
+        #         self.inst.write(f':MEASure:THResholds:RFALl:ABSolute ALL,{rf_top},{(float(rf_top)+float(rf_base))/2},{rf_base}')
+        #         time.sleep(0.05)
 
         def gen_threshold(self, g_top, g_middle, g_base, g_top_percent, g_middle_percent, g_base_percent):
             if int_gen_thres.get() == 1:
@@ -306,21 +327,21 @@ def main_window(scope_ip):
                 time.sleep(0.05)
                 self.add_bookmark(choose_type= choose_type,bookmark= bookmark, chan= chan)
 
-        def display_WMemory(self, chan, bookmark, choose_type):
-            res= self.inst.query(f':WMEMory{chan}:DISPlay?')
-            time.sleep(0.05)
-            if res == '1\n':
-                self.inst.write(f':WMEMory{chan}:DISPlay OFF')
-                time.sleep(0.05)
-                try:
-                    self.inst.write(f':DISPlay:BOOKmark{chan+4}:DELete')
-                    time.sleep(0.05)
-                except:
-                    pass
-            else:
-                self.inst.write(f':WMEMory{chan}:DISPlay ON')
-                time.sleep(0.05)
-                self.add_bookmark(choose_type= choose_type, bookmark= bookmark, chan= chan+4)
+        # def display_WMemory(self, chan, bookmark, choose_type):
+        #     res= self.inst.query(f':WMEMory{chan}:DISPlay?')
+        #     time.sleep(0.05)
+        #     if res == '1\n':
+        #         self.inst.write(f':WMEMory{chan}:DISPlay OFF')
+        #         time.sleep(0.05)
+        #         try:
+        #             self.inst.write(f':DISPlay:BOOKmark{chan+4}:DELete')
+        #             time.sleep(0.05)
+        #         except:
+        #             pass
+        #     else:
+        #         self.inst.write(f':WMEMory{chan}:DISPlay ON')
+        #         time.sleep(0.05)
+        #         self.add_bookmark(choose_type= choose_type, bookmark= bookmark, chan= chan+4)
         
         ### Measurement Related ###
         def called_meas_function(self, chan, command_templates: dict):
@@ -611,13 +632,13 @@ def main_window(scope_ip):
                 total_folder_path = f"C:/Users/Administrator/Desktop/{folder}"
             self.inst.write(f':DISK:LOAD "{total_folder_path}/{setup_name}.set"')
             time.sleep(0.05)
-            if boolvar_setup_timebase.get() == True:
+            if boolvar_load_timebase.get() == True:
                 self.timebase_scale_check(scale= scale)
                 self.timebase_position_check(position= position)
-            if boolvar_setup_label.get() == True:
+            if boolvar_load_label.get() == True:
                 label_content = [
                     str_label_1, str_label_2, str_label_3, str_label_4, 
-                    str_label_5, str_label_6, str_label_7, str_label_8, 
+                    # str_label_5, str_label_6, str_label_7, str_label_8, 
                     ]
                 for i in range(8):
                     self.add_bookmark(choose_type= choose_type, bookmark= label_content[i].get().rstrip('\n'), chan= i+1)
@@ -1115,14 +1136,14 @@ def main_window(scope_ip):
                 return f"{base} Hz"
 
     ### Others ###
-    def switch_string(var_1, var_2):
-        string_1= var_1.get()
-        string_2= var_2.get()
-        var_1.set(string_2)
-        var_2.set(string_1)
+    # def switch_string(var_1, var_2):
+    #     string_1= var_1.get()
+    #     string_2= var_2.get()
+    #     var_1.set(string_2)
+    #     var_2.set(string_1)
 
-    def clear(string):
-        string.set('')
+    # def clear(string):
+    #     string.set('')
 
     def close_window():
         if messagebox.askyesno('Message', 'Exit?'):
@@ -1154,6 +1175,9 @@ def main_window(scope_ip):
             config.set('Real_Time_Selected_Values', 'RealTimeMask', str(boolvar_mask_test.get()))
             config.set('Real_Time_Selected_Values', 'RealTimeMaskPath', str_mask.get())
             
+            config.set('100MHz_PCIE_CLK_Config', 'SignalType', str(int_signal_type.get()))
+            config.set('100MHz_PCIE_CLK_Config', 'SignalLength', str(int_signal_length.get()))
+
             config.set('Acquisition', 'SamplingRate', str_sampling_rate.get())
             config.set('Acquisition', 'MemoryDepth', str_memory_depth.get())
 
@@ -1161,27 +1185,32 @@ def main_window(scope_ip):
             config.set('Lable_Setup_Config', 'ChanLabel2', str_label_2.get())
             config.set('Lable_Setup_Config', 'ChanLabel3', str_label_3.get())
             config.set('Lable_Setup_Config', 'ChanLabel4', str_label_4.get())
-            config.set('Lable_Setup_Config', 'WMeLabel1', str_label_5.get())
-            config.set('Lable_Setup_Config', 'WMeLabel2', str_label_6.get())
-            config.set('Lable_Setup_Config', 'WMeLabel3', str_label_7.get())
-            config.set('Lable_Setup_Config', 'WMeLabel4', str_label_8.get())
+            # config.set('Lable_Setup_Config', 'WMeLabel1', str_label_5.get())
+            # config.set('Lable_Setup_Config', 'WMeLabel2', str_label_6.get())
+            # config.set('Lable_Setup_Config', 'WMeLabel3', str_label_7.get())
+            # config.set('Lable_Setup_Config', 'WMeLabel4', str_label_8.get())
 
             config.set('Chan_Delta', 'ChanSingle', str_ch.get())
 
-            config.set('Save_Setup_Config', 'SaveImgFolder', str_image_folder.get())
-            config.set('Save_Setup_Config', 'SaveImgLocation', str(int_img_path_choice.get()))
-            config.set('Save_Setup_Config', 'SaveImgPCFolder', str_image_pc_folder.get())
-            config.set('Save_Setup_Config', 'SaveImgName', str_image.get())
-            config.set('Save_Setup_Config', 'SaveWMeFolder', str_WMe_folder.get())
-            config.set('Save_Setup_Config', 'SaveWMeLocation', str(int_wme_path_choice.get()))
-            config.set('Save_Setup_Config', 'SaveWMePCFolder', str_WMe_pc_folder.get())
-            config.set('Save_Setup_Config', 'SaveWMeName', str_other_file.get())
+            config.set('Save_Setup_Config', 'SaveFileType', str(int_file_type.get()))
+            config.set('Save_Setup_Config', 'SaveLocation', str(int_save_location_choice.get()))
+            config.set('Save_Setup_Config', 'SaveFolder', str_save_folder.get())
+            # config.set('Save_Setup_Config', 'SaveImgPCFolder', str_image_pc_folder.get())
+            config.set('Save_Setup_Config', 'SaveFileName', str_save_filename.get())
+            # config.set('Save_Setup_Config', 'SaveWMeFolder', str_WMe_folder.get())
+            # config.set('Save_Setup_Config', 'SaveWMeLocation', str(int_wme_path_choice.get()))
+            # config.set('Save_Setup_Config', 'SaveWMePCFolder', str_WMe_pc_folder.get())
+            # config.set('Save_Setup_Config', 'SaveWMeName', str_other_file.get())
 
-            config.set('Load_WMemory_Setup_Config', 'LoadWMe1', str_WMe1.get())
-            config.set('Load_WMemory_Setup_Config', 'LoadWMe2', str_WMe2.get())
-            config.set('Load_WMemory_Setup_Config', 'LoadWMe3', str_WMe3.get())
-            config.set('Load_WMemory_Setup_Config', 'LoadWMe4', str_WMe4.get())
-            config.set('Load_WMemory_Setup_Config', 'LoadSetup', str_setup.get())
+            # config.set('Load_Config', 'LoadWMe1', str_WMe1.get())
+            # config.set('Load_Config', 'LoadWMe2', str_WMe2.get())
+            # config.set('Load_Config', 'LoadWMe3', str_WMe3.get())
+            # config.set('Load_Config', 'LoadWMe4', str_WMe4.get())
+            config.set('Load_Config', 'LoadLocation', str(int_load_location_choice.get()))
+            config.set('Load_Config', 'LoadFolder', str_load_folder.get())
+            config.set('Load_Config', 'LoadFileName', str_load_filename.get())
+            config.set('Load_Config', 'LoadTimeBase', str(boolvar_load_timebase.get()))
+            config.set('Load_Config', 'LoadLabel', str(boolvar_load_label.get()))
 
             config.write(open(os.path.join(os.path.dirname(__file__), 'InitConfig_setup.ini'), 'w'))
 
@@ -1393,10 +1422,10 @@ def main_window(scope_ip):
     button_chan2 = tk.Button(label_frame_chan, text='Chan2', width= 20, height= 2, command= lambda: uxr.display_Chan(chan= 2, bookmark= str_label_2.get(), choose_type= int_label_type.get()))
     button_chan3 = tk.Button(label_frame_chan, text='Chan3', width= 20, height= 2, command= lambda: uxr.display_Chan(chan= 3, bookmark= str_label_3.get(), choose_type= int_label_type.get()))
     button_chan4 = tk.Button(label_frame_chan, text='Chan4', width= 20, height= 2, command= lambda: uxr.display_Chan(chan= 4, bookmark= str_label_4.get(), choose_type= int_label_type.get()))
-    button_wme1 = tk.Button(label_frame_chan, text='WMemory1', width= 20, height= 2, command= lambda: uxr.display_WMemory(chan= 1, bookmark= str_label_5.get(), choose_type= int_label_type.get()))
-    button_wme2 = tk.Button(label_frame_chan, text='WMemory2', width= 20, height= 2, command= lambda: uxr.display_WMemory(chan= 2, bookmark= str_label_6.get(), choose_type= int_label_type.get()))
-    button_wme3 = tk.Button(label_frame_chan, text='WMemory3', width= 20, height= 2, command= lambda: uxr.display_WMemory(chan= 3, bookmark= str_label_7.get(), choose_type= int_label_type.get()))
-    button_wme4 = tk.Button(label_frame_chan, text='WMemory4', width= 20, height= 2, command= lambda: uxr.display_WMemory(chan= 4, bookmark= str_label_8.get(), choose_type= int_label_type.get()))
+    # button_wme1 = tk.Button(label_frame_chan, text='WMemory1', width= 20, height= 2, command= lambda: uxr.display_WMemory(chan= 1, bookmark= str_label_5.get(), choose_type= int_label_type.get()))
+    # button_wme2 = tk.Button(label_frame_chan, text='WMemory2', width= 20, height= 2, command= lambda: uxr.display_WMemory(chan= 2, bookmark= str_label_6.get(), choose_type= int_label_type.get()))
+    # button_wme3 = tk.Button(label_frame_chan, text='WMemory3', width= 20, height= 2, command= lambda: uxr.display_WMemory(chan= 3, bookmark= str_label_7.get(), choose_type= int_label_type.get()))
+    # button_wme4 = tk.Button(label_frame_chan, text='WMemory4', width= 20, height= 2, command= lambda: uxr.display_WMemory(chan= 4, bookmark= str_label_8.get(), choose_type= int_label_type.get()))
 
     # Scale / Offset Frame ===================================================================================================================================
     label_frame_scale= tk.LabelFrame(window, text= 'Scale / Offset', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
@@ -1484,52 +1513,52 @@ def main_window(scope_ip):
     radiobutton_bookmark.select()
 
     str_label_1 = tk.StringVar()
-    entry_label_1 = tk.Entry(label_frame_label, width= 25, textvariable= str_label_1)
+    entry_label_1 = tk.Entry(label_frame_label, width= 50, textvariable= str_label_1)
 
     button_label_1 = tk.Button(label_frame_label, text= 'Chan1_label', command= lambda: uxr.add_bookmark(choose_type= int_label_type.get(), chan= 1, bookmark= str_label_1.get().rstrip('\n')))
     button_del_label_1 = tk.Button(label_frame_label, text= 'Delete', command= lambda: uxr.delete_bookmark(chan= 1, choose_type= int_label_type.get()))
 
     str_label_2 = tk.StringVar()
-    entry_label_2 = tk.Entry(label_frame_label, width= 25, textvariable= str_label_2)
+    entry_label_2 = tk.Entry(label_frame_label, width= 50, textvariable= str_label_2)
 
     button_label_2 = tk.Button(label_frame_label, text= 'Chan2_label', command= lambda: uxr.add_bookmark(choose_type= int_label_type.get(), chan= 2, bookmark= (str_label_2.get().rstrip('\n'))))
     button_del_label_2 = tk.Button(label_frame_label, text= 'Delete', command= lambda: uxr.delete_bookmark(chan= 2, choose_type= int_label_type.get()))
 
     str_label_3 = tk.StringVar()
-    entry_label_3 = tk.Entry(label_frame_label, width= 25, textvariable= str_label_3)
+    entry_label_3 = tk.Entry(label_frame_label, width= 50, textvariable= str_label_3)
 
     button_label_3 = tk.Button(label_frame_label, text= 'Chan3_label', command= lambda: uxr.add_bookmark(choose_type= int_label_type.get(), chan= 3, bookmark= (str_label_3.get().rstrip('\n'))))
     button_del_label_3 = tk.Button(label_frame_label, text= 'Delete', command= lambda: uxr.delete_bookmark(chan= 3, choose_type= int_label_type.get()))
 
     str_label_4 = tk.StringVar()
-    entry_label_4 = tk.Entry(label_frame_label, width= 25, textvariable= str_label_4)
+    entry_label_4 = tk.Entry(label_frame_label, width= 50, textvariable= str_label_4)
 
     button_label_4 = tk.Button(label_frame_label, text= 'Chan4_label', command= lambda: uxr.add_bookmark(choose_type= int_label_type.get(), chan= 4, bookmark= (str_label_4.get().rstrip('\n'))))
     button_del_label_4 = tk.Button(label_frame_label, text= 'Delete', command= lambda: uxr.delete_bookmark(chan= 4, choose_type= int_label_type.get()))
 
-    str_label_5 = tk.StringVar()
-    entry_label_5 = tk.Entry(label_frame_label, width= 25, textvariable= str_label_5)
+    # str_label_5 = tk.StringVar()
+    # entry_label_5 = tk.Entry(label_frame_label, width= 25, textvariable= str_label_5)
 
-    button_label_5 = tk.Button(label_frame_label, text= 'WMe1_label', command= lambda: uxr.add_bookmark(choose_type= int_label_type.get(), chan= 5, bookmark= str_label_5.get().rstrip('\n')))
-    button_del_label_5 = tk.Button(label_frame_label, text= 'Delete', command= lambda: uxr.delete_bookmark(chan= 5, choose_type= int_label_type.get()))
+    # button_label_5 = tk.Button(label_frame_label, text= 'WMe1_label', command= lambda: uxr.add_bookmark(choose_type= int_label_type.get(), chan= 5, bookmark= str_label_5.get().rstrip('\n')))
+    # button_del_label_5 = tk.Button(label_frame_label, text= 'Delete', command= lambda: uxr.delete_bookmark(chan= 5, choose_type= int_label_type.get()))
 
-    str_label_6 = tk.StringVar()
-    entry_label_6 = tk.Entry(label_frame_label, width= 25, textvariable= str_label_6)
+    # str_label_6 = tk.StringVar()
+    # entry_label_6 = tk.Entry(label_frame_label, width= 25, textvariable= str_label_6)
 
-    button_label_6 = tk.Button(label_frame_label, text= 'WMe2_label', command= lambda: uxr.add_bookmark(choose_type= int_label_type.get(), chan= 6, bookmark= (str_label_6.get().rstrip('\n'))))
-    button_del_label_6 = tk.Button(label_frame_label, text= 'Delete', command= lambda: uxr.delete_bookmark(chan= 6, choose_type= int_label_type.get()))
+    # button_label_6 = tk.Button(label_frame_label, text= 'WMe2_label', command= lambda: uxr.add_bookmark(choose_type= int_label_type.get(), chan= 6, bookmark= (str_label_6.get().rstrip('\n'))))
+    # button_del_label_6 = tk.Button(label_frame_label, text= 'Delete', command= lambda: uxr.delete_bookmark(chan= 6, choose_type= int_label_type.get()))
 
-    str_label_7 = tk.StringVar()
-    entry_label_7 = tk.Entry(label_frame_label, width= 25, textvariable= str_label_7)
+    # str_label_7 = tk.StringVar()
+    # entry_label_7 = tk.Entry(label_frame_label, width= 25, textvariable= str_label_7)
 
-    button_label_7 = tk.Button(label_frame_label, text= 'WMe3_label', command= lambda: uxr.add_bookmark(choose_type= int_label_type.get(), chan= 7, bookmark= (str_label_7.get().rstrip('\n'))))
-    button_del_label_7 = tk.Button(label_frame_label, text= 'Delete', command= lambda: uxr.delete_bookmark(chan= 7, choose_type= int_label_type.get()))
+    # button_label_7 = tk.Button(label_frame_label, text= 'WMe3_label', command= lambda: uxr.add_bookmark(choose_type= int_label_type.get(), chan= 7, bookmark= (str_label_7.get().rstrip('\n'))))
+    # button_del_label_7 = tk.Button(label_frame_label, text= 'Delete', command= lambda: uxr.delete_bookmark(chan= 7, choose_type= int_label_type.get()))
 
-    str_label_8 = tk.StringVar()
-    entry_label_8 = tk.Entry(label_frame_label, width= 25, textvariable= str_label_8)
+    # str_label_8 = tk.StringVar()
+    # entry_label_8 = tk.Entry(label_frame_label, width= 25, textvariable= str_label_8)
 
-    button_label_8 = tk.Button(label_frame_label, text= 'WMe4_label', command= lambda: uxr.add_bookmark(choose_type= int_label_type.get(), chan= 8, bookmark= (str_label_8.get().rstrip('\n'))))
-    button_del_label_8 = tk.Button(label_frame_label, text= 'Delete', command= lambda: uxr.delete_bookmark(chan= 8, choose_type= int_label_type.get()))
+    # button_label_8 = tk.Button(label_frame_label, text= 'WMe4_label', command= lambda: uxr.add_bookmark(choose_type= int_label_type.get(), chan= 8, bookmark= (str_label_8.get().rstrip('\n'))))
+    # button_del_label_8 = tk.Button(label_frame_label, text= 'Delete', command= lambda: uxr.delete_bookmark(chan= 8, choose_type= int_label_type.get()))
 
     # Measurement Frame ===================================================================================================================================
     label_frame_meas_item= tk.LabelFrame(window, text= 'Measurement', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
@@ -1584,6 +1613,11 @@ def main_window(scope_ip):
             g_top= combobox_gen_top.get(), g_middle= combobox_gen_mid.get(), g_base= combobox_gen_base.get(), g_top_percent= combobox_gen_top_percent.get(), g_middle_percent= combobox_gen_mid_percent.get(), g_base_percent= combobox_gen_base_percent.get(), 
             )
         )
+    # Result Frame ===================================================================================================================================
+    label_frame_get_result= tk.LabelFrame(window, text= 'Results', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
+
+
+
 
     # Control Frame ===================================================================================================================================
     label_frame_control= tk.LabelFrame(window, text= 'Control', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
@@ -1630,22 +1664,22 @@ def main_window(scope_ip):
     button_button_disable = tk.Button(label_frame_control, text= 'Disable\nButton', width= 8, height=2, command= disable_button)
 
     boolvar_marker_1 = tk.BooleanVar()    
-    checkbutton_marker_1= tk.Checkbutton(label_frame_control, text= 'Meas 1', variable= boolvar_marker_1, background= frame_bg_color_2, fg= label_word_color)
+    checkbutton_marker_1= tk.Checkbutton(label_frame_control, text= 'Meas 1', variable= boolvar_marker_1, background= frame_bg_color_1, fg= label_word_color)
 
     boolvar_marker_2 = tk.BooleanVar()    
-    checkbutton_marker_2= tk.Checkbutton(label_frame_control, text= 'Meas 2', variable= boolvar_marker_2, background= frame_bg_color_2, fg= label_word_color)
+    checkbutton_marker_2= tk.Checkbutton(label_frame_control, text= 'Meas 2', variable= boolvar_marker_2, background= frame_bg_color_1, fg= label_word_color)
 
     boolvar_marker_3 = tk.BooleanVar()    
-    checkbutton_marker_3= tk.Checkbutton(label_frame_control, text= 'Meas 3', variable= boolvar_marker_3, background= frame_bg_color_2, fg= label_word_color)
+    checkbutton_marker_3= tk.Checkbutton(label_frame_control, text= 'Meas 3', variable= boolvar_marker_3, background= frame_bg_color_1, fg= label_word_color)
 
     boolvar_marker_4 = tk.BooleanVar()    
-    checkbutton_marker_4= tk.Checkbutton(label_frame_control, text= 'Meas 4', variable= boolvar_marker_4, background= frame_bg_color_2, fg= label_word_color)
+    checkbutton_marker_4= tk.Checkbutton(label_frame_control, text= 'Meas 4', variable= boolvar_marker_4, background= frame_bg_color_1, fg= label_word_color)
 
     boolvar_marker_5 = tk.BooleanVar()    
-    checkbutton_marker_5= tk.Checkbutton(label_frame_control, text= 'Meas 5', variable= boolvar_marker_5, background= frame_bg_color_2, fg= label_word_color)
+    checkbutton_marker_5= tk.Checkbutton(label_frame_control, text= 'Meas 5', variable= boolvar_marker_5, background= frame_bg_color_1, fg= label_word_color)
 
     boolvar_marker_6 = tk.BooleanVar()    
-    checkbutton_marker_6= tk.Checkbutton(label_frame_control, text= 'Meas 6', variable= boolvar_marker_6, background= frame_bg_color_2, fg= label_word_color)
+    checkbutton_marker_6= tk.Checkbutton(label_frame_control, text= 'Meas 6', variable= boolvar_marker_6, background= frame_bg_color_1, fg= label_word_color)
 
     # Real-time eye Frame ===================================================================================================================================
     label_frame_realtime_eye= tk.LabelFrame(window, text= 'Real Time Eye', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
@@ -1669,42 +1703,134 @@ def main_window(scope_ip):
 
     boolvar_histogram = tk.BooleanVar()    
     checkbutton_histogram= tk.Checkbutton(label_frame_realtime_eye, text= 'Histogram', variable= boolvar_histogram, background= frame_bg_color_2, fg= label_word_color)
+    
     boolvar_voltage_meas = tk.BooleanVar()    
-    checkbutton_voltage_meas= tk.Checkbutton(label_frame_realtime_eye, text= 'Voltage Meas', variable= boolvar_voltage_meas, background= frame_bg_color_2, fg= label_word_color)
+    checkbutton_voltage_meas= tk.Checkbutton(label_frame_realtime_eye, text= 'Vpp, VIH, VIL', variable= boolvar_voltage_meas, background= frame_bg_color_2, fg= label_word_color)
+    
+    boolvar_cdrfrequency = tk.BooleanVar()    
+    checkbutton_cdrfrequency= tk.Checkbutton(label_frame_realtime_eye, text= 'CDRFrequency', variable= boolvar_cdrfrequency, background= frame_bg_color_2, fg= label_word_color)
+    
+    boolvar_eyewidth = tk.BooleanVar()    
+    checkbutton_eyewidth= tk.Checkbutton(label_frame_realtime_eye, text= 'Eye Width', variable= boolvar_eyewidth, background= frame_bg_color_2, fg= label_word_color)
+
+    boolvar_eyeheight = tk.BooleanVar()    
+    checkbutton_eyeheight= tk.Checkbutton(label_frame_realtime_eye, text= 'Eye Height', variable= boolvar_eyeheight, background= frame_bg_color_2, fg= label_word_color)
+    
     boolvar_mask_test = tk.BooleanVar()    
     checkbutton_mask_test= tk.Checkbutton(label_frame_realtime_eye, text= 'Mask', variable= boolvar_mask_test, background= frame_bg_color_2, fg= label_word_color)
     str_mask= tk.StringVar()
     entry_mask= tk.Entry(label_frame_realtime_eye, width= 25, textvariable= str_mask)
-
-
+    button_mask_browse= tk.Button(label_frame_realtime_eye, text= 'Browse', width= 10, command= lambda: select_folder(entry_var= str_mask))
+    
+    button_realtime_eye_setting= tk.Button(label_frame_realtime_eye, text= '一鍵設定', width= 10)
+    
     # 100MHz PCIe CLK Frame ===================================================================================================================================
+    label_frame_100MHz_PCIe_CLK= tk.LabelFrame(window, text= '100MHz PCIe CLK', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
+
+    label_signal_type = tk.Label(label_frame_100MHz_PCIe_CLK, text= 'Signal / Noise', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+
+    int_signal_type = tk.IntVar()
+    radiobutton_signal = tk.Radiobutton(label_frame_100MHz_PCIe_CLK, text= 'Signal', variable= int_signal_type, value= 1, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
+    radiobutton_noise = tk.Radiobutton(label_frame_100MHz_PCIe_CLK, text= 'Noise', variable= int_signal_type, value= 2, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
+
+    label_signal_length = tk.Label(label_frame_100MHz_PCIe_CLK, text= 'Signal Length', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+
+    int_signal_length = tk.IntVar()
+    radiobutton_160u = tk.Radiobutton(label_frame_100MHz_PCIe_CLK, text= '160 us', variable= int_signal_length, value= 1, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
+    radiobutton_170u = tk.Radiobutton(label_frame_100MHz_PCIe_CLK, text= '170 us', variable= int_signal_length, value= 2, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
+    radiobutton_180u = tk.Radiobutton(label_frame_100MHz_PCIe_CLK, text= '180 us', variable= int_signal_length, value= 3, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
+    radiobutton_190u = tk.Radiobutton(label_frame_100MHz_PCIe_CLK, text= '190 us', variable= int_signal_length, value= 4, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
+
+    button_100MHz_pcie_clk_setting = tk.Button(label_frame_100MHz_PCIe_CLK, text= '一鍵設定', width= 10)
+
     # Save Frame ===================================================================================================================================
+    label_frame_save= tk.LabelFrame(window, text= 'Save', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
+    label_save_file_type = tk.Label(label_frame_save, text= 'File Type: ', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+
+    int_file_type = tk.IntVar()
+    radiobutton_img = tk.Radiobutton(label_frame_save, text= 'Image', variable= int_file_type, value= 1, background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
+    radiobutton_setup = tk.Radiobutton(label_frame_save, text= 'Setup', variable= int_file_type, value= 3, background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
+    radiobutton_bin = tk.Radiobutton(label_frame_save, text= 'Bin', variable= int_file_type, value= 4, background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
+    radiobutton_wme = tk.Radiobutton(label_frame_save, text= 'WMemory', variable= int_file_type, value= 2, background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
+    radiobutton_img.select()
+
+    label_save_location = tk.Label(label_frame_save, text= 'Save Location: ', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+
+    int_save_location_choice = tk.IntVar()
+    radiobutton_scope_location = tk.Radiobutton(label_frame_save, text= 'Scope Desktop', variable= int_save_location_choice, value= 1, background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
+    radiobutton_pc_location = tk.Radiobutton(label_frame_save, text= 'PC / Server', variable= int_save_location_choice, value= 2, background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
+    # radiobutton_pc_location.select()
+
+    label_save_folder = tk.Label(label_frame_save, text= 'Save Folder: ', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+    str_save_folder = tk.StringVar()
+    entry_save_folder = tk.Entry(label_frame_save, width= 40, textvariable= str_save_folder)
+
+    button_save_browse = tk.Button(label_frame_save, text= 'PC Browse', width= 10, command= lambda: select_folder(entry_var= str_save_folder))
+
+    label_save_filename = tk.Label(label_frame_save, text= 'File Name: ', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+    str_save_filename = tk.StringVar()
+    entry_save_filename = tk.Entry(label_frame_save, width= 40, textvariable= str_save_filename)
+
+
+    button_save_scope = tk.Button(label_frame_save, text= 'Save', command= lambda: uxr.save_other_file_scope(chan= int_source_chan.get(), folder= str_save_folder.get(), current_file_name= str_save_filename.get(), ext_type= int_file_type.get(), path_choice= int_save_location_choice.get()))
+
     # Load WMemory Frame ===================================================================================================================================
+    label_frame_load= tk.LabelFrame(window, text= 'Load Setup', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
 
+    
+    label_load_location = tk.Label(label_frame_load, text= 'Load Location: ', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
 
+    int_load_location_choice = tk.IntVar()
+    radiobutton_load_scope_location = tk.Radiobutton(label_frame_load, text= 'Scope Desktop', variable= int_load_location_choice, value= 1, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
+    radiobutton_load_pc_location = tk.Radiobutton(label_frame_load, text= 'PC / Server', variable= int_load_location_choice, value= 2, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
+    # radiobutton_load_pc_location.select()
+
+    label_load_folder = tk.Label(label_frame_load, text= 'Load Folder: ', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+    str_load_folder = tk.StringVar()
+    entry_load_folder = tk.Entry(label_frame_load, width= 50, textvariable= str_load_folder)
+
+    button_load_browse = tk.Button(label_frame_load, text= 'PC Browse', width= 10, command= lambda: select_folder(entry_var= str_load_folder))
+
+    label_load_filename = tk.Label(label_frame_load, text= 'File Name: ', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+    
+    str_load_filename = tk.StringVar()
+    entry_load_filename = tk.Entry(label_frame_load, width= 50, textvariable= str_load_filename)
+    button_load_file = tk.Button(label_frame_load, text= 'Load Setup File', command= lambda: uxr.load_setup(folder= str_save_folder.get(), setup_name= str_load_filename.get(), scale= str_time_scale.get(), position= str_time_offset.get(), choose_type= int_label_type.get(), file_path_choice = int_load_location_choice.get()))
+
+    boolvar_load_timebase = tk.BooleanVar()    
+    checkbutton_setup_timebase= tk.Checkbutton(label_frame_load, text= 'Timebase', variable= boolvar_load_timebase, background= frame_bg_color_1, fg= label_word_color)
+    checkbutton_setup_timebase.select()
+
+    boolvar_load_label = tk.BooleanVar()    
+    cbheckbutton_setup_label= tk.Checkbutton(label_frame_load, text= 'Label', variable= boolvar_load_label, background= frame_bg_color_1, fg= label_word_color)
+    cbheckbutton_setup_label.select()
 
     # Grid ===================================================================================================================================
 
     # LabelFrame grid
     label_frame_chan.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'nsew')
-    label_frame_scale.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'nsew')
-    label_frame_acquisition.grid(row= 2, column= 0, padx= 5, pady= 2, sticky= 'nsew')
-    label_frame_label.grid(row= 3, column= 0, padx= 5, pady= 2, sticky= 'nsew')
-    label_frame_meas_item.grid(row= 4, column= 0, padx= 5, pady= 2, sticky= 'nsew')
-    label_frame_thres.grid(row= 5, column= 0, padx= 5, pady= 2, sticky= 'nsew')
+    label_frame_scale.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'nsew', rowspan= 2)
+    label_frame_acquisition.grid(row= 3, column= 0, padx= 5, pady= 2, sticky= 'nsew', rowspan= 2)
+    label_frame_label.grid(row= 5, column= 0, padx= 5, pady= 2, sticky= 'nsew', rowspan= 2)
+    label_frame_meas_item.grid(row= 7, column= 0, padx= 5, pady= 2, sticky= 'nsew')
+    label_frame_thres.grid(row= 8, column= 0, padx= 5, pady= 2, sticky= 'nsew')
+    label_frame_get_result.grid(row= 9, column= 0, padx= 5, pady= 2, sticky= 'nsew')
 
-    label_frame_control.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'nsew')
-    label_frame_realtime_eye.grid(row= 1, column= 1, padx= 5, pady= 2, sticky= 'nsew')
+    label_frame_control.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'nsew', rowspan= 2)
+    label_frame_realtime_eye.grid(row= 2, column= 1, padx= 5, pady= 2, sticky= 'nsew', rowspan= 4)
+    label_frame_100MHz_PCIe_CLK.grid(row= 6, column= 1, padx= 5, pady= 2, sticky= 'nsew')
+    label_frame_save.grid(row= 7, column= 1, padx= 5, pady= 2, sticky= 'nsew', rowspan= 2)
+    label_frame_load.grid(row= 9, column= 1, padx= 5, pady= 2, sticky= 'nsew')
 
     # Channel grid
     button_chan1.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
     button_chan2.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'w')
     button_chan3.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w')
     button_chan4.grid(row= 0, column= 3, padx= 5, pady= 2, sticky= 'w')
-    button_wme1.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w')
-    button_wme2.grid(row= 1, column= 1, padx= 5, pady= 2, sticky= 'w')
-    button_wme3.grid(row= 1, column= 2, padx= 5, pady= 2, sticky= 'w')
-    button_wme4.grid(row= 1, column= 3, padx= 5, pady= 2, sticky= 'w')
+    # button_wme1.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w')
+    # button_wme2.grid(row= 1, column= 1, padx= 5, pady= 2, sticky= 'w')
+    # button_wme3.grid(row= 1, column= 2, padx= 5, pady= 2, sticky= 'w')
+    # button_wme4.grid(row= 1, column= 3, padx= 5, pady= 2, sticky= 'w')
 
     # Scale / Offset grid
     label_ch.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
@@ -1749,18 +1875,18 @@ def main_window(scope_ip):
     button_label_4.grid(row= 3, column= 2, padx= 5, pady= 2, sticky= 'w')
     button_del_label_4.grid(row= 3, column= 3, padx= 5, pady= 2, sticky= 'w')
 
-    entry_label_5.grid(row= 0, column= 4, padx= 5, pady= 2, sticky= 'w')
-    button_label_5.grid(row= 0, column= 5, padx= 5, pady= 2, sticky= 'w')
-    button_del_label_5.grid(row= 0, column= 6, padx= 5, pady= 2, sticky= 'w')
-    entry_label_6.grid(row= 1, column= 4, padx= 5, pady= 2, sticky= 'w')
-    button_label_6.grid(row= 1, column= 5, padx= 5, pady= 2, sticky= 'w')
-    button_del_label_6.grid(row= 1, column= 6, padx= 5, pady= 2, sticky= 'w')
-    entry_label_7.grid(row= 2, column= 4, padx= 5, pady= 2, sticky= 'w')
-    button_label_7.grid(row= 2, column= 5, padx= 5, pady= 2, sticky= 'w')
-    button_del_label_7.grid(row= 2, column= 6, padx= 5, pady= 2, sticky= 'w')
-    entry_label_8.grid(row= 3, column= 4, padx= 5, pady= 2, sticky= 'w')
-    button_label_8.grid(row= 3, column= 5, padx= 5, pady= 2, sticky= 'w')
-    button_del_label_8.grid(row= 3, column= 6, padx= 5, pady= 2, sticky= 'w')
+    # entry_label_5.grid(row= 0, column= 4, padx= 5, pady= 2, sticky= 'w')
+    # button_label_5.grid(row= 0, column= 5, padx= 5, pady= 2, sticky= 'w')
+    # button_del_label_5.grid(row= 0, column= 6, padx= 5, pady= 2, sticky= 'w')
+    # entry_label_6.grid(row= 1, column= 4, padx= 5, pady= 2, sticky= 'w')
+    # button_label_6.grid(row= 1, column= 5, padx= 5, pady= 2, sticky= 'w')
+    # button_del_label_6.grid(row= 1, column= 6, padx= 5, pady= 2, sticky= 'w')
+    # entry_label_7.grid(row= 2, column= 4, padx= 5, pady= 2, sticky= 'w')
+    # button_label_7.grid(row= 2, column= 5, padx= 5, pady= 2, sticky= 'w')
+    # button_del_label_7.grid(row= 2, column= 6, padx= 5, pady= 2, sticky= 'w')
+    # entry_label_8.grid(row= 3, column= 4, padx= 5, pady= 2, sticky= 'w')
+    # button_label_8.grid(row= 3, column= 5, padx= 5, pady= 2, sticky= 'w')
+    # button_del_label_8.grid(row= 3, column= 6, padx= 5, pady= 2, sticky= 'w')
 
     # Acquisition grid
     label_sampling_rate.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
@@ -1824,27 +1950,77 @@ def main_window(scope_ip):
     checkbutton_marker_6.grid(row= 5, column= 4, padx= 5) 
 
     # Real-time eye grid
-    label_source_chan.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
-    combobox_source_chan.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'w')
+    label_source_chan.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w', columnspan= 2)
+    combobox_source_chan.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w')
 
-    label_realtime_sampling_rate.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w')
-    entry_realtime_sampling_rate.grid(row= 0, column= 3, padx= 5, pady= 2, sticky= 'w')
+    label_realtime_sampling_rate.grid(row= 0, column= 3, padx= 5, pady= 2, sticky= 'w')
+    entry_realtime_sampling_rate.grid(row= 0, column= 4, padx= 5, pady= 2, sticky= 'w')
 
-    label_realtime_freq.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w')
-    combobox_realtime_freq.grid(row= 1, column= 1, padx= 5, pady= 2, sticky= 'w')
+    label_realtime_freq.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w', columnspan= 2)
+    combobox_realtime_freq.grid(row= 1, column= 2, padx= 5, pady= 2, sticky= 'w')
 
-    label_realtime_memory_depth.grid(row= 1, column= 2, padx= 5, pady= 2, sticky= 'w')
-    entry_realtime_memory_depth.grid(row= 1, column= 3, padx= 5, pady= 2, sticky= 'w')
+    label_realtime_memory_depth.grid(row= 1, column= 3, padx= 5, pady= 2, sticky= 'w')
+    entry_realtime_memory_depth.grid(row= 1, column= 4, padx= 5, pady= 2, sticky= 'w')
 
-    checkbutton_histogram.grid(row= 2, column= 0, padx= 5, pady= 2, sticky= 'w')
-    checkbutton_voltage_meas.grid(row= 3, column= 0, padx= 5, pady= 2, sticky= 'w')
+    checkbutton_histogram.grid(row= 2, column= 0, padx= 5, pady= 2, sticky= 'w', columnspan= 2)
+    checkbutton_eyewidth.grid(row= 2, column= 2, padx= 5, pady= 2, sticky= 'w')
+    checkbutton_cdrfrequency.grid(row= 2, column= 3, padx= 5, pady= 2, sticky= 'w')
+    checkbutton_voltage_meas.grid(row= 3, column= 0, padx= 5, pady= 2, sticky= 'w', columnspan= 2)
+    checkbutton_eyeheight.grid(row= 3, column= 2, padx= 5, pady= 2, sticky= 'w')
+    
     checkbutton_mask_test.grid(row= 4, column= 0, padx= 5, pady= 2, sticky= 'w')
-    entry_mask.grid(row= 4, column= 1, padx= 5, pady= 2, sticky= 'w')
+    entry_mask.grid(row= 4, column= 1, padx= 5, pady= 2, sticky= 'ew', columnspan= 4)
+    button_mask_browse.grid(row= 4, column= 5, padx= 5, pady= 2, sticky= 'w')
 
+    button_realtime_eye_setting.grid(row= 2, column= 6, padx= 5, pady= 2, sticky= 'w')
 
+    # 100MHz PCIe Clock grid
+    label_signal_type.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
+    radiobutton_signal.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'w')
+    radiobutton_noise.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w')
 
+    label_signal_length.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w')
+    radiobutton_160u.grid(row= 1, column= 1, padx= 5, pady= 2, sticky= 'w')
+    radiobutton_170u.grid(row= 1, column= 2, padx= 5, pady= 2, sticky= 'w')
+    radiobutton_180u.grid(row= 1, column= 3, padx= 5, pady= 2, sticky= 'w')
+    radiobutton_190u.grid(row= 1, column= 4, padx= 5, pady= 2, sticky= 'w')
 
+    button_100MHz_pcie_clk_setting.grid(row= 1, column= 5, padx= 5, pady= 2, sticky= 'w')
 
+    # Save grid
+    label_save_file_type.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
+    radiobutton_img.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'w')
+    radiobutton_setup.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w')
+    radiobutton_bin.grid(row= 0, column= 3, padx= 5, pady= 2, sticky= 'w')
+    radiobutton_wme.grid(row= 0, column= 4, padx= 5, pady= 2, sticky= 'w')
+
+    label_save_location.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w')
+    radiobutton_scope_location.grid(row= 1, column= 1, padx= 5, pady= 2, sticky= 'w')
+    radiobutton_pc_location.grid(row= 1, column= 2, padx= 5, pady= 2, sticky= 'w')
+
+    label_save_folder.grid(row= 2, column= 0, padx= 5, pady= 2, sticky= 'w')
+    entry_save_folder.grid(row= 2, column= 1, padx= 5, pady= 2, sticky= 'ew', columnspan= 4)
+    button_save_browse.grid(row= 2, column= 5, padx= 5, pady= 2, sticky= 'ew')
+
+    label_save_filename.grid(row= 3, column= 0, padx= 5, pady= 2, sticky= 'w')
+    entry_save_filename.grid(row= 3, column= 1, padx= 5, pady= 2, sticky= 'ew', columnspan= 4)
+    button_save_scope.grid(row= 3, column= 5, padx= 5, pady= 2, sticky= 'ew')
+
+    # Load grid
+    label_load_location.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
+    radiobutton_load_scope_location.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'w')
+    radiobutton_load_pc_location.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w')
+
+    label_load_folder.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w')
+    entry_load_folder.grid(row= 1, column= 1, padx= 5, pady= 2, sticky= 'w', columnspan= 3)
+    button_load_browse.grid(row= 1, column= 4, padx= 5, pady= 2, sticky= 'w')
+
+    label_load_filename.grid(row= 2, column= 0, padx= 5, pady= 2, sticky= 'w')
+    entry_load_filename.grid(row= 2, column= 1, padx= 5, pady= 2, sticky= 'w', columnspan= 3)
+    button_load_file.grid(row= 2, column= 4, padx= 5, pady= 2, sticky= 'w')
+
+    checkbutton_setup_timebase.grid(row= 3, column= 0, padx= 5, pady= 2, sticky= 'w')
+    cbheckbutton_setup_label.grid(row= 3, column= 1, padx= 5, pady= 2, sticky= 'w')
 
     initialize()
 
@@ -1870,14 +2046,14 @@ id_window = tk.Tk()
 id_window.title(window_name)
 id_window.resizable(width= False, height= False)
 id_window.geometry('390x160+500+150')
-id_window.configure(background= '#91B6E1')
+id_window.configure(background= "#E1B591")
 
-l_scope_ip = tk.Label(id_window, text= 'Enter Scope IP', background= '#91B6E1', fg= '#091E87', font= ('Candara', 12, 'bold'),)
+l_scope_ip = tk.Label(id_window, text= 'Enter Scope IP', background= '#E1B591', fg= "#874009", font= ('Candara', 12, 'bold'),)
 str_scope_ip = tk.StringVar()
 cb_scope_ip = ttk.Combobox(id_window, textvariable= str_scope_ip, values= scope_ips)
 b_scope_ip = tk.Button(id_window, text= 'OK', width= 10, height= 2, command= lambda: show_main_window(old_scope_ips= scope_ips), )
 
-l_ip = tk.Label(id_window, text= '★★★ 確認電腦IP與Scope在同一網域 ★★★', background= '#91B6E1', fg= '#F6044D', font= ('Candara', 14, 'bold'),)
+l_ip = tk.Label(id_window, text= '★★★ 確認電腦IP與Scope在同一網域 ★★★', background= '#E1B591', fg= '#F6044D', font= ('Candara', 14, 'bold'),)
 
 l_scope_ip.pack(padx= 5, pady= 5)
 cb_scope_ip.pack(padx= 5, pady= 5)
