@@ -1138,25 +1138,29 @@ def main_window(scope_ip):
 
 
         def realtimeeye(self):
-            ans= self.inst.query(f':MEASure:DATarate? CHANnel1')
-            print(ans)
-            self.inst.write(f':AUToscale') #:CHANnels DISPlayed
+            # self.inst.write(f':AUToscale')
+            # time.sleep(0.05)
+            self.inst.write(f':MEASure:THResholds:GENeral:METHod CHANnel1,HYSTeresis')
             time.sleep(0.1)
-            self.inst.write(f':MTESt:FOLDing ON,CHANnel1')
+            self.inst.write(f':MEASure:THResholds:GENAUTO CHANnel1')
+            time.sleep(0.1)
+            # self.inst.write(f':ANALyze:CLOCk ON,CHANnel1')
+            # time.sleep(0.1)
+            self.inst.write(f':MEASure:CLOCk:METHod SOPLL,10312500000')
             time.sleep(0.1)
             self.inst.write(f':ACQuire:SRATe:ANALog 2.56E+11')
             time.sleep(0.05)
             self.inst.write(f':ACQuire:POINts:ANALog 1E+06')
             time.sleep(0.05)
-            self.inst.write(f':MEASure:THResholds:GENeral:HYSTeresis CHANnel1')
-            time.sleep(0.1)
-            self.inst.write(f':MEASure:CLOCk:METHod SOPLL,10312500000')
-            time.sleep(0.1)
-            self.inst.write(f':MTESt:FOLDing:BITS CHANnel1 BOTH')
+            self.inst.write(f':MTESt:FOLDing ON,CHANnel1')
             time.sleep(0.1)
 
         def histogram(self):
+            self.inst.write(f':HISTogram:WINDow:DEFault')
+            time.sleep(0.1)
             self.inst.write(f':HISTogram:AXIS HORizontal')
+            time.sleep(0.1)
+            self.inst.write(f':HISTogram:MODE WAVeforms')
             time.sleep(0.1)
             self.inst.write(f':HISTogram:WINDow:SOURce CHANnel1')
             time.sleep(0.1)
@@ -1180,9 +1184,41 @@ def main_window(scope_ip):
             self.inst.write(f':MEASure:CGRade:EWIDth MEASured,CHANnel1')
             time.sleep(0.1)
 
+        def PCIeClock(self):
+            self.inst.write(f':ACQuire:SRATe:ANALog 2.56E+11')
+            time.sleep(0.05)
+            self.inst.write(f':ACQuire:POINts:ANALog 410E+06')
+            time.sleep(0.05)
+            self.inst.write(f':ACQuire:INTerpolate OFF')
+            time.sleep(0.05)
+
+            self.inst.write(f':CHANnel1:ISIM:BWLimit ON')
+            time.sleep(0.05)
+            self.inst.write(f':CHANnel1:ISIM:BWLimit:TYPE WALL')
+            time.sleep(0.05)
+            self.inst.write(f':CHANnel1:ISIM:BANDwidth 5000000000')
+            time.sleep(0.05)
+
+            self.inst.write(f':CHANnel1:SCALe 0.3')
+            time.sleep(0.05)
+
+            self.inst.write(f':TIMebase:SCALe 160E-06')
+            time.sleep(0.05)
 
 
-
+        def masktest(self):
+            self.inst.write(f':MTESt:FOLDing ON,CHANnel1')
+            time.sleep(0.1)
+            self.inst.write(f':MTESt1:ENABle ON')
+            time.sleep(0.1)
+            # self.inst.write(f':MTESt:RUMode WAVeforms,1E+06')
+            # time.sleep(0.1)
+            # self.inst.write(fr':MTESt1:LOAD "C:\Users\Administrator\Desktop\mask\1G_SFP_MASK.msk"')
+            # time.sleep(0.1)
+            self.inst.write(f':MTESt1:SCALe:DRAW ON')
+            time.sleep(0.1)
+            self.inst.write(f':MTESt1:SCALe:X1 ')
+            time.sleep(0.1)
 
 
 
@@ -1472,7 +1508,7 @@ def main_window(scope_ip):
     # Channel Frame ===================================================================================================================================
     label_frame_chan= tk.LabelFrame(window, text= 'Channel', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
 
-    test = tk.Button(label_frame_chan, text='test', width= 20, height= 2, command= lambda: uxr.realtimeeye())
+    test = tk.Button(label_frame_chan, text='test', width= 20, height= 2, command= lambda: uxr.masktest())
 
     button_chan1 = tk.Button(label_frame_chan, text='Chan1', width= 20, height= 2, command= lambda: uxr.display_Chan(chan= 1, bookmark= str_label_1.get(), choose_type= int_label_type.get()))
     button_chan2 = tk.Button(label_frame_chan, text='Chan2', width= 20, height= 2, command= lambda: uxr.display_Chan(chan= 2, bookmark= str_label_2.get(), choose_type= int_label_type.get()))
