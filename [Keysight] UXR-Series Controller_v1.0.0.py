@@ -1138,21 +1138,21 @@ def main_window(scope_ip):
 
 
         def realtimeeye(self):
-            # self.inst.write(f':AUToscale')
-            # time.sleep(0.05)
-            self.inst.write(f':MEASure:THResholds:GENeral:METHod CHANnel1,HYSTeresis')
-            time.sleep(0.1)
-            self.inst.write(f':MEASure:THResholds:GENAUTO CHANnel1')
-            time.sleep(0.1)
-            # self.inst.write(f':ANALyze:CLOCk ON,CHANnel1')
-            # time.sleep(0.1)
-            self.inst.write(f':MEASure:CLOCk:METHod SOPLL,10312500000')
-            time.sleep(0.1)
+            self.inst.write(f':AUToscale')
+            time.sleep(0.05)
             self.inst.write(f':ACQuire:SRATe:ANALog 2.56E+11')
             time.sleep(0.05)
             self.inst.write(f':ACQuire:POINts:ANALog 1E+06')
             time.sleep(0.05)
+            self.inst.write(f':MEASure:THResholds:GENeral:METHod CHANnel1,HYSTeresis')
+            time.sleep(0.1)
+            self.inst.write(f':MEASure:THResholds:GENAUTO CHANnel1')
+            time.sleep(0.1)
             self.inst.write(f':MTESt:FOLDing ON,CHANnel1')
+            time.sleep(0.1)
+            # self.inst.write(f':ANALyze:CLOCk ON,CHANnel1')
+            # time.sleep(0.1)
+            self.inst.write(f':MEASure:CLOCk:METHod SOPLL,1.03125E+10')
             time.sleep(0.1)
 
         def histogram(self):
@@ -1508,7 +1508,7 @@ def main_window(scope_ip):
     # Channel Frame ===================================================================================================================================
     label_frame_chan= tk.LabelFrame(window, text= 'Channel', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
 
-    test = tk.Button(label_frame_chan, text='test', width= 20, height= 2, command= lambda: uxr.masktest())
+    test = tk.Button(label_frame_chan, text='test', width= 20, height= 2, command= lambda: uxr.realtimeeye())
 
     button_chan1 = tk.Button(label_frame_chan, text='Chan1', width= 20, height= 2, command= lambda: uxr.display_Chan(chan= 1, bookmark= str_label_1.get(), choose_type= int_label_type.get()))
     button_chan2 = tk.Button(label_frame_chan, text='Chan2', width= 20, height= 2, command= lambda: uxr.display_Chan(chan= 2, bookmark= str_label_2.get(), choose_type= int_label_type.get()))
