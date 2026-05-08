@@ -201,87 +201,13 @@ def main_window(scope_ip):
             self.inst.write(f':ACQuire:POINts:ANALog {points_value}')
             time.sleep(0.05)
 
-        # def meas_all_edge(self):
-        #     ans= self.inst.query(':ANALyze:AEDGes?')
-        #     time.sleep(0.05)
-        #     if ans == '0\n':
-        #         b_meas_all_edge['text'] = "Meas All Edge: ON"
-        #         self.inst.write(f':ANALyze:AEDGes 1')
-        #         time.sleep(0.05)
-        #     else:
-        #         b_meas_all_edge['text'] = "Meas All Edge: OFF"
-        #         self.inst.write(f':ANALyze:AEDGes 0')
-        #         time.sleep(0.05)
-        
-        ## Threshold Reslated ###
-        # def RF_threshold(self, rf_top, rf_base, rf_top_percent, rf_base_percent):
-        #     if int_rf_thres.get() == 1:
-        #         self.inst.write(f':MEASure:THResholds:RFALl:METHod ALL,PERCent')
-        #         time.sleep(0.05)
-        #         self.inst.write(f':MEASure:THResholds:RFALl:PERCent ALL,{rf_top_percent},{(float(rf_top_percent)+float(rf_base_percent))/2},{rf_base_percent}')
-        #         time.sleep(0.05)
-        #     elif int_rf_thres.get() == 2:
-        #         self.inst.write(f':MEASure:THResholds:RFALl:METHod ALL,ABSolute')
-        #         time.sleep(0.05)
-        #         self.inst.write(f':MEASure:THResholds:RFALl:ABSolute ALL,{rf_top},{(float(rf_top)+float(rf_base))/2},{rf_base}')
-        #         time.sleep(0.05)
-
-        def gen_threshold(self, g_top, g_middle, g_base, g_top_percent, g_middle_percent, g_base_percent):
-            if int_gen_thres.get() == 1:
-                do_the_judge= False
-                if float(g_top_percent) <= float(g_middle_percent):
-                    g_top_percent= Decimal(g_middle_percent) + Decimal('0.1')
-                    combobox_gen_top_percent.config(foreground= 'red')
-                    combobox_gen_mid_percent.config(foreground= 'red')
-                    do_the_judge= True
-                if float(g_middle_percent) <= float(g_base_percent):
-                    g_base_percent= Decimal(g_middle_percent) - Decimal('0.1')
-                    combobox_gen_base_percent.config(foreground= 'red')
-                    combobox_gen_mid_percent.config(foreground= 'red')
-                    do_the_judge= True
-                if not do_the_judge:
-                    combobox_gen_top_percent.config(foreground= 'black')
-                    combobox_gen_mid_percent.config(foreground= 'black')
-                    combobox_gen_base_percent.config(foreground= 'black')
-
-                self.inst.write(f':MEASure:THResholds:GENeral:METHod ALL,PERCent')
-                time.sleep(0.05)
-                self.inst.write(f':MEASure:THResholds:GENeral:PERCent ALL,{g_top_percent},{g_middle_percent},{g_base_percent}')
-                time.sleep(0.05)
-            elif int_gen_thres.get() == 2:
-                do_the_judge= False
-                if float(g_top) <= float(g_middle):
-                    g_top= Decimal(g_middle) + Decimal('0.01')
-                    combobox_gen_top.config(foreground= 'red')
-                    combobox_gen_mid.config(foreground= 'red')
-                    do_the_judge= True
-                if float(g_middle) <= float(g_base):
-                    g_base= Decimal(g_middle) - Decimal('0.01')
-                    combobox_gen_base.config(foreground= 'red')
-                    combobox_gen_mid.config(foreground= 'red')
-                    do_the_judge= True
-                if not do_the_judge:
-                    combobox_gen_top.config(foreground= 'black')
-                    combobox_gen_mid.config(foreground= 'black')
-                    combobox_gen_base.config(foreground= 'black')
-
-                self.inst.write(f':MEASure:THResholds:GENeral:METHod ALL,ABSolute')
-                time.sleep(0.05)
-                self.inst.write(f':MEASure:THResholds:GENeral:ABSolute ALL,{g_top},{g_middle},{g_base}')
-                time.sleep(0.05)
-
         ### Scale Related ###
         def volt_check(self, scale, offset): # 科學記號
-            display_dict= self.judge_chan_wme()
+            display_dict= self.judge_chan()
             for chan in display_dict['CHANnel']:
                 self.inst.write(f':CHANnel{chan}:SCALe {scale}')
                 time.sleep(0.05)
                 self.inst.write(f':CHANnel{chan}:OFFSet {offset}')
-                time.sleep(0.05)
-            for wme in display_dict['WMEMory']:
-                self.inst.write(f':WMEMory{wme}:YRANge {float(scale)*8}')
-                time.sleep(0.05)
-                self.inst.write(f':WMEMory{wme}:YOFFset {offset}')
                 time.sleep(0.05)
 
         def timebase_position_check(self, position): # 科學記號
@@ -327,25 +253,10 @@ def main_window(scope_ip):
                 time.sleep(0.05)
                 self.add_bookmark(choose_type= choose_type,bookmark= bookmark, chan= chan)
 
-        # def display_WMemory(self, chan, bookmark, choose_type):
-        #     res= self.inst.query(f':WMEMory{chan}:DISPlay?')
-        #     time.sleep(0.05)
-        #     if res == '1\n':
-        #         self.inst.write(f':WMEMory{chan}:DISPlay OFF')
-        #         time.sleep(0.05)
-        #         try:
-        #             self.inst.write(f':DISPlay:BOOKmark{chan+4}:DELete')
-        #             time.sleep(0.05)
-        #         except:
-        #             pass
-        #     else:
-        #         self.inst.write(f':WMEMory{chan}:DISPlay ON')
-        #         time.sleep(0.05)
-        #         self.add_bookmark(choose_type= choose_type, bookmark= bookmark, chan= chan+4)
         
         ### Measurement Related ###
         def called_meas_function(self, chan, command_templates: dict):
-            display_dict= self.judge_chan_wme()
+            display_dict= self.judge_chan()
             for key in command_templates:
                 if chan in display_dict[key]:
                     self.inst.write(command_templates[key].format(chan))
@@ -356,64 +267,7 @@ def main_window(scope_ip):
                 'CHANnel': ':MEASure:FREQuency CHANnel{}',
                 'WMEMory': ':MEASure:FREQuency WMEMory{}'
             }            
-            self.called_meas_function(chan= chan, command_templates= command_templates)
-
-        def period(self, chan):
-            command_templates = {
-                'CHANnel': ':MEASure:PERiod CHANnel{}',
-                'WMEMory': ':MEASure:PERiod WMEMory{}'
-            }            
-            self.called_meas_function(chan= chan, command_templates= command_templates)
-    
-        # def dutycycle(self, chan):
-        #     command_templates = {
-        #         'CHANnel': ':MEASure:DUTYcycle CHANnel{}',
-        #         'WMEMory': ':MEASure:DUTYcycle WMEMory{}'
-        #     }            
-        #     self.called_meas_function(chan= chan, command_templates= command_templates)
-
-        # def slewrate(self, chan, direction):
-        #     display_dict= self.judge_chan_wme()
-        #     for cha in display_dict['CHANnel']:
-        #         if cha == chan:
-        #             self.inst.write(f':MEASure:SLEWrate CHANnel{cha},{direction}')
-        #             time.sleep(0.05)
-        #             self.inst.write(f':MEASure:NAME MEAS1,"{direction} Slew Rate({cha})"')
-        #             time.sleep(0.05)
-        #     for wme in display_dict['WMEMory']:
-        #         if wme == chan:
-        #             self.inst.write(f':MEASure:SLEWrate WMEMory{wme},{direction}')
-        #             time.sleep(0.05)
-        #             self.inst.write(f':MEASure:NAME MEAS1,"{direction} Slew Rate(m{wme})"')
-        #             time.sleep(0.05)
-
-        # def tH(self, chan):
-        #     command_templates = {
-        #         'CHANnel': ':MEASure:PWIDth CHANnel{}',
-        #         'WMEMory': ':MEASure:PWIDth WMEMory{}'
-        #     }            
-        #     self.called_meas_function(chan= chan, command_templates= command_templates)  
-
-        # def tL(self, chan):
-        #     command_templates = {
-        #         'CHANnel': ':MEASure:NWIDth CHANnel{}',
-        #         'WMEMory': ':MEASure:NWIDth WMEMory{}'
-        #     }            
-        #     self.called_meas_function(chan= chan, command_templates= command_templates)  
-
-        # def tR(self, chan):
-        #     command_templates = {
-        #         'CHANnel': ':MEASure:RISetime CHANnel{}',
-        #         'WMEMory': ':MEASure:RISetime WMEMory{}'
-        #     }            
-        #     self.called_meas_function(chan= chan, command_templates= command_templates)              
-
-        # def tF(self, chan):
-        #     command_templates = {
-        #         'CHANnel': ':MEASure:FALLtime CHANnel{}',
-        #         'WMEMory': ':MEASure:FALLtime WMEMory{}'
-        #     }            
-        #     self.called_meas_function(chan= chan, command_templates= command_templates)              
+            self.called_meas_function(chan= chan, command_templates= command_templates)    
 
         def VIH(self, chan):
             command_templates = {
@@ -429,22 +283,6 @@ def main_window(scope_ip):
             }            
             self.called_meas_function(chan= chan, command_templates= command_templates)              
 
-        # def tSU_tHO(self, edge_1, num_1, pos_1, edge_2, num_2, pos_2, chan, chan_start, chan_stop):
-        #     displayed_dict= self.judge_chan_wme()
-        #     for format in displayed_dict:
-        #         for channel in displayed_dict[format]:
-        #             if chan_start == channel:
-        #                 res_start= f'{format}'
-        #             if chan_stop == channel:
-        #                 res_stop= f'{format}'
-
-        #     if chan == 2:
-        #         self.inst.write(f':MEASure:DELTatime:DEFine {edge_1},{num_1},{pos_1},{edge_2},{num_2},{pos_2}')
-        #         time.sleep(0.05)
-        #         self.inst.write(f':MEASure:DELTatime {res_start}{chan_start}, {res_stop}{chan_stop}')
-        #         time.sleep(0.05)
-        #     else:
-        #         pass
 
         ### Control Related ###
         def run(self):
@@ -481,16 +319,6 @@ def main_window(scope_ip):
             else:
                 self.inst.write(':TRIGger:SWEep AUTO')
                 time.sleep(0.05)
-
-        def trig_slope(self):
-            res= self.inst.query(f':TRIGger:EDGE:SLOPe?')
-            time.sleep(0.05)
-            if res == 'POS\n':
-                self.inst.write(':TRIGger:EDGE:SLOPe NEGative')
-                time.sleep(0.05)
-            else:
-                self.inst.write(':TRIGger:EDGE:SLOPe POSitive')
-                time.sleep(0.05)
         
         ### Measurement Related (label) ###
         def delete_item(self):
@@ -515,7 +343,7 @@ def main_window(scope_ip):
                     self.inst.write(f':DISPlay:BOOKmark{chan}:DELete')
 
                 else:
-                    display_dict= self.judge_chan_wme()    
+                    display_dict= self.judge_chan()    
                     try:
                         is_meas_area= self.inst.query(':MEASure:NAME? MEAS1') 
                         time.sleep(0.05)
@@ -535,18 +363,6 @@ def main_window(scope_ip):
                             self.inst.write(f':DISPlay:BOOKmark{chan}:DELete')
                             time.sleep(0.05)
                             self.inst.write(f':DISPlay:BOOKmark{chan}:SET NONE,"{bookmark}",CHANnel{chan},"",1')
-                            time.sleep(0.05)
-                            self.inst.write(f':DISPlay:BOOKmark{chan}:XPOSition {0.01}')
-                            time.sleep(0.05)
-                            bookmark_display_list.append(count)
-                            self.inst.write(f':DISPlay:BOOKmark{chan}:YPOSition {2+interval*count}E-02')
-                            time.sleep(0.05)
-                        count+=1
-                    for wme in display_dict['WMEMory']:
-                        if wme == chan-4:
-                            self.inst.write(f':DISPlay:BOOKmark{chan}:DELete')
-                            time.sleep(0.05)
-                            self.inst.write(f':DISPlay:BOOKmark{chan}:SET NONE,"{bookmark}",WMEMory{chan-4},"",1')
                             time.sleep(0.05)
                             self.inst.write(f':DISPlay:BOOKmark{chan}:XPOSition {0.01}')
                             time.sleep(0.05)
@@ -588,7 +404,7 @@ def main_window(scope_ip):
                     time.sleep(0.05)
 
         def add_label(self, chan, label):
-            display_dict= self.judge_chan_wme()
+            display_dict= self.judge_chan()
             if label == '':
                 self.inst.write(f':DISPlay:LABel OFF')
                 time.sleep(0.05)
@@ -599,32 +415,8 @@ def main_window(scope_ip):
                     if cha == chan:
                         self.inst.write(f':CHANnel{chan}:LABel "{label}"')
                         time.sleep(0.05)
-                for wme in display_dict['WMEMory']:
-                    if wme == chan-4:
-                        self.inst.write(f':WMEMory{chan-4}:LABel "{label}"')
-                        time.sleep(0.05)
 
         ### Save Related ###
-        def load_wmemory(self, chan, folder, wme_name, file_path_choice):
-            self.inst.write(f':WMEMory:TIETimebase 1')
-            time.sleep(0.05)
-            self.inst.write(f':DISPlay:SCOLor WMEMory1,17,100,100')
-            time.sleep(0.05)
-            self.inst.write(f':DISPlay:SCOLor WMEMory2,38,100,84')
-            time.sleep(0.05)
-            self.inst.write(f':DISPlay:SCOLor WMEMory3,60,80,100')
-            time.sleep(0.05)
-            self.inst.write(f':DISPlay:SCOLor WMEMory4,94,100,100')
-            time.sleep(0.05)
-            
-            if file_path_choice == 2:
-                total_folder_path = folder
-            else:
-                total_folder_path = f"C:/Users/Administrator/Desktop/{folder}"
-
-            self.inst.write(f':DISK:LOAD "{total_folder_path}/{wme_name}.h5",WMEMory{chan},OFF')
-            time.sleep(0.05)
-
         def load_setup(self, folder, setup_name, scale, position, choose_type, file_path_choice):
             if file_path_choice == 2:
                 total_folder_path = folder
@@ -643,11 +435,6 @@ def main_window(scope_ip):
                 for i in range(8):
                     self.add_bookmark(choose_type= choose_type, bookmark= label_content[i].get().rstrip('\n'), chan= i+1)
         
-        def clear_wmemory(self, chan, string):
-            self.inst.write(f':WMEMory{chan}:CLEar')
-            time.sleep(0.05)
-            string.set('')
-
         def save_image_scope(self, folder, image_name, path_choice):
             # 清空狀態
             self.inst.write('*CLS')
@@ -887,66 +674,15 @@ def main_window(scope_ip):
             self.inst.write(command)
             time.sleep(0.05)
 
-        def save_wmemory_pc(self, folder, pc_folder, file_name, ext_type):
-            if ext_type == 1:
-                ext = 'h5'
-            else:
-                ext = 'set'
-
-            full_path = f"C:/Users/Administrator/Desktop/{folder}/{file_name}.{ext}"
-            data = b''
-            message = ':DISK:GETFILE? "' + full_path + '"'
-            data = self.inst.query_binary_values(message= message, datatype= 'B', header_fmt= 'ieee', container= bytes)
-            time.sleep(0.05)
-            
-            if not os.path.exists(pc_folder):
-                ask_root = tk.Tk()
-                ask_root.withdraw()  # 隱藏主視窗
-                ask_result = messagebox.askyesno("Warning", f"資料夾不存在，是否新增？")
-                ask_root.destroy()
-                
-                if not ask_result:
-                    ask_root = tk.Tk()
-                    ask_root.withdraw()  # 隱藏主視窗
-                    messagebox.showinfo("Warning", f'檔案未儲存')
-                    # print("檔案未保存。")
-                    return     
-                os.mkdir(pc_folder) 
-
-            if os.path.exists(f"{pc_folder}/{file_name}.{ext}"):
-                ask_root = tk.Tk()
-                ask_root.withdraw()  # 隱藏主視窗
-                ask_result = messagebox.askyesno("Warning", f"檔案已經存在，是否覆蓋？")
-                ask_root.destroy()
-                
-                if not ask_result:
-                    # print("檔案未保存。")
-                    ask_root = tk.Tk()
-                    ask_root.withdraw()  # 隱藏主視窗
-                    messagebox.showinfo("Warning", f'檔案未儲存')
-                    return     
-           
-            with open(f"{pc_folder}/{file_name}.{ext}", 'wb') as f:
-                f.write(data)
-
         ### Display Related ###
-        def judge_chan_wme(self):
-            display_dict= {'CHANnel': [],'WMEMory': []}
+        def judge_chan(self):
+            display_dict= {'CHANnel': []}
             for i in range(1, 5):
                 chan_res= self.inst.query(f':CHANnel{i}:DISPlay?')
                 time.sleep(0.05)
-                wme_res= self.inst.query(f':WMEMory{i}:DISPlay?')
-                time.sleep(0.05)
 
-                if chan_res == '1\n' and not wme_res == '1\n':
+                if chan_res == '1\n':
                     display_dict['CHANnel'].append(i)
-                    # return 'CHANnel'
-                if not chan_res == '1\n' and wme_res == '1\n':
-                    display_dict['WMEMory'].append(i)
-                    # return 'WMEMory'
-                if chan_res == '1\n' and wme_res == '1\n':
-                    display_dict['CHANnel'].append(i)
-                    display_dict['WMEMory'].append(i)
 
             return display_dict
 
@@ -1224,17 +960,6 @@ def main_window(scope_ip):
 
 
 
-
-    ### Others ###
-    # def switch_string(var_1, var_2):
-    #     string_1= var_1.get()
-    #     string_2= var_2.get()
-    #     var_1.set(string_2)
-    #     var_2.set(string_1)
-
-    # def clear(string):
-    #     string.set('')
-
     def close_window():
         if messagebox.askyesno('Message', 'Exit?'):
             config = configparser.ConfigParser()
@@ -1242,70 +967,12 @@ def main_window(scope_ip):
             config.read( os.path.join(os.path.dirname(__file__), 'InitConfig_setup.ini'), encoding='utf-8',)
             
             config.set('Scale_Offset_Selected_Values', 'VoltScale', str_volt_scale.get())
-            config.set('Scale_Offset_Selected_Values', 'VoltOffset', str_volt_offset.get())
-            config.set('Scale_Offset_Config', 'TimebaseScale', str_time_scale.get())
-            config.set('Scale_Offset_Config', 'TimebaseOffset', str_time_offset.get())
-            config.set('Scale_Offset_Selected_Values', 'TriggerLevel', str_trigger_level.get())
-            config.set('Scale_Offset_Config', 'TriggerChan', str_trigger_chan.get())
-            config.set('Scale_Offset_Config', 'WfmIntensity', str_wfm_intensity.get())
             
-            config.set('Threshold_Selected_Values', 'GeneralTopPercent', str_gen_top_percent.get())
-            config.set('Threshold_Selected_Values', 'GeneralMiddlePercent', str_gen_mid_percent.get())
-            config.set('Threshold_Selected_Values', 'GeneralBasePercent', str_gen_base_percent.get())
-            config.set('Threshold_Selected_Values', 'GeneralTop', str_gen_top.get())
-            config.set('Threshold_Selected_Values', 'GeneralMiddle', str_gen_mid.get())
-            config.set('Threshold_Selected_Values', 'GeneralBase', str_gen_base.get())
             
             config.set('Real_Time_Selected_Values', 'RealTimeSourceChannel', str(int_source_chan.get()))
-            config.set('Real_Time_Selected_Values', 'RealTimeFrequency', str_realtime_freq.get())
-            config.set('Real_Time_Selected_Values', 'RealTimeSamplingRate', str_realtime_sampling_rate.get())
-            config.set('Real_Time_Selected_Values', 'RealTimeMemoryDepth', str_realtime_memory_depth.get())
-            config.set('Real_Time_Selected_Values', 'RealTimeHistogram', str(boolvar_histogram.get()))
-            config.set('Real_Time_Selected_Values', 'RealTimeVoltageMeas', str(boolvar_voltage_meas.get()))
-            config.set('Real_Time_Selected_Values', 'RealTimeMask', str(boolvar_mask_test.get()))
-            config.set('Real_Time_Selected_Values', 'RealTimeMaskPath', str_mask.get())
-            
-            config.set('100MHz_PCIE_CLK_Config', 'SignalType', str(int_signal_type.get()))
-            config.set('100MHz_PCIE_CLK_Config', 'SignalLength', str(int_signal_length.get()))
-
-            config.set('Acquisition', 'SamplingRate', str_sampling_rate.get())
-            config.set('Acquisition', 'MemoryDepth', str_memory_depth.get())
-
-            config.set('Lable_Setup_Config', 'ChanLabel1', str_label_1.get())
-            config.set('Lable_Setup_Config', 'ChanLabel2', str_label_2.get())
-            config.set('Lable_Setup_Config', 'ChanLabel3', str_label_3.get())
-            config.set('Lable_Setup_Config', 'ChanLabel4', str_label_4.get())
-            # config.set('Lable_Setup_Config', 'WMeLabel1', str_label_5.get())
-            # config.set('Lable_Setup_Config', 'WMeLabel2', str_label_6.get())
-            # config.set('Lable_Setup_Config', 'WMeLabel3', str_label_7.get())
-            # config.set('Lable_Setup_Config', 'WMeLabel4', str_label_8.get())
-
-            config.set('Chan_Delta', 'ChanSingle', str_ch.get())
-
-            config.set('Save_Setup_Config', 'SaveFileType', str(int_file_type.get()))
-            config.set('Save_Setup_Config', 'SaveLocation', str(int_save_location_choice.get()))
-            config.set('Save_Setup_Config', 'SaveFolder', str_save_folder.get())
-            # config.set('Save_Setup_Config', 'SaveImgPCFolder', str_image_pc_folder.get())
-            config.set('Save_Setup_Config', 'SaveFileName', str_save_filename.get())
-            # config.set('Save_Setup_Config', 'SaveWMeFolder', str_WMe_folder.get())
-            # config.set('Save_Setup_Config', 'SaveWMeLocation', str(int_wme_path_choice.get()))
-            # config.set('Save_Setup_Config', 'SaveWMePCFolder', str_WMe_pc_folder.get())
-            # config.set('Save_Setup_Config', 'SaveWMeName', str_other_file.get())
-
-            # config.set('Load_Config', 'LoadWMe1', str_WMe1.get())
-            # config.set('Load_Config', 'LoadWMe2', str_WMe2.get())
-            # config.set('Load_Config', 'LoadWMe3', str_WMe3.get())
-            # config.set('Load_Config', 'LoadWMe4', str_WMe4.get())
-            config.set('Load_Config', 'LoadLocation', str(int_load_location_choice.get()))
-            config.set('Load_Config', 'LoadFolder', str_load_folder.get())
-            config.set('Load_Config', 'LoadFileName', str_load_filename.get())
-            config.set('Load_Config', 'LoadTimeBase', str(boolvar_load_timebase.get()))
-            config.set('Load_Config', 'LoadLabel', str(boolvar_load_label.get()))
 
             config.write(open(os.path.join(os.path.dirname(__file__), 'InitConfig_setup.ini'), 'w'))
 
-            # formatted_time= self.current_time()
-            # print(f'\n{formatted_time} [GUI Message] Window Closed.')
             window.destroy()
             sys.exit()
 
@@ -1470,7 +1137,6 @@ def main_window(scope_ip):
 
     # 獲取ini數據
     config_data = combo_ini()
-    # general_top_percent_options = config_data['GeneralTopPercent']
     config_file_path = config_data['config_file']
 
 
@@ -1491,253 +1157,132 @@ def main_window(scope_ip):
     window.title(window_name)
     # window.geometry('1500x760+2+2')
     window.geometry('+2+2')
-    window.configure(bg= "#FFF4E9")
+    window.configure(bg= "#EEEEEE")
 
-    frame_bg_color_1= "#d8cfc4"
-    frame_bg_color_2= "#dbc8b0"
-    labelframe_word_color= "#765F50"
-    label_word_color= "#5C260D"
-    text_name_color= "#645C51"
-    text_result_color= "#504737"
+    frame_bg_color_1= "#bababa"
+    frame_bg_color_2= "#888888ff"
+    labelframe_word_color= "#808080"
+    label_word_color= "#4D4D4D"
+    text_name_color= "#4D4D4D"
+    text_result_color= "#313131"
 
     # 設定wfm intensity參數
     wfm_intensity_STEP = 1
     wfm_intensity_MIN_VALUE = 0
     wfm_intensity_MAX_VALUE = 100
 
-    # Channel Frame ===================================================================================================================================
-    label_frame_chan= tk.LabelFrame(window, text= 'Channel', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
+    # Real-time Eye Wizard Frame ===================================================================================================================================
+    label_frame_realtime_eye_wizard= tk.LabelFrame(window, text= 'Real-time Eye Wizard', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
 
-    test = tk.Button(label_frame_chan, text='test', width= 20, height= 2, command= lambda: uxr.realtimeeye())
+    button_chan1 = tk.Button(label_frame_realtime_eye_wizard, text='Channel 1', width= 20, height= 2, command= lambda: uxr.display_Chan(chan= 1, bookmark= str_label_1.get(), choose_type= int_label_type.get()))
+    button_chan2 = tk.Button(label_frame_realtime_eye_wizard, text='Channel 2', width= 20, height= 2, command= lambda: uxr.display_Chan(chan= 2, bookmark= str_label_2.get(), choose_type= int_label_type.get()))
+    button_chan3 = tk.Button(label_frame_realtime_eye_wizard, text='Channel 3', width= 20, height= 2, command= lambda: uxr.display_Chan(chan= 3, bookmark= str_label_3.get(), choose_type= int_label_type.get()))
+    button_chan4 = tk.Button(label_frame_realtime_eye_wizard, text='Channel 4', width= 20, height= 2, command= lambda: uxr.display_Chan(chan= 4, bookmark= str_label_4.get(), choose_type= int_label_type.get()))
 
-    button_chan1 = tk.Button(label_frame_chan, text='Chan1', width= 20, height= 2, command= lambda: uxr.display_Chan(chan= 1, bookmark= str_label_1.get(), choose_type= int_label_type.get()))
-    button_chan2 = tk.Button(label_frame_chan, text='Chan2', width= 20, height= 2, command= lambda: uxr.display_Chan(chan= 2, bookmark= str_label_2.get(), choose_type= int_label_type.get()))
-    button_chan3 = tk.Button(label_frame_chan, text='Chan3', width= 20, height= 2, command= lambda: uxr.display_Chan(chan= 3, bookmark= str_label_3.get(), choose_type= int_label_type.get()))
-    button_chan4 = tk.Button(label_frame_chan, text='Chan4', width= 20, height= 2, command= lambda: uxr.display_Chan(chan= 4, bookmark= str_label_4.get(), choose_type= int_label_type.get()))
-    # button_wme1 = tk.Button(label_frame_chan, text='WMemory1', width= 20, height= 2, command= lambda: uxr.display_WMemory(chan= 1, bookmark= str_label_5.get(), choose_type= int_label_type.get()))
-    # button_wme2 = tk.Button(label_frame_chan, text='WMemory2', width= 20, height= 2, command= lambda: uxr.display_WMemory(chan= 2, bookmark= str_label_6.get(), choose_type= int_label_type.get()))
-    # button_wme3 = tk.Button(label_frame_chan, text='WMemory3', width= 20, height= 2, command= lambda: uxr.display_WMemory(chan= 3, bookmark= str_label_7.get(), choose_type= int_label_type.get()))
-    # button_wme4 = tk.Button(label_frame_chan, text='WMemory4', width= 20, height= 2, command= lambda: uxr.display_WMemory(chan= 4, bookmark= str_label_8.get(), choose_type= int_label_type.get()))
+    label_channel = tk.Label(label_frame_realtime_eye_wizard, text= 'Channel', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
+    str_channel = tk.StringVar()
+    combobox_channel = ttk.Combobox(label_frame_realtime_eye_wizard, width= 5, textvariable= str_channel, values= ['1', '2', '3', '4'])
 
-    # Scale / Offset Frame ===================================================================================================================================
-    label_frame_scale= tk.LabelFrame(window, text= 'Scale / Offset', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
-    
-    label_ch= tk.Label(label_frame_scale, text= 'Chan', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
-    str_ch = tk.StringVar()
-    combobox_ch = ttk.Combobox(label_frame_scale, width= 5, textvariable= str_ch, values= ['All', '1', '2', '3', '4'])
+    label_speed = tk.Label(label_frame_realtime_eye_wizard, text= 'Speed (Hz)', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
+    str_speed = tk.StringVar()
+    combobox_speed = ttk.Combobox(label_frame_realtime_eye_wizard, width= 5, textvariable= str_speed)
+    commbobox_function(combobox= combobox_speed, combobox_var= str_speed, ini_dict_key= 'Speed', ini_option_section= 'Real_Time_Eye_Wizard', ini_option_key= 'Speed', ini_selected_section= 'Real_Time_Eye_Wizard')
 
-    label_volt_scale = tk.Label(label_frame_scale, text= 'Voltage Scale (V)', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
-
-    str_volt_scale = tk.StringVar()
-    combobox_volt_scale = ttk.Combobox(label_frame_scale, width= 7, textvariable= str_volt_scale)
-    commbobox_function(combobox= combobox_volt_scale, combobox_var= str_volt_scale, ini_dict_key= 'VoltScale', ini_option_section= 'Scale_Offset_Config', ini_option_key= 'VoltScale', ini_selected_section= 'Scale_Offset_Selected_Values')
-
-    label_volt_offset = tk.Label(label_frame_scale, text= 'Voltage Offset (V)', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
-
-    str_volt_offset = tk.StringVar()
-    combobox_volt_offset = ttk.Combobox(label_frame_scale, width= 7, textvariable= str_volt_offset)
-    commbobox_function(combobox= combobox_volt_offset, combobox_var= str_volt_offset, ini_dict_key= 'VoltOffset', ini_option_section= 'Scale_Offset_Config', ini_option_key= 'VoltOffset', ini_selected_section= 'Scale_Offset_Selected_Values')
-
-    button_volt_scale = tk.Button(label_frame_scale, text= 'Volt Check', width= 10, height= 1, command= lambda: uxr.volt_check(scale= str_volt_scale.get(), offset= str_volt_offset.get()))
-
-    label_trigger_chan = tk.Label(label_frame_scale, text= 'Trigger Channel', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
-
-    str_trigger_chan = tk.StringVar()
-    combobox_trigger_chan = ttk.Combobox(label_frame_scale, width= 7, textvariable= str_trigger_chan, values= [1, 2, 3, 4])
-
-    label_trigger_level = tk.Label(label_frame_scale, text= 'Trigger level (V)', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
-
-    str_trigger_level = tk.StringVar()
-    combobox_trigger_level = ttk.Combobox(label_frame_scale, width= 7, textvariable= str_trigger_level)
-    commbobox_function(combobox= combobox_trigger_level, combobox_var= str_trigger_level, ini_dict_key= 'TriggerLevel', ini_option_section= 'Scale_Offset_Config', ini_option_key= 'TriggerLevel', ini_selected_section= 'Scale_Offset_Selected_Values')
-
-    button_trigger_check = tk.Button(label_frame_scale, text= 'Trig Check', width= 10, height= 1, command= lambda: uxr.trig_check(chan= str_trigger_chan.get(), level= str_trigger_level.get()))
-
-    label_time_scale = tk.Label(label_frame_scale, text= 'Timebase Scale (sec)', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
-
-    str_time_scale = tk.StringVar()
-    enrty_time_scale = tk.Entry(label_frame_scale, width= 7, textvariable= str_time_scale)
-
-    label_time_offset = tk.Label(label_frame_scale, text= 'Timebase Offset (sec)', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
-
-    str_time_offset = tk.StringVar()
-    enrty_time_offset = tk.Entry(label_frame_scale, width= 7, textvariable= str_time_offset)
-
-    button_time_scale_check = tk.Button(label_frame_scale, text= 'Time scale Check', height= 1, command= lambda: uxr.timebase_scale_check(scale= str_time_scale.get()))
-    button_time_position_check = tk.Button(label_frame_scale, text= 'Time posi Check', height= 1, command= lambda: uxr.timebase_position_check(position= str_time_offset.get()))
-
-    label_wfm_intensity = tk.Label(label_frame_scale, text= 'Waveform Intensity (%)', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
-
-    vcmd = (window.register(validate_number), "%P") # %P = 輸入後字串
-    str_wfm_intensity = tk.StringVar()
-    entry_wfm_intensity = tk.Entry(label_frame_scale, width= 7, justify="center", textvariable= str_wfm_intensity, validate="key", validatecommand=vcmd)
-    update_color(value= str_wfm_intensity.get())
-    button_wfm_intensity = tk.Button(label_frame_scale, text= 'Intensity Check', height= 1, command= lambda: uxr.intensity_check(intensity_value= str_wfm_intensity.get()))
-    
-    button_set_intensity_50 = tk.Button(label_frame_scale, text="Set Intensity 50", command=set_to_50, font=("Candara", 10))
-
-    entry_wfm_intensity.bind("<MouseWheel>", on_mouse_wheel)
-    entry_wfm_intensity.bind("<Button-4>", lambda e: on_mouse_wheel(type("Event", (), {"delta": 120})))
-    entry_wfm_intensity.bind("<Button-5>", lambda e: on_mouse_wheel(type("Event", (), {"delta": -120})))
-
-    # Acquisition Frame ===================================================================================================================================
-    label_frame_acquisition= tk.LabelFrame(window, text= 'Acquisition', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
-    
-    label_sampling_rate = tk.Label(label_frame_acquisition, text= 'Sampling Rate', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
+    label_sampling_rate = tk.Label(label_frame_realtime_eye_wizard, text= 'Sampling Rate (Sa/s)', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
     str_sampling_rate = tk.StringVar()
-    entry_sampling_rate = tk.Entry(label_frame_acquisition, width= 10, textvariable= str_sampling_rate)
-    button_sampling_rate_check = tk.Button(label_frame_acquisition, text= 'Sampling Rate Check', height= 1, command= lambda: uxr.sampling_rate_acquire(rate= str_sampling_rate.get()))
-    button_sampling_rate_auto = tk.Button(label_frame_acquisition, text= 'Return Automatic', height= 1, command= lambda: uxr.sampling_rate_acquire(rate= 'AUTO'))
+    combobox_sampling_rate = ttk.Combobox(label_frame_realtime_eye_wizard, width= 5, textvariable= str_sampling_rate)
+    commbobox_function(combobox= combobox_sampling_rate, combobox_var= str_sampling_rate, ini_dict_key= 'SamplingRate', ini_option_section= 'Real_Time_Eye_Wizard', ini_option_key= 'SamplingRate', ini_selected_section= 'Real_Time_Eye_Wizard')
 
-    label_memory_depth = tk.Label(label_frame_acquisition, text= 'Memory Depth', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
+    label_memory_depth = tk.Label(label_frame_realtime_eye_wizard, text= 'Memory Depth (pts)', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
     str_memory_depth = tk.StringVar()
-    entry_memory_depth = tk.Entry(label_frame_acquisition, width= 10, textvariable= str_memory_depth)
-    button_memory_depth_check = tk.Button(label_frame_acquisition, text= 'Memory Depth Check', height= 1, command= lambda: uxr.memory_depth_acquire(points_value= str_memory_depth.get()))
-    button_memory_depth_auto = tk.Button(label_frame_acquisition, text= 'Return Automatic', height= 1, command= lambda: uxr.memory_depth_acquire(points_value= 'AUTO'))
+    enrty_memory_depth = tk.Entry(label_frame_realtime_eye_wizard, width= 7, textvariable= str_memory_depth)
 
-    # Label Frame ===================================================================================================================================
-    label_frame_label= tk.LabelFrame(window, text= 'Label', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
+    button_reai_time_eye_setup = tk.Button(label_frame_realtime_eye_wizard, text= 'Setup', width= 10, height= 1, command= lambda: '')
 
-    int_label_type = tk.IntVar()    
-    # radiobutton_label= tk.Radiobutton(label_frame_label, text= 'Label', variable= int_label_type, value= 1, background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 10, 'bold'),)
+    # Mask Test Frame ===================================================================================================================================
+    label_frame_mask_test= tk.LabelFrame(window, text= 'Mask Test', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
+    
+    label_mask_locaiton= tk.Label(label_frame_mask_test, text= 'Scope Location', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
+    int_mask_location = tk.IntVar()    
+    radiobutton_mask_location_desktop= tk.Radiobutton(label_frame_mask_test, text= 'Desktop', variable= int_mask_location, value= 1, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 10, 'bold'),)
+    radiobutton_mask_location_desktop.select()
+    radiobutton_mask_location_server= tk.Radiobutton(label_frame_mask_test, text= 'Server', variable= int_mask_location, value= 2, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 10, 'bold'),)
+    
+    label_mask_path = tk.Label(label_frame_mask_test, text= 'Mask Path', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
+    str_mask_path = tk.StringVar()
+    enrty_mask_path = tk.Entry(label_frame_mask_test, width= 7, textvariable= str_mask_path)
 
-    radiobutton_bookmark= tk.Radiobutton(label_frame_label, text= 'Bookmark', variable= int_label_type, value= 2, background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 10, 'bold'),)
-    radiobutton_bookmark.select()
+    button_mask_path_browse = tk.Button(label_frame_mask_test, text= 'Browse', width= 10, height= 1, command= lambda: select_folder(entry_var= str_mask_path))
 
-    str_label_1 = tk.StringVar()
-    entry_label_1 = tk.Entry(label_frame_label, width= 50, textvariable= str_label_1)
+    label_ui_counts = tk.Label(label_frame_mask_test, text= 'UI Counts (UI)', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
+    str_ui_counts = tk.StringVar()
+    enrty_ui_counts = tk.Entry(label_frame_mask_test, width= 7, textvariable= str_ui_counts)
 
-    button_label_1 = tk.Button(label_frame_label, text= 'Chan1_label', command= lambda: uxr.add_bookmark(choose_type= int_label_type.get(), chan= 1, bookmark= str_label_1.get().rstrip('\n')))
-    button_del_label_1 = tk.Button(label_frame_label, text= 'Delete', command= lambda: uxr.delete_bookmark(chan= 1, choose_type= int_label_type.get()))
+    int_mask_stop_type = tk.IntVar()    
+    radiobutton_stop_on_ui= tk.Radiobutton(label_frame_mask_test, text= 'Stop on UI counts', variable= int_mask_stop_type, value= 1, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 10, 'bold'),)
+    radiobutton_stop_on_ui.select()
+    radiobutton_stop_on_failure= tk.Radiobutton(label_frame_mask_test, text= 'Stop on failure', variable= int_mask_stop_type, value= 2, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 10, 'bold'),)
+    radiobutton_forever= tk.Radiobutton(label_frame_mask_test, text= 'Forever', variable= int_mask_stop_type, value= 3, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 10, 'bold'),)
+    
+    button_mask_test_setup = tk.Button(label_frame_mask_test, text= 'Setup', width= 10, height= 1, command= lambda: '')
+    button_mask_test_run = tk.Button(label_frame_mask_test, text= 'Run', width= 10, height= 1, command= lambda: '')
+    button_mask_test_stop = tk.Button(label_frame_mask_test, text= 'Stop', width= 10, height= 1, command= lambda: '')
+    button_mask_window_close = tk.Button(label_frame_mask_test, text= 'Close', width= 10, height= 1, command= lambda: '')
 
-    str_label_2 = tk.StringVar()
-    entry_label_2 = tk.Entry(label_frame_label, width= 50, textvariable= str_label_2)
+    # Histogram Frame ===================================================================================================================================
+    label_frame_histogram= tk.LabelFrame(window, text= 'Histogram', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
 
-    button_label_2 = tk.Button(label_frame_label, text= 'Chan2_label', command= lambda: uxr.add_bookmark(choose_type= int_label_type.get(), chan= 2, bookmark= (str_label_2.get().rstrip('\n'))))
-    button_del_label_2 = tk.Button(label_frame_label, text= 'Delete', command= lambda: uxr.delete_bookmark(chan= 2, choose_type= int_label_type.get()))
+    label_dimension= tk.Label(label_frame_histogram, text= 'Dimension', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
+    int_dimension = tk.IntVar()    
+    radiobutton_horizontal= tk.Radiobutton(label_frame_histogram, text= 'Horizontal', variable= int_dimension, value= 1, background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 10, 'bold'),)
+    radiobutton_horizontal.select()
+    radiobutton_vertical= tk.Radiobutton(label_frame_histogram, text= 'Vertical', variable= int_dimension, value= 2, background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 10, 'bold'),)
 
-    str_label_3 = tk.StringVar()
-    entry_label_3 = tk.Entry(label_frame_label, width= 50, textvariable= str_label_3)
+    label_top_limit = tk.Label(label_frame_histogram, text= 'Top Limits (mV)', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
+    str_top_limit = tk.StringVar()
+    enrty_top_limit = tk.Entry(label_frame_histogram, width= 7, textvariable= str_top_limit)
 
-    button_label_3 = tk.Button(label_frame_label, text= 'Chan3_label', command= lambda: uxr.add_bookmark(choose_type= int_label_type.get(), chan= 3, bookmark= (str_label_3.get().rstrip('\n'))))
-    button_del_label_3 = tk.Button(label_frame_label, text= 'Delete', command= lambda: uxr.delete_bookmark(chan= 3, choose_type= int_label_type.get()))
+    label_bottom_limit = tk.Label(label_frame_histogram, text= 'Bottom Limits (mV)', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
+    str_bottom_limit = tk.StringVar()
+    enrty_bottom_limit = tk.Entry(label_frame_histogram, width= 7, textvariable= str_bottom_limit)
 
-    str_label_4 = tk.StringVar()
-    entry_label_4 = tk.Entry(label_frame_label, width= 50, textvariable= str_label_4)
+    label_left_limit = tk.Label(label_frame_histogram, text= 'Left Limits (s)', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
+    str_left_limit = tk.StringVar()
+    enrty_left_limit = tk.Entry(label_frame_histogram, width= 7, textvariable= str_left_limit)
 
-    button_label_4 = tk.Button(label_frame_label, text= 'Chan4_label', command= lambda: uxr.add_bookmark(choose_type= int_label_type.get(), chan= 4, bookmark= (str_label_4.get().rstrip('\n'))))
-    button_del_label_4 = tk.Button(label_frame_label, text= 'Delete', command= lambda: uxr.delete_bookmark(chan= 4, choose_type= int_label_type.get()))
+    label_right_limit = tk.Label(label_frame_histogram, text= 'Right Limits (s)', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
+    str_right_limit = tk.StringVar()
+    enrty_right_limit = tk.Entry(label_frame_histogram, width= 7, textvariable= str_right_limit)
 
-    # str_label_5 = tk.StringVar()
-    # entry_label_5 = tk.Entry(label_frame_label, width= 25, textvariable= str_label_5)
-
-    # button_label_5 = tk.Button(label_frame_label, text= 'WMe1_label', command= lambda: uxr.add_bookmark(choose_type= int_label_type.get(), chan= 5, bookmark= str_label_5.get().rstrip('\n')))
-    # button_del_label_5 = tk.Button(label_frame_label, text= 'Delete', command= lambda: uxr.delete_bookmark(chan= 5, choose_type= int_label_type.get()))
-
-    # str_label_6 = tk.StringVar()
-    # entry_label_6 = tk.Entry(label_frame_label, width= 25, textvariable= str_label_6)
-
-    # button_label_6 = tk.Button(label_frame_label, text= 'WMe2_label', command= lambda: uxr.add_bookmark(choose_type= int_label_type.get(), chan= 6, bookmark= (str_label_6.get().rstrip('\n'))))
-    # button_del_label_6 = tk.Button(label_frame_label, text= 'Delete', command= lambda: uxr.delete_bookmark(chan= 6, choose_type= int_label_type.get()))
-
-    # str_label_7 = tk.StringVar()
-    # entry_label_7 = tk.Entry(label_frame_label, width= 25, textvariable= str_label_7)
-
-    # button_label_7 = tk.Button(label_frame_label, text= 'WMe3_label', command= lambda: uxr.add_bookmark(choose_type= int_label_type.get(), chan= 7, bookmark= (str_label_7.get().rstrip('\n'))))
-    # button_del_label_7 = tk.Button(label_frame_label, text= 'Delete', command= lambda: uxr.delete_bookmark(chan= 7, choose_type= int_label_type.get()))
-
-    # str_label_8 = tk.StringVar()
-    # entry_label_8 = tk.Entry(label_frame_label, width= 25, textvariable= str_label_8)
-
-    # button_label_8 = tk.Button(label_frame_label, text= 'WMe4_label', command= lambda: uxr.add_bookmark(choose_type= int_label_type.get(), chan= 8, bookmark= (str_label_8.get().rstrip('\n'))))
-    # button_del_label_8 = tk.Button(label_frame_label, text= 'Delete', command= lambda: uxr.delete_bookmark(chan= 8, choose_type= int_label_type.get()))
+    button_histogram_setup = tk.Button(label_frame_histogram, text= 'Setup', width= 10, height= 1, command= lambda: '')
+    button_histogram_window_close = tk.Button(label_frame_histogram, text= 'Close', width= 10, height= 1, command= lambda: '')
 
     # Measurement Frame ===================================================================================================================================
-    label_frame_meas_item= tk.LabelFrame(window, text= 'Measurement', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
-
-    button_freq = tk.Button(label_frame_meas_item, text='Frequency', width= 20, height= 2, command= lambda: uxr.freq(chan= str_ch.get()))
-    button_period = tk.Button(label_frame_meas_item, text='Period', width= 20, height= 2, command= lambda: uxr.period(chan= str_ch.get()))
-    button_VIH = tk.Button(label_frame_meas_item, text='VIH', width= 20, height= 2, command= lambda: uxr.VIH(chan= str_ch.get()))
-    button_VIL= tk.Button(label_frame_meas_item, text='VIL', width= 20, height= 2, command= lambda: uxr.VIL(chan= str_ch.get()))
+    label_frame_measurement= tk.LabelFrame(window, text= 'Measurement', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
     
-    # Threshold Frame ===================================================================================================================================
-    label_frame_thres= tk.LabelFrame(window, text= 'Threshold', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
-
-    int_gen_thres = tk.IntVar()    
-    radiobutton_gen_threshold_1= tk.Radiobutton(label_frame_thres, text= 'Gen Thres Top (%)', variable= int_gen_thres, value= 1, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
-
-    str_gen_top_percent = tk.StringVar()
-    combobox_gen_top_percent = ttk.Combobox(label_frame_thres, width= 8, textvariable= str_gen_top_percent)
-    commbobox_function(combobox= combobox_gen_top_percent, combobox_var= str_gen_top_percent, ini_dict_key= 'GeneralTopPercent', ini_option_section= 'Threshold_Setup_Config', ini_option_key= 'GeneralTopPercent', ini_selected_section= 'Threshold_Selected_Values')
-    
-    label_gen_threshold_1= tk.Label(label_frame_thres, text= '        Gen Thres Middle (%)', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
-
-    str_gen_mid_percent = tk.StringVar()
-    combobox_gen_mid_percent = ttk.Combobox(label_frame_thres, width= 8, textvariable= str_gen_mid_percent)
-    commbobox_function(combobox= combobox_gen_mid_percent, combobox_var= str_gen_mid_percent, ini_dict_key= 'GeneralMiddlePercent', ini_option_section= 'Threshold_Setup_Config', ini_option_key= 'GeneralMiddlePercent', ini_selected_section= 'Threshold_Selected_Values')
-
-    label_gen_threshold_2= tk.Label(label_frame_thres, text= '        Gen Thres Base (%)', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
-
-    str_gen_base_percent = tk.StringVar()
-    combobox_gen_base_percent = ttk.Combobox(label_frame_thres, width= 8, textvariable= str_gen_base_percent)
-    commbobox_function(combobox= combobox_gen_base_percent, combobox_var= str_gen_base_percent, ini_dict_key= 'GeneralBasePercent', ini_option_section= 'Threshold_Setup_Config', ini_option_key= 'GeneralBasePercent', ini_selected_section= 'Threshold_Selected_Values')
-
-    radiobutton_gen_threshold_2= tk.Radiobutton(label_frame_thres, text= 'Gen Thres Top (V)', variable= int_gen_thres, value= 2, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
-    radiobutton_gen_threshold_2.select()
-
-    str_gen_top = tk.StringVar()
-    combobox_gen_top = ttk.Combobox(label_frame_thres, width= 8, textvariable= str_gen_top)
-    commbobox_function(combobox= combobox_gen_top, combobox_var= str_gen_top, ini_dict_key= 'GeneralTop', ini_option_section= 'Threshold_Setup_Config', ini_option_key= 'GeneralTop', ini_selected_section= 'Threshold_Selected_Values')
-
-    label_gen_threshold_4= tk.Label(label_frame_thres, text= '        Gen Thres Middle (V)', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
-
-    str_gen_mid = tk.StringVar()
-    combobox_gen_mid = ttk.Combobox(label_frame_thres, width= 8, textvariable= str_gen_mid)
-    commbobox_function(combobox= combobox_gen_mid, combobox_var= str_gen_mid, ini_dict_key= 'GeneralMiddle', ini_option_section= 'Threshold_Setup_Config', ini_option_key= 'GeneralMiddle', ini_selected_section= 'Threshold_Selected_Values')
-
-    label_gen_threshold_5= tk.Label(label_frame_thres, text= '        Gen Thres Base (V)', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
-
-    str_gen_base = tk.StringVar()
-    combobox_gen_base = ttk.Combobox(label_frame_thres, width= 8, textvariable= str_gen_base)
-    commbobox_function(combobox= combobox_gen_base, combobox_var= str_gen_base, ini_dict_key= 'GeneralBase', ini_option_section= 'Threshold_Setup_Config', ini_option_key= 'GeneralBase', ini_selected_section= 'Threshold_Selected_Values')
-    button_gen_check = tk.Button(
-        label_frame_thres, text= 'Gen Thres Check', command= lambda: uxr.gen_threshold(
-            g_top= combobox_gen_top.get(), g_middle= combobox_gen_mid.get(), g_base= combobox_gen_base.get(), g_top_percent= combobox_gen_top_percent.get(), g_middle_percent= combobox_gen_mid_percent.get(), g_base_percent= combobox_gen_base_percent.get(), 
-            )
-        )
-    # Result Frame ===================================================================================================================================
-    label_frame_get_result= tk.LabelFrame(window, text= 'Results', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
-
-
-
+    button_Vpp = tk.Button(label_frame_measurement, text= 'Vpp', width= 10, height= 1, command= lambda: '')
+    button_VIH = tk.Button(label_frame_measurement, text= 'VIH', width= 10, height= 1, command= lambda: '')
+    button_VIL = tk.Button(label_frame_measurement, text= 'VIL', width= 10, height= 1, command= lambda: '')
+    button_eye_height = tk.Button(label_frame_measurement, text= 'Eye Height', width= 10, height= 1, command= lambda: '')
+    button_eye_width = tk.Button(label_frame_measurement, text= 'Eye Width', width= 10, height= 1, command= lambda: '')
+    button_cdrrate = tk.Button(label_frame_measurement, text= 'CDR rate', width= 10, height= 1, command= lambda: '')
 
     # Control Frame ===================================================================================================================================
-    label_frame_control= tk.LabelFrame(window, text= 'Control', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
+    label_frame_control= tk.LabelFrame(window, text= 'Control', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
 
     button_run = tk.Button(label_frame_control, text='RUN', width= 20, height= 2, command= lambda: uxr.run())
-
     button_stop = tk.Button(label_frame_control, text='STOP', width= 20, height= 2, command= lambda: uxr.stop())
-
     button_single = tk.Button(label_frame_control, text='SINGLE', width= 20, height= 2, command= lambda: uxr.single())
-
     button_clear_display = tk.Button(label_frame_control, text='Clear', width= 8, height= 2, command= lambda: uxr.clear_diaplay())
     button_clear_display.config(state= 'disabled')
-
     button_autoscale = tk.Button(label_frame_control, text='Auto Scale', width= 20, height= 2, command= lambda: uxr.autoscale())
     button_autoscale.config(state= 'disabled')
-
     button_default = tk.Button(label_frame_control, text='Default', width= 20, height= 2, command= lambda: uxr.default())
     button_default.config(state= 'disabled')
-
-    button_trigger = tk.Button(label_frame_control, text='Trigger Type', width= 20, height= 2, command= lambda: uxr.trig_type())
-
-    button_del = tk.Button(label_frame_control, text='Delete item', width= 20, height= 2, command= lambda: uxr.delete_item())
-
+    button_trigger_type = tk.Button(label_frame_control, text='Trigger Type', width= 20, height= 2, command= lambda: uxr.trig_type())
+    button_del_meas = tk.Button(label_frame_control, text='Delete item', width= 20, height= 2, command= lambda: uxr.delete_item())
     button_add_marker = tk.Button(label_frame_control, text='Add Marker', width= 20, height= 2, command= lambda: uxr.add_marker())
-
     button_del_marker = tk.Button(label_frame_control, text='Del Marker', width= 20, height= 2, command= lambda: uxr.delete_marker())
-
-    button_trig_slope = tk.Button(label_frame_control, text= 'Trig Slope', width= 8, height= 2, command= lambda: uxr.trig_slope())
 
     def disable_button():
         if button_autoscale["state"] == 'normal':
@@ -1753,367 +1298,169 @@ def main_window(scope_ip):
         else:
             button_clear_display.config(state="normal")
 
-    button_button_disable = tk.Button(label_frame_control, text= 'Disable\nButton', width= 8, height=2, command= disable_button)
+    button_disable = tk.Button(label_frame_control, text= 'Disable\nButton', width= 8, height=2, command= disable_button)
 
     boolvar_marker_1 = tk.BooleanVar()    
-    checkbutton_marker_1= tk.Checkbutton(label_frame_control, text= 'Meas 1', variable= boolvar_marker_1, background= frame_bg_color_1, fg= label_word_color)
-
+    checkbox_marker_1= tk.Checkbutton(label_frame_control, text= 'Meas 1', variable= boolvar_marker_1, background= frame_bg_color_2, fg= label_word_color)
     boolvar_marker_2 = tk.BooleanVar()    
-    checkbutton_marker_2= tk.Checkbutton(label_frame_control, text= 'Meas 2', variable= boolvar_marker_2, background= frame_bg_color_1, fg= label_word_color)
-
+    checkbox_marker_2= tk.Checkbutton(label_frame_control, text= 'Meas 2', variable= boolvar_marker_2, background= frame_bg_color_2, fg= label_word_color)
     boolvar_marker_3 = tk.BooleanVar()    
-    checkbutton_marker_3= tk.Checkbutton(label_frame_control, text= 'Meas 3', variable= boolvar_marker_3, background= frame_bg_color_1, fg= label_word_color)
-
+    checkbox_marker_3= tk.Checkbutton(label_frame_control, text= 'Meas 3', variable= boolvar_marker_3, background= frame_bg_color_2, fg= label_word_color)
     boolvar_marker_4 = tk.BooleanVar()    
-    checkbutton_marker_4= tk.Checkbutton(label_frame_control, text= 'Meas 4', variable= boolvar_marker_4, background= frame_bg_color_1, fg= label_word_color)
-
+    checkbox_marker_4= tk.Checkbutton(label_frame_control, text= 'Meas 4', variable= boolvar_marker_4, background= frame_bg_color_2, fg= label_word_color)
     boolvar_marker_5 = tk.BooleanVar()    
-    checkbutton_marker_5= tk.Checkbutton(label_frame_control, text= 'Meas 5', variable= boolvar_marker_5, background= frame_bg_color_1, fg= label_word_color)
-
+    checkbox_marker_5= tk.Checkbutton(label_frame_control, text= 'Meas 5', variable= boolvar_marker_5, background= frame_bg_color_2, fg= label_word_color)
     boolvar_marker_6 = tk.BooleanVar()    
-    checkbutton_marker_6= tk.Checkbutton(label_frame_control, text= 'Meas 6', variable= boolvar_marker_6, background= frame_bg_color_1, fg= label_word_color)
+    checkbox_marker_6= tk.Checkbutton(label_frame_control, text= 'Meas 6', variable= boolvar_marker_6, background= frame_bg_color_2, fg= label_word_color)
 
-    # Real-time eye Frame ===================================================================================================================================
-    label_frame_realtime_eye= tk.LabelFrame(window, text= 'Real Time Eye', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
+    # Config Frame ===================================================================================================================================
+    label_frame_config= tk.LabelFrame(window, text= 'Config.', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
 
-    label_source_chan= tk.Label(label_frame_realtime_eye, text= 'Source Channel', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
-    int_source_chan = tk.IntVar()
-    combobox_source_chan = ttk.Combobox(label_frame_realtime_eye, width= 5, textvariable= int_source_chan, values= ['1', '2', '3', '4'])
+    label_voltage_scale = tk.Label(label_frame_config, text= 'Voltage Scale (V)', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+    str_voltage_scale = tk.StringVar()
+    combobox_voltage_scale = ttk.Combobox(label_frame_config, width= 7, textvariable= str_voltage_scale)
+    commbobox_function(combobox= combobox_voltage_scale, combobox_var= str_voltage_scale, ini_dict_key= 'VoltageScale', ini_option_section= 'Real_Time_Config', ini_option_key= 'VoltageScale', ini_selected_section= 'Real_Time_Config')
+
+    button_voltage_scale_check = tk.Button(label_frame_config, text='Check', width= 20, height= 1, command= lambda: '')
+
+    label_voltage_offset = tk.Label(label_frame_config, text= 'Voltage Offset (V)', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+    str_voltage_offset = tk.StringVar()
+    combobox_voltage_offset = ttk.Combobox(label_frame_config, width= 7, textvariable= str_voltage_offset)
+    commbobox_function(combobox= combobox_voltage_offset, combobox_var= str_voltage_offset, ini_dict_key= 'VoltageOffset', ini_option_section= 'Real_Time_Config', ini_option_key= 'VoltageOffset', ini_selected_section= 'Real_Time_Config')
+
+    button_voltage_offset_check = tk.Button(label_frame_config, text='Check', width= 20, height= 1, command= lambda: '')
+
+    label_timebase_scale = tk.Label(label_frame_config, text= 'Timebase Scale (s)', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+    str_timebase_scale = tk.StringVar()
+    enrty_imebase_scale = tk.Entry(label_frame_config, width= 7, textvariable= str_timebase_scale)
+
+    button_timebase_scale_check = tk.Button(label_frame_config, text='Check', width= 20, height= 1, command= lambda: '')
+
+    label_timebase_offset = tk.Label(label_frame_config, text= 'Timebase Offset (s)', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+    str_timebase_offset = tk.StringVar()
+    enrty_timebase_offset = tk.Entry(label_frame_config, width= 7, textvariable= str_timebase_offset)
+
+    button_timebase_offset_check = tk.Button(label_frame_config, text='Check', width= 20, height= 1, command= lambda: '')
+
+    label_trigger_channel = tk.Label(label_frame_config, text= 'Trigger Channel', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+    str_trigger_channel = tk.StringVar()
+    combobox_trigger_channel = ttk.Combobox(label_frame_config, width= 7, textvariable= str_trigger_channel)
+    commbobox_function(combobox= combobox_trigger_channel, combobox_var= str_trigger_channel, ini_dict_key= 'TriggerChan', ini_option_section= 'Real_Time_Config', ini_option_key= 'TriggerChan', ini_selected_section= 'Real_Time_Config')
+
+    label_trigger_level = tk.Label(label_frame_config, text= 'Trigger Level (V)', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+    str_trigger_level = tk.StringVar()
+    combobox_trigger_level = ttk.Combobox(label_frame_config, width= 7, textvariable= str_trigger_level)
+    commbobox_function(combobox= combobox_trigger_level, combobox_var= str_trigger_level, ini_dict_key= 'TriggerLevel', ini_option_section= 'Real_Time_Config', ini_option_key= 'TriggerLevel', ini_selected_section= 'Real_Time_Config')
+
+    button_trigger_check = tk.Button(label_frame_config, text='Check', width= 20, height= 1, command= lambda: '')
+
+    label_wfm_intensity = tk.Label(label_frame_config, text= 'Waveform Intensity', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+    vcmd = (window.register(validate_number), "%P") # %P = 輸入後字串
+    str_wfm_intensity = tk.StringVar()
+    entry_wfm_intensity = tk.Entry(label_frame_config, width= 7, justify="center", textvariable= str_wfm_intensity, validate="key", validatecommand=vcmd)
+    update_color(value= str_wfm_intensity.get())
+    button_wfm_intensity = tk.Button(label_frame_config, text= 'Check', height= 1, command= lambda: uxr.intensity_check(intensity_value= str_wfm_intensity.get()))
     
-    label_realtime_freq= tk.Label(label_frame_realtime_eye, text= 'Frequency (GHz)', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
-    str_realtime_freq= tk.StringVar()
-    combobox_realtime_freq = ttk.Combobox(label_frame_realtime_eye, width= 8, textvariable= str_realtime_freq)
-    commbobox_function(combobox= combobox_realtime_freq, combobox_var= str_realtime_freq, ini_dict_key= 'RealTimeFrequency', ini_option_section= 'Real_Time_Config', ini_option_key= 'RealTimeFrequency', ini_selected_section= 'Real_Time_Selected_Values')
-    
-    label_realtime_sampling_rate= tk.Label(label_frame_realtime_eye, text= 'Sampling Rate (Sa/s)', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
-    str_realtime_sampling_rate = tk.StringVar()
-    entry_realtime_sampling_rate = tk.Entry(label_frame_realtime_eye, width= 10, textvariable= str_realtime_sampling_rate)
+    button_set_intensity_50 = tk.Button(label_frame_config, text="Set Intensity 50", command=set_to_50, font=("Candara", 10))
 
-    label_realtime_memory_depth= tk.Label(label_frame_realtime_eye, text= 'Memory Depth (pts)', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
-    str_realtime_memory_depth = tk.StringVar()
-    entry_realtime_memory_depth = tk.Entry(label_frame_realtime_eye, width= 10, textvariable= str_realtime_memory_depth)
+    entry_wfm_intensity.bind("<MouseWheel>", on_mouse_wheel)
+    entry_wfm_intensity.bind("<Button-4>", lambda e: on_mouse_wheel(type("Event", (), {"delta": 120})))
+    entry_wfm_intensity.bind("<Button-5>", lambda e: on_mouse_wheel(type("Event", (), {"delta": -120})))
 
-    boolvar_histogram = tk.BooleanVar()    
-    checkbutton_histogram= tk.Checkbutton(label_frame_realtime_eye, text= 'Histogram', variable= boolvar_histogram, background= frame_bg_color_2, fg= label_word_color)
-    
-    boolvar_voltage_meas = tk.BooleanVar()    
-    checkbutton_voltage_meas= tk.Checkbutton(label_frame_realtime_eye, text= 'Vpp, VIH, VIL', variable= boolvar_voltage_meas, background= frame_bg_color_2, fg= label_word_color)
-    
-    boolvar_cdrfrequency = tk.BooleanVar()    
-    checkbutton_cdrfrequency= tk.Checkbutton(label_frame_realtime_eye, text= 'CDRFrequency', variable= boolvar_cdrfrequency, background= frame_bg_color_2, fg= label_word_color)
-    
-    boolvar_eyewidth = tk.BooleanVar()    
-    checkbutton_eyewidth= tk.Checkbutton(label_frame_realtime_eye, text= 'Eye Width', variable= boolvar_eyewidth, background= frame_bg_color_2, fg= label_word_color)
+    label_label_type= tk.Label(label_frame_config, text= 'Label Type', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
+    int_label_type = tk.IntVar()    
+    radiobutton_label= tk.Radiobutton(label_frame_config, text= 'Label', variable= int_label_type, value= 1, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 10, 'bold'),)
+    radiobutton_label.select()
+    radiobutton_bookmark= tk.Radiobutton(label_frame_config, text= 'Bookmark', variable= int_label_type, value= 2, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 10, 'bold'),)
 
-    boolvar_eyeheight = tk.BooleanVar()    
-    checkbutton_eyeheight= tk.Checkbutton(label_frame_realtime_eye, text= 'Eye Height', variable= boolvar_eyeheight, background= frame_bg_color_2, fg= label_word_color)
-    
-    boolvar_mask_test = tk.BooleanVar()    
-    checkbutton_mask_test= tk.Checkbutton(label_frame_realtime_eye, text= 'Mask', variable= boolvar_mask_test, background= frame_bg_color_2, fg= label_word_color)
-    str_mask= tk.StringVar()
-    entry_mask= tk.Entry(label_frame_realtime_eye, width= 25, textvariable= str_mask)
-    button_mask_browse= tk.Button(label_frame_realtime_eye, text= 'Browse', width= 10, command= lambda: select_folder(entry_var= str_mask))
-    
-    button_realtime_eye_setting= tk.Button(label_frame_realtime_eye, text= '一鍵設定', width= 10)
-    
-    # 100MHz PCIe CLK Frame ===================================================================================================================================
-    label_frame_100MHz_PCIe_CLK= tk.LabelFrame(window, text= '100MHz PCIe CLK', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
+    str_label_name = tk.StringVar()
+    enrty_label_name = tk.Entry(label_frame_config, width= 7, textvariable= str_label_name)
+    button_add_label = tk.Button(label_frame_config, text='Add Label', width= 20, height= 1, command= lambda: '')
+    button_del_label = tk.Button(label_frame_config, text='Delete Label', width= 20, height= 1, command= lambda: '')
 
-    label_signal_type = tk.Label(label_frame_100MHz_PCIe_CLK, text= 'Signal / Noise', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+    # Save Image Frame ===================================================================================================================================
+    label_frame_save_image= tk.LabelFrame(window, text= 'Save Image.', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
 
-    int_signal_type = tk.IntVar()
-    radiobutton_signal = tk.Radiobutton(label_frame_100MHz_PCIe_CLK, text= 'Signal', variable= int_signal_type, value= 1, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
-    radiobutton_noise = tk.Radiobutton(label_frame_100MHz_PCIe_CLK, text= 'Noise', variable= int_signal_type, value= 2, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
+    label_save_img_pc_folder = tk.Label(label_frame_save_image, text= 'Image Folder (PC)', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+    str_save_img_pc_folder = tk.StringVar()
+    enrty_save_img_pc_folder = tk.Entry(label_frame_save_image, width= 7, textvariable= str_save_img_pc_folder)
 
-    label_signal_length = tk.Label(label_frame_100MHz_PCIe_CLK, text= 'Signal Length', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+    button_img_pc_folder_browse = tk.Button(label_frame_save_image, text='Browse', width= 20, height= 1, command= lambda: '')
 
-    int_signal_length = tk.IntVar()
-    radiobutton_160u = tk.Radiobutton(label_frame_100MHz_PCIe_CLK, text= '160 us', variable= int_signal_length, value= 1, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
-    radiobutton_170u = tk.Radiobutton(label_frame_100MHz_PCIe_CLK, text= '170 us', variable= int_signal_length, value= 2, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
-    radiobutton_180u = tk.Radiobutton(label_frame_100MHz_PCIe_CLK, text= '180 us', variable= int_signal_length, value= 3, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
-    radiobutton_190u = tk.Radiobutton(label_frame_100MHz_PCIe_CLK, text= '190 us', variable= int_signal_length, value= 4, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
+    label_save_img_name = tk.Label(label_frame_save_image, text= 'Image Name', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+    str_save_img_name = tk.StringVar()
+    enrty_save_img_name = tk.Entry(label_frame_save_image, width= 7, textvariable= str_save_img_name)
 
-    button_100MHz_pcie_clk_setting = tk.Button(label_frame_100MHz_PCIe_CLK, text= '一鍵設定', width= 10)
+    button_img_name_save = tk.Button(label_frame_save_image, text='Save', width= 20, height= 1, command= lambda: '')
 
-    # Save Frame ===================================================================================================================================
-    label_frame_save= tk.LabelFrame(window, text= 'Save', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
-    label_save_file_type = tk.Label(label_frame_save, text= 'File Type: ', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+    # Setup File Frame ===================================================================================================================================
+    label_frame_setup_file= tk.LabelFrame(window, text= 'Setup Files', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
 
-    int_file_type = tk.IntVar()
-    radiobutton_img = tk.Radiobutton(label_frame_save, text= 'Image', variable= int_file_type, value= 1, background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
-    radiobutton_setup = tk.Radiobutton(label_frame_save, text= 'Setup', variable= int_file_type, value= 3, background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
-    radiobutton_bin = tk.Radiobutton(label_frame_save, text= 'Bin', variable= int_file_type, value= 4, background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
-    radiobutton_wme = tk.Radiobutton(label_frame_save, text= 'WMemory', variable= int_file_type, value= 2, background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
-    radiobutton_img.select()
+    label_save_scope_folder = tk.Label(label_frame_setup_file, text= 'Image Folder (PC)', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+    str_save_scope_folder = tk.StringVar()
+    enrty_save_scope_folder = tk.Entry(label_frame_setup_file, width= 7, textvariable= str_save_scope_folder)
 
-    label_save_location = tk.Label(label_frame_save, text= 'Save Location: ', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+    button_scope_folder_browse = tk.Button(label_frame_setup_file, text='Browse', width= 20, height= 1, command= lambda: '')
 
-    int_save_location_choice = tk.IntVar()
-    radiobutton_scope_location = tk.Radiobutton(label_frame_save, text= 'Scope Desktop', variable= int_save_location_choice, value= 1, background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
-    radiobutton_pc_location = tk.Radiobutton(label_frame_save, text= 'PC / Server', variable= int_save_location_choice, value= 2, background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
-    # radiobutton_pc_location.select()
+    label_file_name = tk.Label(label_frame_setup_file, text= 'Image Name', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+    str_file_name = tk.StringVar()
+    enrty_file_name = tk.Entry(label_frame_setup_file, width= 7, textvariable= str_file_name)
 
-    label_save_folder = tk.Label(label_frame_save, text= 'Save Folder: ', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11, 'bold'),)
-    str_save_folder = tk.StringVar()
-    entry_save_folder = tk.Entry(label_frame_save, width= 40, textvariable= str_save_folder)
-
-    button_save_browse = tk.Button(label_frame_save, text= 'PC Browse', width= 10, command= lambda: select_folder(entry_var= str_save_folder))
-
-    label_save_filename = tk.Label(label_frame_save, text= 'File Name: ', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11, 'bold'),)
-    str_save_filename = tk.StringVar()
-    entry_save_filename = tk.Entry(label_frame_save, width= 40, textvariable= str_save_filename)
-
-
-    button_save_scope = tk.Button(label_frame_save, text= 'Save', command= lambda: uxr.save_other_file_scope(chan= int_source_chan.get(), folder= str_save_folder.get(), current_file_name= str_save_filename.get(), ext_type= int_file_type.get(), path_choice= int_save_location_choice.get()))
-
-    # Load WMemory Frame ===================================================================================================================================
-    label_frame_load= tk.LabelFrame(window, text= 'Load Setup', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
-
-    
-    label_load_location = tk.Label(label_frame_load, text= 'Load Location: ', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
-
-    int_load_location_choice = tk.IntVar()
-    radiobutton_load_scope_location = tk.Radiobutton(label_frame_load, text= 'Scope Desktop', variable= int_load_location_choice, value= 1, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
-    radiobutton_load_pc_location = tk.Radiobutton(label_frame_load, text= 'PC / Server', variable= int_load_location_choice, value= 2, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
-    # radiobutton_load_pc_location.select()
-
-    label_load_folder = tk.Label(label_frame_load, text= 'Load Folder: ', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
-    str_load_folder = tk.StringVar()
-    entry_load_folder = tk.Entry(label_frame_load, width= 50, textvariable= str_load_folder)
-
-    button_load_browse = tk.Button(label_frame_load, text= 'PC Browse', width= 10, command= lambda: select_folder(entry_var= str_load_folder))
-
-    label_load_filename = tk.Label(label_frame_load, text= 'File Name: ', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
-    
-    str_load_filename = tk.StringVar()
-    entry_load_filename = tk.Entry(label_frame_load, width= 50, textvariable= str_load_filename)
-    button_load_file = tk.Button(label_frame_load, text= 'Load Setup File', command= lambda: uxr.load_setup(folder= str_save_folder.get(), setup_name= str_load_filename.get(), scale= str_time_scale.get(), position= str_time_offset.get(), choose_type= int_label_type.get(), file_path_choice = int_load_location_choice.get()))
-
-    boolvar_load_timebase = tk.BooleanVar()    
-    checkbutton_setup_timebase= tk.Checkbutton(label_frame_load, text= 'Timebase', variable= boolvar_load_timebase, background= frame_bg_color_1, fg= label_word_color)
-    checkbutton_setup_timebase.select()
+    button_file_name_save = tk.Button(label_frame_setup_file, text='Save', width= 20, height= 1, command= lambda: '')
+    button_file_name_load = tk.Button(label_frame_setup_file, text='Load', width= 20, height= 1, command= lambda: '')
 
     boolvar_load_label = tk.BooleanVar()    
-    cbheckbutton_setup_label= tk.Checkbutton(label_frame_load, text= 'Label', variable= boolvar_load_label, background= frame_bg_color_1, fg= label_word_color)
+    cbheckbutton_setup_label= tk.Checkbutton(label_frame_setup_file, text= 'Label', variable= boolvar_load_label, background= frame_bg_color_1, fg= label_word_color)
     cbheckbutton_setup_label.select()
+
+    # Extract Results Frame ===================================================================================================================================
+    label_frame_extract_results= tk.LabelFrame(window, text= 'Extract Results', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
+
+    button_get_results = tk.Button(label_frame_extract_results, text= 'Get Results\n(最多取6個)', width= 20, height= 2, command= lambda: uxr.get_results())
+    
+    label_meas_name_1 = tk.Label(label_frame_extract_results, text= '', background= frame_bg_color_2, fg= '#516464', font= ('Candara', 11, 'bold'),)
+    text_meas_1 = tk.Text(label_frame_extract_results, width= 25, height= 1, background= '#DBE4F0', fg= '#375050', font= ('Calibri', 11, 'bold'),)
+    text_meas_1.config(state=tk.DISABLED)
+    
+    label_meas_name_2 = tk.Label(label_frame_extract_results, text= '', background= frame_bg_color_2, fg= '#516464', font= ('Candara', 11, 'bold'),)
+    text_meas_2 = tk.Text(label_frame_extract_results, width= 25, height= 1, background= '#DBE4F0', fg= '#375050', font= ('Calibri', 11, 'bold'),)
+    text_meas_2.config(state=tk.DISABLED)
+    
+    label_meas_name_3 = tk.Label(label_frame_extract_results, text= '', background= frame_bg_color_2, fg= '#516464', font= ('Candara', 11, 'bold'),)
+    text_meas_3 = tk.Text(label_frame_extract_results, width= 25, height= 1, background= '#DBE4F0', fg= '#375050', font= ('Calibri', 11, 'bold'),)
+    text_meas_3.config(state=tk.DISABLED)
+    
+    label_meas_name_4 = tk.Label(label_frame_extract_results, text= '', background= frame_bg_color_2, fg= '#516464', font= ('Candara', 11, 'bold'),)
+    text_meas_4 = tk.Text(label_frame_extract_results, width= 25, height= 1, background= '#DBE4F0', fg= '#375050', font= ('Calibri', 11, 'bold'),)
+    text_meas_4.config(state=tk.DISABLED)
+    
+    label_meas_name_5 = tk.Label(label_frame_extract_results, text= '', background= frame_bg_color_2, fg= '#516464', font= ('Candara', 11, 'bold'),)
+    text_meas_5 = tk.Text(label_frame_extract_results, width= 25, height= 1, background= '#DBE4F0', fg= '#375050', font= ('Calibri', 11, 'bold'),)
+    text_meas_5.config(state=tk.DISABLED)
+    
+    label_meas_name_6 = tk.Label(label_frame_extract_results, text= '', background= frame_bg_color_2, fg= '#516464', font= ('Candara', 11, 'bold'),)
+    text_meas_6 = tk.Text(label_frame_extract_results, width= 25, height= 1, background= '#DBE4F0', fg= '#375050', font= ('Calibri', 11, 'bold'),)
+    text_meas_6.config(state=tk.DISABLED)
+
 
     # Grid ===================================================================================================================================
 
     # LabelFrame grid
-    label_frame_chan.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'nsew')
-    label_frame_scale.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'nsew', rowspan= 2)
-    label_frame_acquisition.grid(row= 3, column= 0, padx= 5, pady= 2, sticky= 'nsew', rowspan= 2)
-    label_frame_label.grid(row= 5, column= 0, padx= 5, pady= 2, sticky= 'nsew', rowspan= 2)
-    label_frame_meas_item.grid(row= 7, column= 0, padx= 5, pady= 2, sticky= 'nsew')
-    label_frame_thres.grid(row= 8, column= 0, padx= 5, pady= 2, sticky= 'nsew')
-    label_frame_get_result.grid(row= 9, column= 0, padx= 5, pady= 2, sticky= 'nsew')
-
-    label_frame_control.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'nsew', rowspan= 2)
-    label_frame_realtime_eye.grid(row= 2, column= 1, padx= 5, pady= 2, sticky= 'nsew', rowspan= 4)
-    label_frame_100MHz_PCIe_CLK.grid(row= 6, column= 1, padx= 5, pady= 2, sticky= 'nsew')
-    label_frame_save.grid(row= 7, column= 1, padx= 5, pady= 2, sticky= 'nsew', rowspan= 2)
-    label_frame_load.grid(row= 9, column= 1, padx= 5, pady= 2, sticky= 'nsew')
+    label_frame_realtime_eye_wizard.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'nsew')
+    label_frame_mask_test.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'nsew')
+    label_frame_histogram.grid(row= 2, column= 0, padx= 5, pady= 2, sticky= 'nsew')
+    label_frame_measurement.grid(row= 3, column= 0, padx= 5, pady= 2, sticky= 'nsew')
+    label_frame_control.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'nsew')
+    label_frame_config.grid(row= 1, column= 1, padx= 5, pady= 2, sticky= 'nsew')
+    label_frame_save_image.grid(row= 2, column= 1, padx= 5, pady= 2, sticky= 'nsew')
+    label_frame_setup_file.grid(row= 3, column= 1, padx= 5, pady= 2, sticky= 'nsew')
+    label_frame_extract_results.grid(row= 4, column= 0, padx= 5, pady= 2, sticky= 'nsew', columnspan= 2)
 
     # Channel grid
-    test.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w')
     button_chan1.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
     button_chan2.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'w')
     button_chan3.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w')
     button_chan4.grid(row= 0, column= 3, padx= 5, pady= 2, sticky= 'w')
-    # button_wme1.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w')
-    # button_wme2.grid(row= 1, column= 1, padx= 5, pady= 2, sticky= 'w')
-    # button_wme3.grid(row= 1, column= 2, padx= 5, pady= 2, sticky= 'w')
-    # button_wme4.grid(row= 1, column= 3, padx= 5, pady= 2, sticky= 'w')
-
-    # Scale / Offset grid
-    label_ch.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
-    combobox_ch.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'w')
-    
-    label_volt_scale.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w', columnspan= 2)
-    combobox_volt_scale.grid(row= 1, column= 2, padx= 5, pady= 2, sticky= 'w')
-    label_volt_offset.grid(row= 2, column= 0, padx= 5, pady= 2, sticky= 'w', columnspan= 2)
-    combobox_volt_offset.grid(row= 2, column= 2, padx= 5, pady= 2, sticky= 'w')
-    button_volt_scale.grid(row= 1, column= 3, padx= 5, pady= 2, sticky= 'w')
-
-    label_trigger_chan.grid(row= 4, column= 0, padx= 5, pady= 2, sticky= 'w', columnspan= 2)
-    combobox_trigger_chan.grid(row= 4, column= 2, padx= 5, pady= 2, sticky= 'w')
-    label_trigger_level.grid(row= 5, column= 0, padx= 5, pady= 2, sticky= 'w', columnspan= 2)
-    combobox_trigger_level.grid(row= 5, column= 2, padx= 5, pady= 2, sticky= 'w')
-    button_trigger_check.grid(row= 4, column= 3, padx= 5, pady= 2, sticky= 'w')
-
-    label_time_scale.grid(row= 1, column= 4, padx= 5, pady= 2, sticky= 'w')
-    enrty_time_scale.grid(row= 1, column= 5, padx= 5, pady= 2, sticky= 'w')
-    button_time_scale_check.grid(row= 1, column= 6, padx= 5, pady= 2, sticky= 'w')
-    label_time_offset.grid(row= 2, column= 4, padx= 5, pady= 2, sticky= 'w')
-    enrty_time_offset.grid(row= 2, column= 5, padx= 5, pady= 2, sticky= 'w')
-    button_time_position_check.grid(row= 2, column= 6, padx= 5, pady= 2, sticky= 'w')
-
-    label_wfm_intensity.grid(row= 4, column= 4, padx= 5, pady= 2, sticky= 'w')
-    entry_wfm_intensity.grid(row= 4, column= 5, padx= 5, pady= 2, sticky= 'w')
-    button_wfm_intensity.grid(row= 4, column= 6, padx= 5, pady= 2, sticky= 'w')
-    button_set_intensity_50.grid(row= 5, column= 6, padx= 5, pady= 2, sticky= 'w')
-
-    # Label grid
-    # radiobutton_label.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
-    entry_label_1.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w', columnspan= 2)
-    button_label_1.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w')
-    button_del_label_1.grid(row= 0, column= 3, padx= 5, pady= 2, sticky= 'w')
-    entry_label_2.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w', columnspan= 2)
-    button_label_2.grid(row= 1, column= 2, padx= 5, pady= 2, sticky= 'w')
-    button_del_label_2.grid(row= 1, column= 3, padx= 5, pady= 2, sticky= 'w')
-    entry_label_3.grid(row= 2, column= 0, padx= 5, pady= 2, sticky= 'w', columnspan= 2)
-    button_label_3.grid(row= 2, column= 2, padx= 5, pady= 2, sticky= 'w')
-    button_del_label_3.grid(row= 2, column= 3, padx= 5, pady= 2, sticky= 'w')
-    entry_label_4.grid(row= 3, column= 0, padx= 5, pady= 2, sticky= 'w', columnspan= 2)
-    button_label_4.grid(row= 3, column= 2, padx= 5, pady= 2, sticky= 'w')
-    button_del_label_4.grid(row= 3, column= 3, padx= 5, pady= 2, sticky= 'w')
-
-    # entry_label_5.grid(row= 0, column= 4, padx= 5, pady= 2, sticky= 'w')
-    # button_label_5.grid(row= 0, column= 5, padx= 5, pady= 2, sticky= 'w')
-    # button_del_label_5.grid(row= 0, column= 6, padx= 5, pady= 2, sticky= 'w')
-    # entry_label_6.grid(row= 1, column= 4, padx= 5, pady= 2, sticky= 'w')
-    # button_label_6.grid(row= 1, column= 5, padx= 5, pady= 2, sticky= 'w')
-    # button_del_label_6.grid(row= 1, column= 6, padx= 5, pady= 2, sticky= 'w')
-    # entry_label_7.grid(row= 2, column= 4, padx= 5, pady= 2, sticky= 'w')
-    # button_label_7.grid(row= 2, column= 5, padx= 5, pady= 2, sticky= 'w')
-    # button_del_label_7.grid(row= 2, column= 6, padx= 5, pady= 2, sticky= 'w')
-    # entry_label_8.grid(row= 3, column= 4, padx= 5, pady= 2, sticky= 'w')
-    # button_label_8.grid(row= 3, column= 5, padx= 5, pady= 2, sticky= 'w')
-    # button_del_label_8.grid(row= 3, column= 6, padx= 5, pady= 2, sticky= 'w')
-
-    # Acquisition grid
-    label_sampling_rate.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
-    entry_sampling_rate.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'w')
-    button_sampling_rate_check.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w')
-    button_sampling_rate_auto.grid(row= 1, column= 2, padx= 5, pady= 2, sticky= 'w')
-
-    label_memory_depth.grid(row= 0, column= 3, padx= 5, pady= 2, sticky= 'w')
-    entry_memory_depth.grid(row= 0, column= 4, padx= 5, pady= 2, sticky= 'w')
-    button_memory_depth_check.grid(row= 0, column= 5, padx= 5, pady= 2, sticky= 'w')
-    button_memory_depth_auto.grid(row= 1, column= 5, padx= 5, pady= 2, sticky= 'w')
-
-    # Measurement grid
-    button_freq.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
-    button_period.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w')
-    button_VIH.grid(row= 0, column= 3, padx= 5, pady= 2, sticky= 'w')
-    button_VIL.grid(row= 0, column= 4, padx= 5, pady= 2, sticky= 'w')
-
-    # Threshold grid
-    radiobutton_gen_threshold_1.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
-    combobox_gen_top_percent.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'w')
-
-    label_gen_threshold_1.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w')
-    combobox_gen_mid_percent.grid(row= 1, column= 1, padx= 5, pady= 2, sticky= 'w')
-
-    label_gen_threshold_2.grid(row= 2, column= 0, padx= 5, pady= 2, sticky= 'w')
-    combobox_gen_base_percent.grid(row= 2, column= 1, padx= 5, pady= 2, sticky= 'w')
-
-    radiobutton_gen_threshold_2.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w')
-    combobox_gen_top.grid(row= 0, column= 3, padx= 5, pady= 2, sticky= 'w')
-
-    label_gen_threshold_4.grid(row= 1, column= 2, padx= 5, pady= 2, sticky= 'w')
-    combobox_gen_mid.grid(row= 1, column= 3, padx= 5, pady= 2, sticky= 'w')
-
-    label_gen_threshold_5.grid(row= 2, column= 2, padx= 5, pady= 2, sticky= 'w')
-    combobox_gen_base.grid(row= 2, column= 3, padx= 5, pady= 2, sticky= 'w')
-
-    button_gen_check.grid(row= 0, column= 4, padx= 5, pady= 2, sticky= 'w')
-
-    # Control grid
-    button_run.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
-    button_stop.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
-    button_single.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
-    button_clear_display.grid(row= 0, column= 3, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
-
-    button_autoscale.grid(row= 2, column= 0, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
-    button_default.grid(row= 2, column= 1, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
-    button_trigger.grid(row= 2, column= 2, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
-    button_trig_slope.grid(row= 2, column= 3, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
-
-    button_del.grid(row= 4, column= 0, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
-    button_add_marker.grid(row= 4, column= 1, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
-    button_del_marker.grid(row= 4, column= 2, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
-    button_button_disable.grid(row= 4, column= 3, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
-
-    checkbutton_marker_1.grid(row= 0, column= 4, padx= 5) 
-    checkbutton_marker_2.grid(row= 1, column= 4, padx= 5) 
-    checkbutton_marker_3.grid(row= 2, column= 4, padx= 5) 
-    checkbutton_marker_4.grid(row= 3, column= 4, padx= 5) 
-    checkbutton_marker_5.grid(row= 4, column= 4, padx= 5) 
-    checkbutton_marker_6.grid(row= 5, column= 4, padx= 5) 
-
-    # Real-time eye grid
-    label_source_chan.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w', columnspan= 2)
-    combobox_source_chan.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w')
-
-    label_realtime_sampling_rate.grid(row= 0, column= 3, padx= 5, pady= 2, sticky= 'w')
-    entry_realtime_sampling_rate.grid(row= 0, column= 4, padx= 5, pady= 2, sticky= 'w')
-
-    label_realtime_freq.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w', columnspan= 2)
-    combobox_realtime_freq.grid(row= 1, column= 2, padx= 5, pady= 2, sticky= 'w')
-
-    label_realtime_memory_depth.grid(row= 1, column= 3, padx= 5, pady= 2, sticky= 'w')
-    entry_realtime_memory_depth.grid(row= 1, column= 4, padx= 5, pady= 2, sticky= 'w')
-
-    checkbutton_histogram.grid(row= 2, column= 0, padx= 5, pady= 2, sticky= 'w', columnspan= 2)
-    checkbutton_eyewidth.grid(row= 2, column= 2, padx= 5, pady= 2, sticky= 'w')
-    checkbutton_cdrfrequency.grid(row= 2, column= 3, padx= 5, pady= 2, sticky= 'w')
-    checkbutton_voltage_meas.grid(row= 3, column= 0, padx= 5, pady= 2, sticky= 'w', columnspan= 2)
-    checkbutton_eyeheight.grid(row= 3, column= 2, padx= 5, pady= 2, sticky= 'w')
-    
-    checkbutton_mask_test.grid(row= 4, column= 0, padx= 5, pady= 2, sticky= 'w')
-    entry_mask.grid(row= 4, column= 1, padx= 5, pady= 2, sticky= 'ew', columnspan= 4)
-    button_mask_browse.grid(row= 4, column= 5, padx= 5, pady= 2, sticky= 'w')
-
-    button_realtime_eye_setting.grid(row= 2, column= 6, padx= 5, pady= 2, sticky= 'w')
-
-    # 100MHz PCIe Clock grid
-    label_signal_type.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
-    radiobutton_signal.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'w')
-    radiobutton_noise.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w')
-
-    label_signal_length.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w')
-    radiobutton_160u.grid(row= 1, column= 1, padx= 5, pady= 2, sticky= 'w')
-    radiobutton_170u.grid(row= 1, column= 2, padx= 5, pady= 2, sticky= 'w')
-    radiobutton_180u.grid(row= 1, column= 3, padx= 5, pady= 2, sticky= 'w')
-    radiobutton_190u.grid(row= 1, column= 4, padx= 5, pady= 2, sticky= 'w')
-
-    button_100MHz_pcie_clk_setting.grid(row= 1, column= 5, padx= 5, pady= 2, sticky= 'w')
-
-    # Save grid
-    label_save_file_type.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
-    radiobutton_img.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'w')
-    radiobutton_setup.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w')
-    radiobutton_bin.grid(row= 0, column= 3, padx= 5, pady= 2, sticky= 'w')
-    radiobutton_wme.grid(row= 0, column= 4, padx= 5, pady= 2, sticky= 'w')
-
-    label_save_location.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w')
-    radiobutton_scope_location.grid(row= 1, column= 1, padx= 5, pady= 2, sticky= 'w')
-    radiobutton_pc_location.grid(row= 1, column= 2, padx= 5, pady= 2, sticky= 'w')
-
-    label_save_folder.grid(row= 2, column= 0, padx= 5, pady= 2, sticky= 'w')
-    entry_save_folder.grid(row= 2, column= 1, padx= 5, pady= 2, sticky= 'ew', columnspan= 4)
-    button_save_browse.grid(row= 2, column= 5, padx= 5, pady= 2, sticky= 'ew')
-
-    label_save_filename.grid(row= 3, column= 0, padx= 5, pady= 2, sticky= 'w')
-    entry_save_filename.grid(row= 3, column= 1, padx= 5, pady= 2, sticky= 'ew', columnspan= 4)
-    button_save_scope.grid(row= 3, column= 5, padx= 5, pady= 2, sticky= 'ew')
-
-    # Load grid
-    label_load_location.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
-    radiobutton_load_scope_location.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'w')
-    radiobutton_load_pc_location.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w')
-
-    label_load_folder.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w')
-    entry_load_folder.grid(row= 1, column= 1, padx= 5, pady= 2, sticky= 'w', columnspan= 3)
-    button_load_browse.grid(row= 1, column= 4, padx= 5, pady= 2, sticky= 'w')
-
-    label_load_filename.grid(row= 2, column= 0, padx= 5, pady= 2, sticky= 'w')
-    entry_load_filename.grid(row= 2, column= 1, padx= 5, pady= 2, sticky= 'w', columnspan= 3)
-    button_load_file.grid(row= 2, column= 4, padx= 5, pady= 2, sticky= 'w')
-
-    checkbutton_setup_timebase.grid(row= 3, column= 0, padx= 5, pady= 2, sticky= 'w')
-    cbheckbutton_setup_label.grid(row= 3, column= 1, padx= 5, pady= 2, sticky= 'w')
 
     initialize()
 
