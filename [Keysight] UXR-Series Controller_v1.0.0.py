@@ -1,5 +1,6 @@
 import pyvisa
 import tkinter as tk
+import tkinter.ttk as ttk
 from tkinter import filedialog, messagebox, scrolledtext, simpledialog, ttk
 import configparser
 import os
@@ -42,69 +43,121 @@ def main_window(scope_ip):
         config_initial.optionxform = str
         config_initial.read(os.path.join(os.path.dirname(__file__), 'InitConfig_setup.ini'), encoding='UTF-8',)
 
-        select_VoltScale = config_initial['Scale_Offset_Selected_Values']['VoltScale']
-        select_VoltOffset = config_initial['Scale_Offset_Selected_Values']['VoltOffset']
-        TimebaseScale = config_initial['Scale_Offset_Config']['TimebaseScale']
-        TimebaseOffset = config_initial['Scale_Offset_Config']['TimebaseOffset']
-        select_TriggerLevel = config_initial['Scale_Offset_Selected_Values']['TriggerLevel']
-        TriggerChan = config_initial['Scale_Offset_Config']['TriggerChan']
-        WfmIntensity = config_initial['Scale_Offset_Config']['WfmIntensity']
+        RealTimeSourceChannel = config_initial['Real_Time_Eye_Wizard']['RealTimeSourceChannel']
+        select_RealTimeFrequency = config_initial['Real_Time_Eye_Wizard_Selected_Values']['RealTimeFrequency']
+        RealTimeSamplingRate = config_initial['Real_Time_Eye_Wizard']['RealTimeSamplingRate']
+        RealTimeMemoryDepth = config_initial['Real_Time_Eye_Wizard']['RealTimeMemoryDepth']
 
-        select_GeneralTopPercent = config_initial['Threshold_Selected_Values']['GeneralTopPercent']
-        select_GeneralMiddlePercent = config_initial['Threshold_Selected_Values']['GeneralMiddlePercent']
-        select_GeneralBasePercent = config_initial['Threshold_Selected_Values']['GeneralBasePercent']
-        select_GeneralTop = config_initial['Threshold_Selected_Values']['GeneralTop']
-        select_GeneralMiddle = config_initial['Threshold_Selected_Values']['GeneralMiddle']
-        select_GeneralBase = config_initial['Threshold_Selected_Values']['GeneralBase']
-        
-        RealTimeSourceChannel = config_initial['Real_Time_Selected_Values']['RealTimeSourceChannel']
-        select_RealTimeFrequency = config_initial['Real_Time_Selected_Values']['RealTimeFrequency']
-        RealTimeSamplingRate = config_initial['Real_Time_Selected_Values']['RealTimeSamplingRate']
-        RealTimeMemoryDepth = config_initial['Real_Time_Selected_Values']['RealTimeMemoryDepth']
-        RealTimeHistogram = config_initial['Real_Time_Selected_Values']['RealTimeHistogram']
-        RealTimeVoltageMeas = config_initial['Real_Time_Selected_Values']['RealTimeVoltageMeas']
-        RealTimeEyeWidth = config_initial['Real_Time_Selected_Values']['RealTimeEyeWidth']
-        RealTimeEyeHeight = config_initial['Real_Time_Selected_Values']['RealTimeEyeHeight']
-        RealTimeCDRFrequency = config_initial['Real_Time_Selected_Values']['RealTimeCDRFrequency']
-        RealTimeMask = config_initial['Real_Time_Selected_Values']['RealTimeMask']
-        RealTimeMaskPath = config_initial['Real_Time_Selected_Values']['RealTimeMaskPath']
+        MaskLocation = config_initial['Mask_Test']['ScopeLocation']
+        MaskPath = config_initial['Mask_Test']['MaskPath']
+        UICounts = config_initial['Mask_Test']['UICounts']
+        StopType = config_initial['Mask_Test']['StopType']
 
-        SignalType = config_initial['100MHz_PCIE_CLK_Config']['SignalType']
-        SignalLength = config_initial['100MHz_PCIE_CLK_Config']['SignalLength']
+        Dimension = config_initial['Histogram']['Dimension']
+        TopLimit = config_initial['Histogram']['TopLimit']
+        BottomLimit = config_initial['Histogram']['BottomLimit']
+        LeftLimit = config_initial['Histogram']['LeftLimit']
+        RightLimit = config_initial['Histogram']['RightLimit']
 
-        SamplingRate = config_initial['Acquisition']['SamplingRate']
-        MemoryDepth = config_initial['Acquisition']['MemoryDepth']
+        select_VoltScale = config_initial['Real_Time_Config_Selected_Values']['VoltageScale']
+        select_VoltOffset = config_initial['Real_Time_Config_Selected_Values']['VoltageOffset']
+        TimebaseScale = config_initial['Real_Time_Config']['TimebaseScale']
+        TimebaseOffset = config_initial['Real_Time_Config']['TimebaseOffset']
+        TriggerChan = config_initial['Real_Time_Config']['TriggerChan']
+        select_TriggerLevel = config_initial['Real_Time_Config_Selected_Values']['TriggerLevel']
+        WfmIntensity = config_initial['Real_Time_Config']['WfmIntensity']
+        LabelType = config_initial['Real_Time_Config']['LabelType']
+        Label = config_initial['Real_Time_Config']['Label']
 
-        ChanLabel1 = config_initial['Lable_Setup_Config']['ChanLabel1']
-        ChanLabel2 = config_initial['Lable_Setup_Config']['ChanLabel2']
-        ChanLabel3 = config_initial['Lable_Setup_Config']['ChanLabel3']
-        ChanLabel4 = config_initial['Lable_Setup_Config']['ChanLabel4']
-        # WMeLabel1 = config_initial['Lable_Setup_Config']['WMeLabel1']
-        # WMeLabel2 = config_initial['Lable_Setup_Config']['WMeLabel2']
-        # WMeLabel3 = config_initial['Lable_Setup_Config']['WMeLabel3']
-        # WMeLabel4 = config_initial['Lable_Setup_Config']['WMeLabel4']
+        ImageFolder = config_initial['Real_Time_Save_Image']['ImageFolder']
+        ImageName = config_initial['Real_Time_Save_Image']['ImageName']
+        SetupScopeLocation = config_initial['Real_Time_Setup_Files']['ScopeLocation']
+        FileFolder = config_initial['HistReal_Time_Setup_Filesogram']['FileFolder']
+        SetupFileName = config_initial['Real_Time_Setup_Files']['SetupFileName']
+        LoadLabel = config_initial['Real_Time_Setup_Files']['LoadLabel']
 
-        ChanSingle = config_initial['Chan_Delta']['ChanSingle']
+        PCIeClockChannel = config_initial['PCIe_Clock_Config']['PCIeClockChannel']
+        PCIeClockSamplingRate = config_initial['PCIe_Clock_Config']['PCIeClockSamplingRate']
+        PCIeClockMemoryDepth = config_initial['PCIe_Clock_Config']['PCIeClockMemoryDepth']
+        PCIeClockVoltageScale = config_initial['PCIe_Clock_Config']['PCIeClockVoltageScale']
+        PCIeClockVoltageOffset = config_initial['PCIe_Clock_Config']['PCIeClockVoltageOffset']
+        PCIeClockTimebaseScale = config_initial['PCIe_Clock_Config']['PCIeClockTimebaseScale']
+        IsLPF = config_initial['PCIe_Clock_Config']['IsLPF']
 
-        SaveFileType = config_initial['Save_Setup_Config']['SaveFileType']
-        SaveLocation = config_initial['Save_Setup_Config']['SaveLocation']
-        SaveFolder = config_initial['Save_Setup_Config']['SaveFolder']
-        # SaveImgPCFolder = config_initial['Save_Setup_Config']['SaveImgPCFolder']
-        SaveFileName = config_initial['Save_Setup_Config']['SaveFileName']
-        # SaveWMeFolder = config_initial['Save_Setup_Config']['SaveWMeFolder']
-        # SaveWMeLocation = config_initial['Save_Setup_Config']['SaveWMeLocation']
-        # SaveWMePCFolder = config_initial['Save_Setup_Config']['SaveWMePCFolder']
-        # SaveWMeName = config_initial['Save_Setup_Config']['SaveWMeName']
+        PCIeClockScopeLocation = config_initial['PCIe_Clock_SAve_and_Load']['PCIeClockScopeLocation']
+        FileType = config_initial['PCIe_Clock_SAve_and_Load']['FileType']
+        PCFolder = config_initial['PCIe_Clock_SAve_and_Load']['PCFolder']
+        ScopeFolder = config_initial['PCIe_Clock_SAve_and_Load']['ScopeFolder']
+        FileName = config_initial['PCIe_Clock_SAve_and_Load']['FileName']
 
-        # LoadWMe1 = config_initial['Load_Config']['LoadWMe1']
-        # LoadWMe2 = config_initial['Load_Config']['LoadWMe2']
-        # LoadWMe3 = config_initial['Load_Config']['LoadWMe3']
-        # LoadWMe4 = config_initial['Load_Config']['LoadWMe4']
-        LoadFolder = config_initial['Load_Config']['LoadFolder']
-        LoadLocation = config_initial['Load_Config']['LoadLocation']
-        LoadFileName = config_initial['Load_Config']['LoadFileName']
-        LoadTimeBase = config_initial['Load_Config']['LoadTimeBase']
-        LoadLabel = config_initial['Load_Config']['LoadLabel']
+        str_channel.set(value= RealTimeSourceChannel)
+        str_frequency.set(value= select_RealTimeFrequency)
+        str_sampling_rate.set(value= RealTimeSamplingRate)
+        str_memory_depth.set(value= RealTimeMemoryDepth)
+
+        int_mask_location.set(value= int(MaskLocation))
+        str_mask_path.set(value= MaskPath)
+        str_ui_counts.set(value= UICounts)
+        int_mask_stop_type.set(value= int(StopType))
+
+        int_dimension.set(value= int(Dimension))
+        str_top_limit.set(value= TopLimit)
+        str_bottom_limit.set(value= BottomLimit)
+        str_left_limit.set(value= LeftLimit)
+        str_right_limit.set(value= RightLimit)
+
+        str_voltage_scale.set(value= select_VoltScale)
+        str_voltage_offset.set(value= select_VoltOffset)
+        str_timebase_scale.set(value= TimebaseScale)
+        str_timebase_offset.set(value= TimebaseOffset)
+        str_trigger_channel.set(value= TriggerChan)
+        str_trigger_level.set(value= select_TriggerLevel)
+        str_wfm_intensity.set(value= WfmIntensity)
+        int_label_type.set(value= LabelType)
+        str_label_name.set(value= Label)
+
+        str_save_img_pc_folder.set(value= ImageFolder)
+        str_save_img_name.set(value= ImageName)
+        int_setup_location.set(value= int(SetupScopeLocation))
+        str_save_scope_folder.set(value= FileFolder)
+        str_file_name.set(value= SetupFileName)
+        boolvar_load_label.set(value= bool(LoadLabel))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         str_volt_scale.set(value= select_VoltScale)
         str_volt_offset.set(value= select_VoltOffset)
@@ -984,46 +1037,46 @@ def main_window(scope_ip):
         config_initial.read(config_file, encoding='UTF-8')
         
         # Scale
-        VoltScale_options = config_initial['Scale_Offset_Config'].get('VoltScale', '').split(',')
-        VoltOffset_options = config_initial['Scale_Offset_Config'].get('VoltOffset', '').split(',')
-        TriggerLevel_options = config_initial['Scale_Offset_Config'].get('TriggerLevel', '').split(',')
+        VoltScale_options = config_initial['Real_Time_Config'].get('VoltageScale', '').split(',')
+        VoltOffset_options = config_initial['Real_Time_Config'].get('VoltageOffset', '').split(',')
+        TriggerLevel_options = config_initial['Real_Time_Config'].get('TriggerLevel', '').split(',')
 
-        # Threshold
-        GeneralTopPercent_options = config_initial['Threshold_Setup_Config'].get('GeneralTopPercent', '').split(',')
-        GeneralMiddlePercent_options = config_initial['Threshold_Setup_Config'].get('GeneralMiddlePercent', '').split(',')
-        GeneralBasePercent_options = config_initial['Threshold_Setup_Config'].get('GeneralBasePercent', '').split(',')
-        GeneralTop_options = config_initial['Threshold_Setup_Config'].get('GeneralTop', '').split(',')
-        GeneralMiddle_options = config_initial['Threshold_Setup_Config'].get('GeneralMiddle', '').split(',')
-        GeneralBase_options = config_initial['Threshold_Setup_Config'].get('GeneralBase', '').split(',')
+        # # Threshold
+        # GeneralTopPercent_options = config_initial['Threshold_Setup_Config'].get('GeneralTopPercent', '').split(',')
+        # GeneralMiddlePercent_options = config_initial['Threshold_Setup_Config'].get('GeneralMiddlePercent', '').split(',')
+        # GeneralBasePercent_options = config_initial['Threshold_Setup_Config'].get('GeneralBasePercent', '').split(',')
+        # GeneralTop_options = config_initial['Threshold_Setup_Config'].get('GeneralTop', '').split(',')
+        # GeneralMiddle_options = config_initial['Threshold_Setup_Config'].get('GeneralMiddle', '').split(',')
+        # GeneralBase_options = config_initial['Threshold_Setup_Config'].get('GeneralBase', '').split(',')
         
-        RealTimeFrequency_options = config_initial['Real_Time_Config'].get('RealTimeFrequency', '').split(',')
+        RealTimeFrequency_options = config_initial['Real_Time_Eye_Wizard'].get('RealTimeFrequency', '').split(',')
         
         # 從這裡返回值供其他部分調用
         return {
-            'VoltScale': VoltScale_options, 
-            'VoltOffset': VoltOffset_options, 
+            'VoltageScale': VoltScale_options, 
+            'VoltageOffset': VoltOffset_options, 
             'TriggerLevel': TriggerLevel_options, 
-            'GeneralTopPercent': GeneralTopPercent_options,
-            'GeneralMiddlePercent': GeneralMiddlePercent_options, 
-            'GeneralBasePercent': GeneralBasePercent_options, 
-            'GeneralTop': GeneralTop_options, 
-            'GeneralMiddle': GeneralMiddle_options, 
-            'GeneralBase': GeneralBase_options, 
+            # 'GeneralTopPercent': GeneralTopPercent_options,
+            # 'GeneralMiddlePercent': GeneralMiddlePercent_options, 
+            # 'GeneralBasePercent': GeneralBasePercent_options, 
+            # 'GeneralTop': GeneralTop_options, 
+            # 'GeneralMiddle': GeneralMiddle_options, 
+            # 'GeneralBase': GeneralBase_options, 
             'RealTimeFrequency': RealTimeFrequency_options, 
             
             'config_file': config_file,  # 儲存config文件路徑以便後續使用
 
             'selected_values': {
-                'VoltScale': config_initial['Scale_Offset_Selected_Values'].get('VoltScale', ''),
-                'VoltOffset': config_initial['Scale_Offset_Selected_Values'].get('VoltOffset', ''),
-                'TriggerLevel': config_initial['Scale_Offset_Selected_Values'].get('TriggerLevel', ''),
-                'GeneralTopPercent': config_initial['Threshold_Selected_Values'].get('GeneralTopPercent', ''),
-                'GeneralMiddlePercent': config_initial['Threshold_Selected_Values'].get('GeneralMiddlePercent', ''),
-                'GeneralBasePercent': config_initial['Threshold_Selected_Values'].get('GeneralBasePercent', ''),
-                'GeneralTop': config_initial['Threshold_Selected_Values'].get('GeneralTop', ''),
-                'GeneralMiddle': config_initial['Threshold_Selected_Values'].get('GeneralMiddle', ''),
-                'GeneralBase': config_initial['Threshold_Selected_Values'].get('GeneralBase', ''),
-                'RealTimeFrequency': config_initial['Real_Time_Selected_Values'].get('RealTimeFrequency', ''),
+                'VoltageScale': config_initial['Real_Time_Config_Selected_Values'].get('VoltageScale', ''),
+                'VoltageOffset': config_initial['Real_Time_Config_Selected_Values'].get('VoltageOffset', ''),
+                'TriggerLevel': config_initial['Real_Time_Config_Selected_Values'].get('TriggerLevel', ''),
+                # 'GeneralTopPercent': config_initial['Threshold_Selected_Values'].get('GeneralTopPercent', ''),
+                # 'GeneralMiddlePercent': config_initial['Threshold_Selected_Values'].get('GeneralMiddlePercent', ''),
+                # 'GeneralBasePercent': config_initial['Threshold_Selected_Values'].get('GeneralBasePercent', ''),
+                # 'GeneralTop': config_initial['Threshold_Selected_Values'].get('GeneralTop', ''),
+                # 'GeneralMiddle': config_initial['Threshold_Selected_Values'].get('GeneralMiddle', ''),
+                # 'GeneralBase': config_initial['Threshold_Selected_Values'].get('GeneralBase', ''),
+                'RealTimeFrequency': config_initial['Real_Time_Eye_Wizard_Selected_Values'].get('RealTimeFrequency', ''),
                 }        
         }
 
@@ -1171,8 +1224,13 @@ def main_window(scope_ip):
     wfm_intensity_MIN_VALUE = 0
     wfm_intensity_MAX_VALUE = 100
 
+    notebook=ttk.Notebook (window)
+
+    notebook_frame_realtime= tk.Frame()
+    notebook_frame_pcieclock= tk.Frame()
+
     # Real-time Eye Wizard Frame ===================================================================================================================================
-    label_frame_realtime_eye_wizard= tk.LabelFrame(window, text= 'Real-time Eye Wizard', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
+    label_frame_realtime_eye_wizard= tk.LabelFrame(notebook_frame_realtime, text= 'Real-time Eye Wizard', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
 
     button_chan1 = tk.Button(label_frame_realtime_eye_wizard, text='Channel 1', width= 20, height= 2, command= lambda: uxr.display_Chan(chan= 1, bookmark= str_label_1.get(), choose_type= int_label_type.get()))
     button_chan2 = tk.Button(label_frame_realtime_eye_wizard, text='Channel 2', width= 20, height= 2, command= lambda: uxr.display_Chan(chan= 2, bookmark= str_label_2.get(), choose_type= int_label_type.get()))
@@ -1183,10 +1241,10 @@ def main_window(scope_ip):
     str_channel = tk.StringVar()
     combobox_channel = ttk.Combobox(label_frame_realtime_eye_wizard, width= 5, textvariable= str_channel, values= ['1', '2', '3', '4'])
 
-    label_speed = tk.Label(label_frame_realtime_eye_wizard, text= 'Speed (Hz)', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
-    str_speed = tk.StringVar()
-    combobox_speed = ttk.Combobox(label_frame_realtime_eye_wizard, width= 5, textvariable= str_speed)
-    commbobox_function(combobox= combobox_speed, combobox_var= str_speed, ini_dict_key= 'Speed', ini_option_section= 'Real_Time_Eye_Wizard', ini_option_key= 'Speed', ini_selected_section= 'Real_Time_Eye_Wizard')
+    label_frequency = tk.Label(label_frame_realtime_eye_wizard, text= 'Frequency (Hz)', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
+    str_frequency = tk.StringVar()
+    combobox_frequency = ttk.Combobox(label_frame_realtime_eye_wizard, width= 5, textvariable= str_frequency)
+    commbobox_function(combobox= combobox_frequency, combobox_var= str_frequency, ini_dict_key= 'RealTimeFrequency', ini_option_section= 'Real_Time_Eye_Wizard', ini_option_key= 'RealTimeFrequency', ini_selected_section= 'Real_Time_Eye_Wizard')
 
     label_sampling_rate = tk.Label(label_frame_realtime_eye_wizard, text= 'Sampling Rate (Sa/s)', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
     str_sampling_rate = tk.StringVar()
@@ -1200,7 +1258,7 @@ def main_window(scope_ip):
     button_reai_time_eye_setup = tk.Button(label_frame_realtime_eye_wizard, text= 'Setup', width= 10, height= 1, command= lambda: '')
 
     # Mask Test Frame ===================================================================================================================================
-    label_frame_mask_test= tk.LabelFrame(window, text= 'Mask Test', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
+    label_frame_mask_test= tk.LabelFrame(notebook_frame_realtime, text= 'Mask Test', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
     
     label_mask_locaiton= tk.Label(label_frame_mask_test, text= 'Scope Location', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
     int_mask_location = tk.IntVar()    
@@ -1230,7 +1288,7 @@ def main_window(scope_ip):
     button_mask_window_close = tk.Button(label_frame_mask_test, text= 'Close', width= 10, height= 1, command= lambda: '')
 
     # Histogram Frame ===================================================================================================================================
-    label_frame_histogram= tk.LabelFrame(window, text= 'Histogram', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
+    label_frame_histogram= tk.LabelFrame(notebook_frame_realtime, text= 'Histogram', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
 
     label_dimension= tk.Label(label_frame_histogram, text= 'Dimension', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11,),)
     int_dimension = tk.IntVar()    
@@ -1258,7 +1316,7 @@ def main_window(scope_ip):
     button_histogram_window_close = tk.Button(label_frame_histogram, text= 'Close', width= 10, height= 1, command= lambda: '')
 
     # Measurement Frame ===================================================================================================================================
-    label_frame_measurement= tk.LabelFrame(window, text= 'Measurement', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
+    label_frame_measurement= tk.LabelFrame(notebook_frame_realtime, text= 'Measurement', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
     
     button_Vpp = tk.Button(label_frame_measurement, text= 'Vpp', width= 10, height= 1, command= lambda: '')
     button_VIH = tk.Button(label_frame_measurement, text= 'VIH', width= 10, height= 1, command= lambda: '')
@@ -1268,7 +1326,7 @@ def main_window(scope_ip):
     button_cdrrate = tk.Button(label_frame_measurement, text= 'CDR rate', width= 10, height= 1, command= lambda: '')
 
     # Control Frame ===================================================================================================================================
-    label_frame_control= tk.LabelFrame(window, text= 'Control', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
+    label_frame_control= tk.LabelFrame(notebook_frame_realtime, text= 'Control', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
 
     button_run = tk.Button(label_frame_control, text='RUN', width= 20, height= 2, command= lambda: uxr.run())
     button_stop = tk.Button(label_frame_control, text='STOP', width= 20, height= 2, command= lambda: uxr.stop())
@@ -1314,7 +1372,7 @@ def main_window(scope_ip):
     checkbox_marker_6= tk.Checkbutton(label_frame_control, text= 'Meas 6', variable= boolvar_marker_6, background= frame_bg_color_2, fg= label_word_color)
 
     # Config Frame ===================================================================================================================================
-    label_frame_config= tk.LabelFrame(window, text= 'Config.', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
+    label_frame_config= tk.LabelFrame(notebook_frame_realtime, text= 'Config.', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
 
     label_voltage_scale = tk.Label(label_frame_config, text= 'Voltage Scale (V)', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
     str_voltage_scale = tk.StringVar()
@@ -1355,7 +1413,7 @@ def main_window(scope_ip):
     button_trigger_check = tk.Button(label_frame_config, text='Check', width= 20, height= 1, command= lambda: '')
 
     label_wfm_intensity = tk.Label(label_frame_config, text= 'Waveform Intensity', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
-    vcmd = (window.register(validate_number), "%P") # %P = 輸入後字串
+    vcmd = (notebook_frame_realtime.register(validate_number), "%P") # %P = 輸入後字串
     str_wfm_intensity = tk.StringVar()
     entry_wfm_intensity = tk.Entry(label_frame_config, width= 7, justify="center", textvariable= str_wfm_intensity, validate="key", validatecommand=vcmd)
     update_color(value= str_wfm_intensity.get())
@@ -1379,7 +1437,7 @@ def main_window(scope_ip):
     button_del_label = tk.Button(label_frame_config, text='Delete Label', width= 20, height= 1, command= lambda: '')
 
     # Save Image Frame ===================================================================================================================================
-    label_frame_save_image= tk.LabelFrame(window, text= 'Save Image.', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
+    label_frame_save_image= tk.LabelFrame(notebook_frame_realtime, text= 'Save Image.', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
 
     label_save_img_pc_folder = tk.Label(label_frame_save_image, text= 'Image Folder (PC)', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11, 'bold'),)
     str_save_img_pc_folder = tk.StringVar()
@@ -1394,15 +1452,21 @@ def main_window(scope_ip):
     button_img_name_save = tk.Button(label_frame_save_image, text='Save', width= 20, height= 1, command= lambda: '')
 
     # Setup File Frame ===================================================================================================================================
-    label_frame_setup_file= tk.LabelFrame(window, text= 'Setup Files', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
+    label_frame_setup_file= tk.LabelFrame(notebook_frame_realtime, text= 'Setup Files', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
 
-    label_save_scope_folder = tk.Label(label_frame_setup_file, text= 'Image Folder (PC)', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+    label_setup_locaiton= tk.Label(label_frame_setup_file, text= 'Scope Location', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
+    int_setup_location = tk.IntVar()    
+    radiobutton_setup_location_desktop= tk.Radiobutton(label_frame_setup_file, text= 'Desktop', variable= int_setup_location, value= 1, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 10, 'bold'),)
+    radiobutton_setup_location_desktop.select()
+    radiobutton_setup_location_server= tk.Radiobutton(label_frame_setup_file, text= 'Server', variable= int_setup_location, value= 2, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 10, 'bold'),)
+
+    label_save_scope_folder = tk.Label(label_frame_setup_file, text= 'Scope Folder', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
     str_save_scope_folder = tk.StringVar()
     enrty_save_scope_folder = tk.Entry(label_frame_setup_file, width= 7, textvariable= str_save_scope_folder)
 
     button_scope_folder_browse = tk.Button(label_frame_setup_file, text='Browse', width= 20, height= 1, command= lambda: '')
 
-    label_file_name = tk.Label(label_frame_setup_file, text= 'Image Name', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
+    label_file_name = tk.Label(label_frame_setup_file, text= 'File Name', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
     str_file_name = tk.StringVar()
     enrty_file_name = tk.Entry(label_frame_setup_file, width= 7, textvariable= str_file_name)
 
@@ -1414,7 +1478,7 @@ def main_window(scope_ip):
     cbheckbutton_setup_label.select()
 
     # Extract Results Frame ===================================================================================================================================
-    label_frame_extract_results= tk.LabelFrame(window, text= 'Extract Results', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
+    label_frame_extract_results= tk.LabelFrame(notebook_frame_realtime, text= 'Extract Results', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 10, 'bold'),)
 
     button_get_results = tk.Button(label_frame_extract_results, text= 'Get Results\n(最多取6個)', width= 20, height= 2, command= lambda: uxr.get_results())
     
@@ -1456,13 +1520,70 @@ def main_window(scope_ip):
     label_frame_setup_file.grid(row= 3, column= 1, padx= 5, pady= 2, sticky= 'nsew')
     label_frame_extract_results.grid(row= 4, column= 0, padx= 5, pady= 2, sticky= 'nsew', columnspan= 2)
 
-    # Channel grid
+    # Real-time Eye Wizard grid
     button_chan1.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
     button_chan2.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'w')
     button_chan3.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w')
     button_chan4.grid(row= 0, column= 3, padx= 5, pady= 2, sticky= 'w')
 
+    label_channel.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w')
+    combobox_channel.grid(row= 1, column= 1, padx= 5, pady= 2, sticky= 'w')
+
+    label_sampling_rate.grid(row= 1, column= 2, padx= 5, pady= 2, sticky= 'w')
+    combobox_sampling_rate.grid(row= 1, column= 3, padx= 5, pady= 2, sticky= 'w')
+
+    label_frequency.grid(row= 2, column= 0, padx= 5, pady= 2, sticky= 'w')
+    combobox_frequency.grid(row= 2, column= 1, padx= 5, pady= 2, sticky= 'w')
+
+    label_memory_depth.grid(row= 2, column= 2, padx= 5, pady= 2, sticky= 'w')
+    enrty_memory_depth.grid(row= 2, column= 3, padx= 5, pady= 2, sticky= 'w')
+
+    button_reai_time_eye_setup.grid(row= 3, column= 3, padx= 5, pady= 2, sticky= 'w')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     initialize()
+
+    notebook.add(notebook_frame_realtime, text= 'Real-time Eye')
+    notebook.add(notebook_frame_pcieclock, text= 'PCIe 100MHz Clock')
+    notebook.pack(padx= 10, pady= 10, fill= 'both', expand= True)
 
     window.protocol('WM_DELETE_WINDOW', close_window)
 
