@@ -1390,7 +1390,7 @@ def main_window(scope_ip):
 
     label_timebase_scale = tk.Label(label_frame_config, text= 'Timebase Scale (s)', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
     str_timebase_scale = tk.StringVar()
-    enrty_imebase_scale = tk.Entry(label_frame_config, width= 7, textvariable= str_timebase_scale)
+    enrty_timebase_scale = tk.Entry(label_frame_config, width= 7, textvariable= str_timebase_scale)
 
     button_timebase_scale_check = tk.Button(label_frame_config, text='Check', width= 20, height= 1, command= lambda: '')
 
@@ -1540,43 +1540,151 @@ def main_window(scope_ip):
 
     button_reai_time_eye_setup.grid(row= 3, column= 3, padx= 5, pady= 2, sticky= 'w')
 
+    # Mask Test grid
+    label_mask_locaiton.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
+    radiobutton_mask_location_desktop.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'w')
+    radiobutton_mask_location_server.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w')
 
+    label_mask_path.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w')
+    enrty_mask_path.grid(row= 1, column= 1, padx= 5, pady= 2, sticky= 'w', columnspan= 2)
+    button_mask_path_browse.grid(row= 1, column= 3, padx= 5, pady= 2, sticky= 'w')
 
+    label_ui_counts.grid(row= 2, column= 0, padx= 5, pady= 2, sticky= 'w')
+    enrty_ui_counts.grid(row= 2, column= 1, padx= 5, pady= 2, sticky= 'w')
 
+    radiobutton_stop_on_ui.grid(row= 2, column= 2, padx= 5, pady= 2, sticky= 'w')
 
+    radiobutton_stop_on_failure.grid(row= 3, column= 2, padx= 5, pady= 2, sticky= 'w')
+    button_mask_test_setup.grid(rcow= 3, column= 3, padx= 5, pady= 2, sticky= 'w')
+    
+    button_mask_test_run.grid(row= 4, column= 0, padx= 5, pady= 2, sticky= 'w')
+    button_mask_test_stop.grid(row= 4, column= 1, padx= 5, pady= 2, sticky= 'w')
+    radiobutton_forever.grid(row= 4, column= 2, padx= 5, pady= 2, sticky= 'w')
+    button_mask_window_close.grid(row= 4, column= 3, padx= 5, pady= 2, sticky= 'w')
 
+    # Histogram grid
+    label_dimension.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
+    radiobutton_horizontal.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'w')
+    radiobutton_vertical.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w')
 
+    label_top_limit.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w')
+    enrty_top_limit.grid(row= 1, column= 1, padx= 5, pady= 2, sticky= 'w')
+    label_left_limit.grid(row= 1, column= 2, padx= 5, pady= 2, sticky= 'w')
+    enrty_left_limit.grid(row= 1, column= 3, padx= 5, pady= 2, sticky= 'w')
 
+    label_bottom_limit.grid(row= 2, column= 0, padx= 5, pady= 2, sticky= 'w')
+    enrty_bottom_limit.grid(row= 2, column= 1, padx= 5, pady= 2, sticky= 'w')
+    label_right_limit.grid(row= 2, column= 2, padx= 5, pady= 2, sticky= 'w')
+    enrty_right_limit.grid(row= 2, column= 3, padx= 5, pady= 2, sticky= 'w')
 
+    button_histogram_setup.grid(row= 3, column= 1, padx= 5, pady= 2, sticky= 'w')
+    button_histogram_window_close.grid(row= 3, column= 3, padx= 5, pady= 2, sticky= 'w')
 
+    # Measurement grid
+    button_Vpp.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
+    button_eye_width.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'w')
+    button_eye_height.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w')
+    button_cdrrate.grid(row= 0, column= 3, padx= 5, pady= 2, sticky= 'w')
+    button_VIH.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w')
+    button_VIL.grid(row= 1, column= 1, padx= 5, pady= 2, sticky= 'w')
 
+    # Control grid
+    button_run.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
+    button_stop.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
+    button_single.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
+    button_clear_display.grid(row= 0, column= 3, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
 
+    button_autoscale.grid(row= 2, column= 0, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
+    button_default.grid(row= 2, column= 1, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
+    button_trigger_type.grid(row= 2, column= 2, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
 
+    button_del_meas.grid(row= 4, column= 0, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
+    button_add_marker.grid(row= 4, column= 1, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
+    button_del_marker.grid(row= 4, column= 2, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
+    button_disable.grid(row= 4, column= 3, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
 
+    checkbox_marker_1.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
+    checkbox_marker_2.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w')
+    checkbox_marker_3.grid(row= 2, column= 0, padx= 5, pady= 2, sticky= 'w')
+    checkbox_marker_4.grid(row= 3, column= 0, padx= 5, pady= 2, sticky= 'w')
+    checkbox_marker_5.grid(row= 4, column= 0, padx= 5, pady= 2, sticky= 'w')
+    checkbox_marker_6.grid(row= 5, column= 0, padx= 5, pady= 2, sticky= 'w')
 
+    # Config grid
+    label_voltage_scale.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
+    combobox_voltage_scale.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'w')
+    button_voltage_scale_check.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w')
 
+    label_timebase_scale.grid(row= 0, column= 3, padx= 5, pady= 2, sticky= 'w')
+    enrty_timebase_scale.grid(row= 0, column= 4, padx= 5, pady= 2, sticky= 'w')
+    button_timebase_scale_check.grid(row= 0, column= 5, padx= 5, pady= 2, sticky= 'w')
 
+    label_voltage_offset.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w')
+    combobox_voltage_offset.grid(row= 1, column= 1, padx= 5, pady= 2, sticky= 'w')
+    button_voltage_offset_check.grid(row= 1, column= 2, padx= 5, pady= 2, sticky= 'w')
 
+    label_timebase_offset.grid(row= 1, column= 3, padx= 5, pady= 2, sticky= 'w')
+    enrty_timebase_offset.grid(row= 1, column= 4, padx= 5, pady= 2, sticky= 'w')
+    button_timebase_offset_check.grid(row= 1, column= 5, padx= 5, pady= 2, sticky= 'w')
 
+    label_trigger_channel.grid(row= 2, column= 0, padx= 5, pady= 2, sticky= 'w')
+    combobox_trigger_channel.grid(row= 2, column= 1, padx= 5, pady= 2, sticky= 'w')
+    label_trigger_level.grid(row= 3, column= 0, padx= 5, pady= 2, sticky= 'w')
+    combobox_trigger_level.grid(row= 3, column= 1, padx= 5, pady= 2, sticky= 'w')
+    button_trigger_check.grid(row= 3, column= 2, padx= 5, pady= 2, sticky= 'w')
 
+    label_wfm_intensity.grid(row= 2, column= 3, padx= 5, pady= 2, sticky= 'w')
+    entry_wfm_intensity.grid(row= 2, column= 4, padx= 5, pady= 2, sticky= 'w')
+    button_wfm_intensity.grid(row= 2, column= 5, padx= 5, pady= 2, sticky= 'w')
+    button_set_intensity_50.grid(row= 3, column= 5, padx= 5, pady= 2, sticky= 'w')
 
+    label_label_type.grid(row= 4, column= 0, padx= 5, pady= 2, sticky= 'w')
+    radiobutton_label.grid(row= 4, column= 1, padx= 5, pady= 2, sticky= 'w')
+    radiobutton_bookmark.grid(row= 4, column= 2, padx= 5, pady= 2, sticky= 'w')
 
+    enrty_label_name.grid(row= 5, column= 0, padx= 5, pady= 2, sticky= 'w', columnspan= 3)
+    button_add_label.grid(row= 5, column= 3, padx= 5, pady= 2, sticky= 'w')
+    button_del_label.grid(row= 5, column= 4, padx= 5, pady= 2, sticky= 'w')
 
+    # Save Image grid
+    label_save_img_pc_folder.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
+    enrty_save_img_pc_folder.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'w')
+    button_img_pc_folder_browse.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w')
 
+    label_save_img_name.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w')
+    enrty_save_img_name.grid(row= 1, column= 1, padx= 5, pady= 2, sticky= 'w')
+    button_img_name_save.grid(row= 1, column= 2, padx= 5, pady= 2, sticky= 'w')
 
+    # Setup File grid
+    label_setup_locaiton.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
+    radiobutton_setup_location_desktop.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'w')
+    radiobutton_setup_location_server.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w')
 
+    label_save_scope_folder.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w')
+    enrty_save_scope_folder.grid(row= 1, column= 1, padx= 5, pady= 2, sticky= 'w', columnspan= 3)
+    button_scope_folder_browse.grid(row= 1, column= 4, padx= 5, pady= 2, sticky= 'w')
 
+    label_file_name.grid(row= 2, column= 0, padx= 5, pady= 2, sticky= 'w')
+    enrty_file_name.grid(row= 2, column= 1, padx= 5, pady= 2, sticky= 'w', columnspan= 3)
+    button_file_name_save.grid(row= 2, column= 4, padx= 5, pady= 2, sticky= 'w')
 
+    cbheckbutton_setup_label.grid(row= 3, column= 3, padx= 5, pady= 2, sticky= 'w')
+    button_file_name_load.grid(row= 3, column= 4, padx= 5, pady= 2, sticky= 'w')
 
-
-
-
-
-
-
-
-
-
+    # Extract Results grid
+    button_get_results.grid(row= 0, column= 0, padx= 5, pady= 2, sticky= 'w')
+    label_meas_name_1.grid(row= 0, column= 1, padx= 5, pady= 2, sticky= 'w')
+    text_meas_1.grid(row= 0, column= 2, padx= 5, pady= 2, sticky= 'w')
+    label_meas_name_2.grid(row= 0, column= 3, padx= 5, pady= 2, sticky= 'w')
+    text_meas_2.grid(row= 0, column= 4, padx= 5, pady= 2, sticky= 'w')
+    label_meas_name_3.grid(row= 0, column= 5, padx= 5, pady= 2, sticky= 'w')
+    text_meas_3.grid(row= 0, column= 6, padx= 5, pady= 2, sticky= 'w')
+    label_meas_name_4.grid(row= 0, column= 7, padx= 5, pady= 2, sticky= 'w')
+    text_meas_4.grid(row= 0, column= 8, padx= 5, pady= 2, sticky= 'w')
+    label_meas_name_5.grid(row= 0, column= 9, padx= 5, pady= 2, sticky= 'w')
+    text_meas_5.grid(row= 0, column= 10, padx= 5, pady= 2, sticky= 'w')
+    label_meas_name_6.grid(row= 0, column= 11, padx= 5, pady= 2, sticky= 'w')
+    text_meas_6.grid(row= 0, column= 12, padx= 5, pady= 2, sticky= 'w')
 
 
     initialize()
