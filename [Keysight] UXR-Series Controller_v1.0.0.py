@@ -169,34 +169,36 @@ def main_window(scope_ip):
             time.sleep(0.05)
 
         ### Scale Related ###
-        def volt_check(self, scale, offset): # 科學記號
-            display_dict= self.judge_chan()
-            for chan in display_dict['CHANnel']:
-                self.inst.write(f':CHANnel{chan}:SCALe {scale}')
-                time.sleep(0.05)
-                self.inst.write(f':CHANnel{chan}:OFFSet {offset}')
-                time.sleep(0.05)
-
-        def timebase_position_check(self, position): # 科學記號
-            self.inst.write(f':TIMebase:POSition {position}')
+        def voltage_scale_check(self, voltage_scale): # 科學記號
+            channel= self.get_display_channel()
+            self.inst.write(f':CHANnel{channel}:SCALe {voltage_scale}')
             time.sleep(0.05)
 
-        def timebase_scale_check(self, scale): # 科學記號
-            self.inst.write(f':TIMebase:SCALe {scale}')
+        def voltage_offset_check(self, voltage_offset): # 科學記號
+            channel= self.get_display_channel()
+            self.inst.write(f':CHANnel{channel}:OFFSet {voltage_offset}')
             time.sleep(0.05)
 
-        def trig_check(self, chan, level):
-            res= self.inst.query(f':CHANnel{chan}:DISPlay?')
+        def timebase_position_check(self, timebase_position): # 科學記號
+            self.inst.write(f':TIMebase:POSition {timebase_position}')
+            time.sleep(0.05)
+
+        def timebase_scale_check(self, timebase_scale): # 科學記號
+            self.inst.write(f':TIMebase:SCALe {timebase_scale}')
+            time.sleep(0.05)
+
+        def trigger_check(self, trigger_channel, trigger_level):
+            res= self.inst.query(f':CHANnel{trigger_channel}:DISPlay?')
             time.sleep(0.05)
             if not res == '1\n':
-                self.inst.write(f':CHANnel{chan}:DISPlay ON')
+                self.inst.write(f':CHANnel{trigger_channel}:DISPlay ON')
                 time.sleep(0.05)
-            self.inst.write(f':TRIGger:EDGE:SOURce CHANnel{chan}')
+            self.inst.write(f':TRIGger:EDGE:SOURce CHANnel{trigger_channel}')
             time.sleep(0.05)
-            self.inst.write(f':TRIGger:LEVel CHANnel{chan},{level}')
+            self.inst.write(f':TRIGger:LEVel CHANnel{trigger_channel},{trigger_level}')
             time.sleep(0.05)
             if not res == '1\n':
-                self.inst.write(f':CHANnel{chan}:DISPlay OFF')
+                self.inst.write(f':CHANnel{trigger_channel}:DISPlay OFF')
                 time.sleep(0.05)
 
         def intensity_check(self, intensity_value):
@@ -222,33 +224,33 @@ def main_window(scope_ip):
 
         
         ### Measurement Related ###
-        def called_meas_function(self, chan, command_templates: dict):
-            display_dict= self.judge_chan()
-            for key in command_templates:
-                if chan in display_dict[key]:
-                    self.inst.write(command_templates[key].format(chan))
-                    time.sleep(0.05)            
+        # def called_meas_function(self, chan, command_templates: dict):
+        #     display_dict= self.judge_chan()
+        #     for key in command_templates:
+        #         if chan in display_dict[key]:
+        #             self.inst.write(command_templates[key].format(chan))
+        #             time.sleep(0.05)            
         
-        def freq(self, chan):
-            command_templates = {
-                'CHANnel': ':MEASure:FREQuency CHANnel{}',
-                'WMEMory': ':MEASure:FREQuency WMEMory{}'
-            }            
-            self.called_meas_function(chan= chan, command_templates= command_templates)    
+        # def freq(self, chan):
+        #     command_templates = {
+        #         'CHANnel': ':MEASure:FREQuency CHANnel{}',
+        #         'WMEMory': ':MEASure:FREQuency WMEMory{}'
+        #     }            
+        #     self.called_meas_function(chan= chan, command_templates= command_templates)    
 
-        def VIH(self, chan):
-            command_templates = {
-                'CHANnel': ':MEASure:VTOP CHANnel{}',
-                'WMEMory': ':MEASure:VTOP WMEMory{}'
-            }            
-            self.called_meas_function(chan= chan, command_templates= command_templates)              
+        # def VIH(self, chan):
+        #     command_templates = {
+        #         'CHANnel': ':MEASure:VTOP CHANnel{}',
+        #         'WMEMory': ':MEASure:VTOP WMEMory{}'
+        #     }            
+        #     self.called_meas_function(chan= chan, command_templates= command_templates)              
 
-        def VIL(self, chan):
-            command_templates = {
-                'CHANnel': ':MEASure:VBASe CHANnel{}',
-                'WMEMory': ':MEASure:VBASe WMEMory{}'
-            }            
-            self.called_meas_function(chan= chan, command_templates= command_templates)              
+        # def VIL(self, chan):
+        #     command_templates = {
+        #         'CHANnel': ':MEASure:VBASe CHANnel{}',
+        #         'WMEMory': ':MEASure:VBASe WMEMory{}'
+        #     }            
+        #     self.called_meas_function(chan= chan, command_templates= command_templates)              
 
 
         ### Control Related ###
@@ -370,18 +372,21 @@ def main_window(scope_ip):
                     self.inst.write(f':MARKer:MEASurement:MEASurement MEASurement{i+1},OFF')
                     time.sleep(0.05)
 
-        def add_label(self, chan, label):
-            display_dict= self.judge_chan()
+        def add_label(self, label):
+            channel= self.get_display_channel()
+
             if label == '':
                 self.inst.write(f':DISPlay:LABel OFF')
                 time.sleep(0.05)
             else:
                 self.inst.write(f':DISPlay:LABel ON')
                 time.sleep(0.05)
-                for cha in display_dict['CHANnel']:
-                    if cha == chan:
-                        self.inst.write(f':CHANnel{chan}:LABel "{label}"')
-                        time.sleep(0.05)
+                self.inst.write(f':CHANnel{channel}:LABel "{label}"')
+                time.sleep(0.05)
+
+        def delete_label(self):
+            self.inst.write(f':DISPlay:LABel OFF')
+            time.sleep(0.05)
 
         ### Save Related ###
         def load_setup(self, folder, setup_name, choose_type, file_path_choice):
@@ -394,124 +399,124 @@ def main_window(scope_ip):
             if boolvar_load_label.get() == True:
                 self.add_bookmark(choose_type= choose_type, bookmark= str_label_name.get().rstrip('\n'), chan= str_channel.get())
         
-        def save_image_scope(self, folder, image_name, path_choice):
-            # 清空狀態
-            self.inst.write('*CLS')
-            time.sleep(0.05)
+        # def save_image_scope(self, folder, image_name, path_choice):
+        #     # 清空狀態
+        #     self.inst.write('*CLS')
+        #     time.sleep(0.05)
 
-            # error messenge
-                # 113 This directory is not valid.
-                # -256 File name not found
-                # -257 File name error
-                # -410 Query INTERRUPTED
-                # -420 Query UNTERMINATED
-                # 0 No error
+        #     # error messenge
+        #         # 113 This directory is not valid.
+        #         # -256 File name not found
+        #         # -257 File name error
+        #         # -410 Query INTERRUPTED
+        #         # -420 Query UNTERMINATED
+        #         # 0 No error
 
-            # CDIRectory會害存圖卡死 orz
+        #     # CDIRectory會害存圖卡死 orz
 
-            if path_choice == 2:
-                folder_total_path = folder
-            else:
-                folder_total_path = f"C:/Users/Administrator/Desktop/{folder}"
+        #     if path_choice == 2:
+        #         folder_total_path = folder
+        #     else:
+        #         folder_total_path = f"C:/Users/Administrator/Desktop/{folder}"
 
-            # 資料夾是否存在
-            self.inst.query(f':DISK:DIRectory? "{folder_total_path}"')
-            time.sleep(0.05)
-            error_messenge=self.inst.query(f':SYSTem:ERRor?')
-            time.sleep(0.05)
-            # print(error_messenge)
-            if error_messenge == '-256\n' or error_messenge == '113\n' or error_messenge == '-257\n':
-                ask_scp_root = tk.Tk()
-                ask_scp_root.withdraw()  # 隱藏主視窗
-                ask_scp_result = messagebox.askyesno("Warning", f"資料夾不存在，是否新增？")
-                ask_scp_root.destroy()
+        #     # 資料夾是否存在
+        #     self.inst.query(f':DISK:DIRectory? "{folder_total_path}"')
+        #     time.sleep(0.05)
+        #     error_messenge=self.inst.query(f':SYSTem:ERRor?')
+        #     time.sleep(0.05)
+        #     # print(error_messenge)
+        #     if error_messenge == '-256\n' or error_messenge == '113\n' or error_messenge == '-257\n':
+        #         ask_scp_root = tk.Tk()
+        #         ask_scp_root.withdraw()  # 隱藏主視窗
+        #         ask_scp_result = messagebox.askyesno("Warning", f"資料夾不存在，是否新增？")
+        #         ask_scp_root.destroy()
                 
-                if not ask_scp_result:
-                    ask_scp_root = tk.Tk()
-                    ask_scp_root.withdraw()  # 隱藏主視窗
-                    messagebox.showinfo("Warning", f'檔案未儲存')
-                    # print("檔案未保存。")
-                    return     
-                # 新建資料夾
-                folder_total_path= folder_total_path.replace("/", "\\")
-                # print(folder_total_path)
+        #         if not ask_scp_result:
+        #             ask_scp_root = tk.Tk()
+        #             ask_scp_root.withdraw()  # 隱藏主視窗
+        #             messagebox.showinfo("Warning", f'檔案未儲存')
+        #             # print("檔案未保存。")
+        #             return     
+        #         # 新建資料夾
+        #         folder_total_path= folder_total_path.replace("/", "\\")
+        #         # print(folder_total_path)
 
-                split_folder_list= folder_total_path.split('\\')
+        #         split_folder_list= folder_total_path.split('\\')
 
-                folder= split_folder_list[0]
-                for split in split_folder_list[1:]:
-                    folder= f'{folder}\\{split}'
-                    self.inst.query(f':DISK:DIRectory? "{folder}"')
-                    time.sleep(0.05)
-                    response= self.inst.query(f':SYSTem:ERRor?')
-                    time.sleep(0.05)
-                    # print(response)
-                    if response == '-256\n' or response == '113\n' or response == '-257\n':
-                        self.inst.write(f':DISK:MDIRectory "{folder}"')
-                        time.sleep(0.05)
+        #         folder= split_folder_list[0]
+        #         for split in split_folder_list[1:]:
+        #             folder= f'{folder}\\{split}'
+        #             self.inst.query(f':DISK:DIRectory? "{folder}"')
+        #             time.sleep(0.05)
+        #             response= self.inst.query(f':SYSTem:ERRor?')
+        #             time.sleep(0.05)
+        #             # print(response)
+        #             if response == '-256\n' or response == '113\n' or response == '-257\n':
+        #                 self.inst.write(f':DISK:MDIRectory "{folder}"')
+        #                 time.sleep(0.05)
 
-            # 資料夾全部內容
-            folder_content= self.inst.query(f':DISK:DIRectory? "{folder_total_path}"')
-            time.sleep(0.05)
-            # 使用正則表達式來匹配所有 .png 檔案名稱
-            png_files = re.findall(r'\b[\w-]+\.(?:png)\b', folder_content)
+        #     # 資料夾全部內容
+        #     folder_content= self.inst.query(f':DISK:DIRectory? "{folder_total_path}"')
+        #     time.sleep(0.05)
+        #     # 使用正則表達式來匹配所有 .png 檔案名稱
+        #     png_files = re.findall(r'\b[\w-]+\.(?:png)\b', folder_content)
 
-            for file_name in png_files:
-                if f'{image_name}.png' == file_name:
-                    ask_scp_root = tk.Tk()
-                    ask_scp_root.withdraw()  # 隱藏主視窗
-                    ask_scp_result = messagebox.askyesno("Warning", f"檔案已經存在，是否覆蓋？")
-                    ask_scp_root.destroy()
+        #     for file_name in png_files:
+        #         if f'{image_name}.png' == file_name:
+        #             ask_scp_root = tk.Tk()
+        #             ask_scp_root.withdraw()  # 隱藏主視窗
+        #             ask_scp_result = messagebox.askyesno("Warning", f"檔案已經存在，是否覆蓋？")
+        #             ask_scp_root.destroy()
                     
-                    if not ask_scp_result:
-                        # print("檔案未保存。")
-                        ask_scp_root = tk.Tk()
-                        ask_scp_root.withdraw()  # 隱藏主視窗
-                        messagebox.showinfo("Warning", f'檔案未儲存')
-                        return     
+        #             if not ask_scp_result:
+        #                 # print("檔案未保存。")
+        #                 ask_scp_root = tk.Tk()
+        #                 ask_scp_root.withdraw()  # 隱藏主視窗
+        #                 messagebox.showinfo("Warning", f'檔案未儲存')
+        #                 return     
 
-            self.inst.write(f':DISK:SAVE:IMAGe "{folder_total_path}/{image_name}",PNG,SCReen,OFF,NORMal,OFF')
-            time.sleep(0.05)
+        #     self.inst.write(f':DISK:SAVE:IMAGe "{folder_total_path}/{image_name}",PNG,SCReen,OFF,NORMal,OFF')
+        #     time.sleep(0.05)
 
-        def save_waveform_pc(self, folder, pc_folder, file_name):            
+        # def save_waveform_pc(self, folder, pc_folder, file_name):            
 
-            full_path = rf"C:/Users/Administrator/Desktop/{folder}/{file_name}.png"
-            full_path = full_path.replace('\\', '/')
-            # print(full_path)
-            data = b''
-            message = f':DISK:GETFILE? "{full_path}"'
-            data = self.inst.query_binary_values(message=message, datatype='B', header_fmt='ieee', container=bytes)
-            time.sleep(0.05)
+        #     full_path = rf"C:/Users/Administrator/Desktop/{folder}/{file_name}.png"
+        #     full_path = full_path.replace('\\', '/')
+        #     # print(full_path)
+        #     data = b''
+        #     message = f':DISK:GETFILE? "{full_path}"'
+        #     data = self.inst.query_binary_values(message=message, datatype='B', header_fmt='ieee', container=bytes)
+        #     time.sleep(0.05)
 
-            if not os.path.exists(pc_folder):
-                ask_root = tk.Tk()
-                ask_root.withdraw()  # 隱藏主視窗
-                ask_result = messagebox.askyesno("Warning", f"資料夾不存在，是否新增？")
-                ask_root.destroy()
+        #     if not os.path.exists(pc_folder):
+        #         ask_root = tk.Tk()
+        #         ask_root.withdraw()  # 隱藏主視窗
+        #         ask_result = messagebox.askyesno("Warning", f"資料夾不存在，是否新增？")
+        #         ask_root.destroy()
                 
-                if not ask_result:
-                    ask_root = tk.Tk()
-                    ask_root.withdraw()  # 隱藏主視窗
-                    messagebox.showinfo("Warning", f'檔案未儲存')
-                    # print("檔案未保存。")
-                    return     
-                os.mkdir(pc_folder) 
+        #         if not ask_result:
+        #             ask_root = tk.Tk()
+        #             ask_root.withdraw()  # 隱藏主視窗
+        #             messagebox.showinfo("Warning", f'檔案未儲存')
+        #             # print("檔案未保存。")
+        #             return     
+        #         os.mkdir(pc_folder) 
 
-            if os.path.exists(f"{pc_folder}/{file_name}.png"):
-                ask_root = tk.Tk()
-                ask_root.withdraw()  # 隱藏主視窗
-                ask_result = messagebox.askyesno("Warning", f"檔案已經存在，是否覆蓋？")
-                ask_root.destroy()
+        #     if os.path.exists(f"{pc_folder}/{file_name}.png"):
+        #         ask_root = tk.Tk()
+        #         ask_root.withdraw()  # 隱藏主視窗
+        #         ask_result = messagebox.askyesno("Warning", f"檔案已經存在，是否覆蓋？")
+        #         ask_root.destroy()
                 
-                if not ask_result:
-                    # print("檔案未保存。")
-                    ask_root = tk.Tk()
-                    ask_root.withdraw()  # 隱藏主視窗
-                    messagebox.showinfo("Warning", f'檔案未儲存')
-                    return     
+        #         if not ask_result:
+        #             # print("檔案未保存。")
+        #             ask_root = tk.Tk()
+        #             ask_root.withdraw()  # 隱藏主視窗
+        #             messagebox.showinfo("Warning", f'檔案未儲存')
+        #             return     
            
-            with open(f"{pc_folder}/{file_name}.png", 'wb') as f:
-                f.write(data)
+        #     with open(f"{pc_folder}/{file_name}.png", 'wb') as f:
+        #         f.write(data)
 
         def save_image_pc(self, pc_folder, file_name):
             screen_data = np.array(self.inst.query_binary_values(":DISPlay:DATA? PNG", datatype = 's', container = bytes))
@@ -548,7 +553,7 @@ def main_window(scope_ip):
             f_img.write(bytearray(screen_data))
             f_img.close()
 
-        def save_other_file_scope(self, chan, folder, current_file_name, ext_type, path_choice):
+        def save_setup_file_scope(self, folder, current_file_name, path_choice):
             # 清空狀態
             self.inst.write('*CLS')
             time.sleep(0.05)
@@ -604,17 +609,10 @@ def main_window(scope_ip):
             folder_content= self.inst.query(f':DISK:DIRectory? "{folder_total_path}"')
             time.sleep(0.05)
 
-            # 判斷存.h5或.set
-            if ext_type == 1:
-                # 使用正則表達式來匹配所有 .h5 檔案名稱
-                files = re.findall(r'\b[\w-]+\.(?:h5)\b', folder_content)
-                ext= 'h5'
-                command= f':DISK:SAVE:WAVeform CHANnel{chan},"{folder_total_path}/{current_file_name}",H5,OFF'
-            else:
-                # 使用正則表達式來匹配所有 .set 檔案名稱
-                files = re.findall(r'\b[\w-]+\.(?:set)\b', folder_content)
-                ext= 'set'
-                command= f':DISK:SAVE:SETup "{folder_total_path}/{current_file_name}"'
+            # 使用正則表達式來匹配所有 .set 檔案名稱
+            files = re.findall(r'\b[\w-]+\.(?:set)\b', folder_content)
+            ext= 'set'
+            command= f':DISK:SAVE:SETup "{folder_total_path}/{current_file_name}"'
 
             for file_name in files:
                 if f'{current_file_name}.{ext}' == file_name:
@@ -831,52 +829,128 @@ def main_window(scope_ip):
                 return f"{base} Hz"
 
 
+        def get_display_channel(self):
+            channel = self.inst.query(f':CHANnel<N>:DISPlay?').rstrip('\n')
+            time.sleep(0.1)
+            channel = channel.rstrip('\n')
+            channel = channel.lstrip('CHAN')
+            
+            return channel
 
-        def realtimeeye(self):
+        def setup_real_time_eye(self, sampling_rate, acquire_points, frequency):
+            
+            channel= self.get_display_channel()
+
             self.inst.write(f':AUToscale')
             time.sleep(0.05)
-            self.inst.write(f':ACQuire:SRATe:ANALog 2.56E+11')
+            self.inst.write(f':ACQuire:SRATe:ANALog {sampling_rate}')
             time.sleep(0.05)
-            self.inst.write(f':ACQuire:POINts:ANALog 1E+06')
+            self.inst.write(f':ACQuire:POINts:ANALog {acquire_points}')
             time.sleep(0.05)
-            self.inst.write(f':MEASure:THResholds:GENeral:METHod CHANnel1,HYSTeresis')
+            self.inst.write(f':MEASure:THResholds:GENeral:METHod CHANnel{channel},HYSTeresis')
             time.sleep(0.1)
-            self.inst.write(f':MEASure:THResholds:GENAUTO CHANnel1')
+            self.inst.write(f':MEASure:THResholds:GENAUTO CHANnel{channel}')
             time.sleep(0.1)
-            self.inst.write(f':MTESt:FOLDing ON,CHANnel1')
+            self.inst.write(f':MTESt:FOLDing ON,CHANnel{channel}')
             time.sleep(0.1)
             # self.inst.write(f':ANALyze:CLOCk ON,CHANnel1')
             # time.sleep(0.1)
-            self.inst.write(f':MEASure:CLOCk:METHod SOPLL,1.03125E+10')
+            self.inst.write(f':MEASure:CLOCk:METHod SOPLL,{frequency}')
             time.sleep(0.1)
 
-        def histogram(self):
+        def setup_mask_test(self, mask_name, ui_counts):
+
+            channel= self.get_display_channel()
+
+            self.inst.write(f':MTESt:FOLDing ON,CHANnel{channel}')
+            time.sleep(0.1)
+            self.inst.write(f':MTESt1:ENABle ON')
+            time.sleep(0.1)
+            self.inst.write(fr':MTESt1:LOAD "C:\Users\Administrator\Desktop\mask\{mask_name}.msk"')
+            time.sleep(0.1)
+            if int_mask_stop_type.get() == 1:
+                self.inst.write(f':MTESt:RUMode WAVeforms,{ui_counts}')
+                time.sleep(0.1)
+            elif int_mask_stop_type.get() == 2:
+                self.inst.write(f':MTESt:RUMode:SOFailure 1')
+                time.sleep(0.1)
+            elif int_mask_stop_type.get() == 3:
+                self.inst.write(f':MTESt:RUMode FORever')
+                time.sleep(0.1)
+
+            self.inst.write(f':MTESt:STOP')
+            time.sleep(0.1)
+
+            # self.inst.write(f':MTESt1:SCALe:DRAW ON')
+            # time.sleep(0.1)
+            # self.inst.write(f':MTESt1:SCALe:X1 ')
+            # time.sleep(0.1)
+
+        def run_mask_test(self):
+            self.inst.write(f':MTESt:STARt')
+
+        def stop_mask_test(self):
+            self.inst.write(f':MTESt:STOP')
+            time.sleep(0.1)
+
+        def disable_mask_test(self):
+            self.inst.write(f':MTESt1:ENABle OFF')
+            time.sleep(0.1)
+
+        def setup_histogram(self, top_limit, bottom_limit, left_limit, right_limit):
+
+            channel= self.get_display_channel()
+
             self.inst.write(f':HISTogram:WINDow:DEFault')
             time.sleep(0.1)
             self.inst.write(f':HISTogram:AXIS HORizontal')
             time.sleep(0.1)
             self.inst.write(f':HISTogram:MODE WAVeforms')
             time.sleep(0.1)
-            self.inst.write(f':HISTogram:WINDow:SOURce CHANnel1')
+            self.inst.write(f':HISTogram:WINDow:SOURce CHANnel{channel}')
             time.sleep(0.1)
 
-            self.inst.write(f':HISTogram:WINDow:LLIMit -97E-09')
+            self.inst.write(f':HISTogram:WINDow:LLIMit {left_limit}')
             time.sleep(0.1)
-            self.inst.write(f':HISTogram:WINDow:RLIMit 0')
+            self.inst.write(f':HISTogram:WINDow:RLIMit {right_limit}')
             time.sleep(0.1)
-            self.inst.write(f':HISTogram:WINDow:BLIMit 0')
+            self.inst.write(f':HISTogram:WINDow:BLIMit {bottom_limit}')
             time.sleep(0.1)
-            self.inst.write(f':HISTogram:WINDow:TLIMit 0')
+            self.inst.write(f':HISTogram:WINDow:TLIMit {top_limit}')
             time.sleep(0.1)
 
-        def measurement(self):
-            self.inst.write(f':MEASure:CDRRate CHANnel1')
+        def disable_histogram(self):
+            self.inst.write(f':HISTogram:MODE OFF')
             time.sleep(0.1)
-            self.inst.write(f':MEASure:VPP CHANnel1')
+
+        def cdr_rate_measurement(self):
+            channel= self.get_display_channel()
+            self.inst.write(f':MEASure:CDRRate CHANnel{channel}')
             time.sleep(0.1)
-            self.inst.write(f':MEASure:CGRade:EHEight MEASured,CHANnel1')
+            
+        def vpp_measurement(self):
+            channel= self.get_display_channel()
+            self.inst.write(f':MEASure:VPP CHANnel{channel}')
             time.sleep(0.1)
-            self.inst.write(f':MEASure:CGRade:EWIDth MEASured,CHANnel1')
+
+        def eye_height_measurement(self):
+            channel= self.get_display_channel()
+            self.inst.write(f':MEASure:CGRade:EHEight MEASured,CHANnel{channel}')
+            time.sleep(0.1)
+
+        def eye_width_measurement(self):
+            channel= self.get_display_channel()
+            self.inst.write(f':MEASure:CGRade:EWIDth MEASured,CHANnel{channel}')
+            time.sleep(0.1)
+
+        def vih_measurement(self):
+            channel= self.get_display_channel()
+            self.inst.write(f':MEASure:CGRade:EWIDth MEASured,CHANnel{channel}')
+            time.sleep(0.1)
+            
+        def vil_width_measurement(self):
+            channel= self.get_display_channel()
+            self.inst.write(f':MEASure:CGRade:EWIDth MEASured,CHANnel{channel}')
             time.sleep(0.1)
 
         def PCIeClock(self):
@@ -901,19 +975,6 @@ def main_window(scope_ip):
             time.sleep(0.05)
 
 
-        def masktest(self):
-            self.inst.write(f':MTESt:FOLDing ON,CHANnel1')
-            time.sleep(0.1)
-            self.inst.write(f':MTESt1:ENABle ON')
-            time.sleep(0.1)
-            # self.inst.write(f':MTESt:RUMode WAVeforms,1E+06')
-            # time.sleep(0.1)
-            # self.inst.write(fr':MTESt1:LOAD "C:\Users\Administrator\Desktop\mask\1G_SFP_MASK.msk"')
-            # time.sleep(0.1)
-            self.inst.write(f':MTESt1:SCALe:DRAW ON')
-            time.sleep(0.1)
-            self.inst.write(f':MTESt1:SCALe:X1 ')
-            time.sleep(0.1)
 
 
 
@@ -1201,7 +1262,11 @@ def main_window(scope_ip):
     str_memory_depth = tk.StringVar()
     enrty_memory_depth = tk.Entry(label_frame_realtime_eye_wizard, width= 7, textvariable= str_memory_depth)
 
-    button_reai_time_eye_setup = tk.Button(label_frame_realtime_eye_wizard, text= 'Setup', width= 10, height= 1, command= lambda: '')
+    button_reai_time_eye_setup = tk.Button(label_frame_realtime_eye_wizard, text= 'Setup', width= 10, height= 1, command= lambda: uxr.setup_real_time_eye(
+        sampling_rate= str_sampling_rate.get(), 
+        acquire_points= str_memory_depth.get(), 
+        frequency= str_frequency.get()
+    ))
 
     # Mask Test Frame ===================================================================================================================================
     label_frame_mask_test= tk.LabelFrame(notebook_frame_realtime, text= 'Mask Test', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 11, 'bold'),)
@@ -1228,10 +1293,13 @@ def main_window(scope_ip):
     radiobutton_stop_on_failure= tk.Radiobutton(label_frame_mask_test, text= 'Stop on failure', variable= int_mask_stop_type, value= 2, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
     radiobutton_forever= tk.Radiobutton(label_frame_mask_test, text= 'Forever', variable= int_mask_stop_type, value= 3, background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11, 'bold'),)
     
-    button_mask_test_setup = tk.Button(label_frame_mask_test, text= 'Setup', width= 10, height= 1, command= lambda: '')
-    button_mask_test_run = tk.Button(label_frame_mask_test, text= 'Run', width= 10, height= 1, command= lambda: '')
-    button_mask_test_stop = tk.Button(label_frame_mask_test, text= 'Stop', width= 10, height= 1, command= lambda: '')
-    button_mask_window_close = tk.Button(label_frame_mask_test, text= 'Close', width= 10, height= 1, command= lambda: '')
+    button_mask_test_setup = tk.Button(label_frame_mask_test, text= 'Setup', width= 10, height= 1, command= lambda: uxr.setup_mask_test(
+        mask_name= str_mask_path.get(), 
+        ui_counts= str_ui_counts.get()
+    ))
+    button_mask_test_run = tk.Button(label_frame_mask_test, text= 'Run', width= 10, height= 1, command= lambda: uxr.run_mask_test())
+    button_mask_test_stop = tk.Button(label_frame_mask_test, text= 'Stop', width= 10, height= 1, command= lambda: uxr.stop_mask_test())
+    button_mask_window_close = tk.Button(label_frame_mask_test, text= 'Close', width= 10, height= 1, command= lambda: uxr.disable_mask_test())
 
     # Histogram Frame ===================================================================================================================================
     label_frame_histogram= tk.LabelFrame(notebook_frame_realtime, text= 'Histogram', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 11, 'bold'),)
@@ -1258,18 +1326,23 @@ def main_window(scope_ip):
     str_right_limit = tk.StringVar()
     enrty_right_limit = tk.Entry(label_frame_histogram, width= 12, textvariable= str_right_limit)
 
-    button_histogram_setup = tk.Button(label_frame_histogram, text= 'Setup', width= 10, height= 1, command= lambda: '')
-    button_histogram_window_close = tk.Button(label_frame_histogram, text= 'Close', width= 10, height= 1, command= lambda: '')
+    button_histogram_setup = tk.Button(label_frame_histogram, text= 'Setup', width= 10, height= 1, command= lambda: uxr.setup_histogram(
+        top_limit= str_top_limit.get(), 
+        bottom_limit= str_bottom_limit.get(), 
+        left_limit= str_left_limit.get(), 
+        right_limit= str_right_limit.get()
+    ))
+    button_histogram_window_close = tk.Button(label_frame_histogram, text= 'Close', width= 10, height= 1, command= lambda: uxr.disable_histogram())
 
     # Measurement Frame ===================================================================================================================================
     label_frame_measurement= tk.LabelFrame(notebook_frame_realtime, text= 'Measurement', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 11, 'bold'),)
     
-    button_Vpp = tk.Button(label_frame_measurement, text= 'Vpp', width= 20, height= 2, command= lambda: '')
-    button_VIH = tk.Button(label_frame_measurement, text= 'VIH', width= 20, height= 2, command= lambda: '')
-    button_VIL = tk.Button(label_frame_measurement, text= 'VIL', width= 20, height= 2, command= lambda: '')
-    button_eye_height = tk.Button(label_frame_measurement, text= 'Eye Height', width= 20, height= 2, command= lambda: '')
-    button_eye_width = tk.Button(label_frame_measurement, text= 'Eye Width', width= 20, height= 2, command= lambda: '')
-    button_cdrrate = tk.Button(label_frame_measurement, text= 'CDR rate', width= 20, height= 2, command= lambda: '')
+    button_Vpp = tk.Button(label_frame_measurement, text= 'Vpp', width= 20, height= 2, command= lambda: uxr.vpp_measurement())
+    button_VIH = tk.Button(label_frame_measurement, text= 'VIH', width= 20, height= 2, command= lambda: uxr.vih_measurement())
+    button_VIL = tk.Button(label_frame_measurement, text= 'VIL', width= 20, height= 2, command= lambda: uxr.vil_width_measurement())
+    button_eye_height = tk.Button(label_frame_measurement, text= 'Eye Height', width= 20, height= 2, command= lambda: uxr.eye_height_measurement())
+    button_eye_width = tk.Button(label_frame_measurement, text= 'Eye Width', width= 20, height= 2, command= lambda: uxr.eye_width_measurement())
+    button_cdrrate = tk.Button(label_frame_measurement, text= 'CDR rate', width= 20, height= 2, command= lambda: uxr.cdr_rate_measurement())
 
     # Control Frame ===================================================================================================================================
     label_frame_control= tk.LabelFrame(notebook_frame_realtime, text= 'Control', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 11, 'bold'),)
@@ -1325,26 +1398,34 @@ def main_window(scope_ip):
     combobox_voltage_scale = ttk.Combobox(label_frame_config, width= 12, textvariable= str_voltage_scale)
     commbobox_function(combobox= combobox_voltage_scale, combobox_var= str_voltage_scale, ini_dict_key= 'VoltageScale', ini_option_section= 'Real_Time_Config', ini_option_key= 'VoltageScale', ini_selected_section= 'Real_Time_Config_Selected_Values')
 
-    button_voltage_scale_check = tk.Button(label_frame_config, text='Check', width= 12, height= 1, command= lambda: '')
+    button_voltage_scale_check = tk.Button(label_frame_config, text='Check', width= 12, height= 1, command= lambda: uxr.voltage_scale_check(
+        voltage_scale= str_voltage_scale.get(), 
+    ))
 
     label_voltage_offset = tk.Label(label_frame_config, text= 'Voltage Offset (V)', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
     str_voltage_offset = tk.StringVar()
     combobox_voltage_offset = ttk.Combobox(label_frame_config, width= 12, textvariable= str_voltage_offset)
     commbobox_function(combobox= combobox_voltage_offset, combobox_var= str_voltage_offset, ini_dict_key= 'VoltageOffset', ini_option_section= 'Real_Time_Config', ini_option_key= 'VoltageOffset', ini_selected_section= 'Real_Time_Config_Selected_Values')
 
-    button_voltage_offset_check = tk.Button(label_frame_config, text='Check', width= 12, height= 1, command= lambda: '')
+    button_voltage_offset_check = tk.Button(label_frame_config, text='Check', width= 12, height= 1, command= lambda: uxr.voltage_offset_check(
+        voltage_offset= str_voltage_offset.get()
+    ))
 
     label_timebase_scale = tk.Label(label_frame_config, text= 'Timebase Scale (s)', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
     str_timebase_scale = tk.StringVar()
     enrty_timebase_scale = tk.Entry(label_frame_config, width= 12, textvariable= str_timebase_scale)
 
-    button_timebase_scale_check = tk.Button(label_frame_config, text='Check', width= 12, height= 1, command= lambda: '')
+    button_timebase_scale_check = tk.Button(label_frame_config, text='Check', width= 12, height= 1, command= lambda: uxr.timebase_scale_check(
+        timebase_scale= str_timebase_scale.get()
+    ))
 
     label_timebase_offset = tk.Label(label_frame_config, text= 'Timebase Offset (s)', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
     str_timebase_offset = tk.StringVar()
     enrty_timebase_offset = tk.Entry(label_frame_config, width= 12, textvariable= str_timebase_offset)
 
-    button_timebase_offset_check = tk.Button(label_frame_config, text='Check', width= 12, height= 1, command= lambda: '')
+    button_timebase_offset_check = tk.Button(label_frame_config, text='Check', width= 12, height= 1, command= lambda: uxr.timebase_position_check(
+        timebase_position= str_timebase_offset.get()
+    ))
 
     label_trigger_channel = tk.Label(label_frame_config, text= 'Trigger Channel', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
     str_trigger_channel = tk.StringVar()
@@ -1356,14 +1437,19 @@ def main_window(scope_ip):
     combobox_trigger_level = ttk.Combobox(label_frame_config, width= 12, textvariable= str_trigger_level)
     commbobox_function(combobox= combobox_trigger_level, combobox_var= str_trigger_level, ini_dict_key= 'TriggerLevel', ini_option_section= 'Real_Time_Config', ini_option_key= 'TriggerLevel', ini_selected_section= 'Real_Time_Config_Selected_Values')
 
-    button_trigger_check = tk.Button(label_frame_config, text='Check', width= 12, height= 1, command= lambda: '')
+    button_trigger_check = tk.Button(label_frame_config, text='Check', width= 12, height= 1, command= lambda: uxr.trigger_check(
+        trigger_channel= str_trigger_channel.get(), 
+        trigger_level= str_trigger_level.get()
+    ))
 
     label_wfm_intensity = tk.Label(label_frame_config, text= 'Waveform Intensity', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
     vcmd = (notebook_frame_realtime.register(validate_number), "%P") # %P = 輸入後字串
     str_wfm_intensity = tk.StringVar()
     entry_wfm_intensity = tk.Entry(label_frame_config, width= 12, justify="center", textvariable= str_wfm_intensity, validate="key", validatecommand=vcmd)
     update_color(value= str_wfm_intensity.get())
-    button_wfm_intensity = tk.Button(label_frame_config, text= 'Check', width= 12, height= 1, command= lambda: uxr.intensity_check(intensity_value= str_wfm_intensity.get()))
+    button_wfm_intensity = tk.Button(label_frame_config, text= 'Check', width= 12, height= 1, command= lambda: uxr.intensity_check(
+        intensity_value= str_wfm_intensity.get()
+    ))
     
     button_set_intensity_50 = tk.Button(label_frame_config, text="Set Intensity 50", command= set_to_50, font=("Candara", 10))
 
@@ -1380,8 +1466,10 @@ def main_window(scope_ip):
     label_label_name= tk.Label(label_frame_config, text= 'Label Name', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 12,),)
     str_label_name = tk.StringVar()
     enrty_label_name = tk.Entry(label_frame_config, width= 18, textvariable= str_label_name)
-    button_add_label = tk.Button(label_frame_config, text='Add Label', width= 12, height= 1, command= lambda: '')
-    button_del_label = tk.Button(label_frame_config, text='Delete Label', width= 12, height= 1, command= lambda: '')
+    button_add_label = tk.Button(label_frame_config, text='Add Label', width= 12, height= 1, command= lambda: uxr.add_label(
+        label= str_label_name.get()
+    ))
+    button_del_label = tk.Button(label_frame_config, text='Delete Label', width= 12, height= 1, command= lambda: uxr.delete_label())
 
     # Save Image Frame ===================================================================================================================================
     label_frame_save_image= tk.LabelFrame(notebook_frame_realtime, text= 'Save Image.', background= frame_bg_color_2, fg= labelframe_word_color, font= ('Candara', 11, 'bold'),)
@@ -1390,13 +1478,16 @@ def main_window(scope_ip):
     str_save_img_pc_folder = tk.StringVar()
     enrty_save_img_pc_folder = tk.Entry(label_frame_save_image, width= 60, textvariable= str_save_img_pc_folder)
 
-    button_img_pc_folder_browse = tk.Button(label_frame_save_image, text='Browse', width= 12, height= 1, command= lambda: '')
+    button_img_pc_folder_browse = tk.Button(label_frame_save_image, text='Browse', width= 12, height= 1, command= lambda: select_folder(entry_var= str_save_img_pc_folder))
 
     label_save_img_name = tk.Label(label_frame_save_image, text= 'Image Name', background= frame_bg_color_2, fg= label_word_color, font= ('Candara', 11),)
     str_save_img_name = tk.StringVar()
     enrty_save_img_name = tk.Entry(label_frame_save_image, width= 60, textvariable= str_save_img_name)
 
-    button_img_name_save = tk.Button(label_frame_save_image, text='Save', width= 12, height= 1, command= lambda: '')
+    button_img_name_save = tk.Button(label_frame_save_image, text='Save', width= 12, height= 1, command= lambda: uxr.save_image_pc(
+        pc_folder= str_save_img_pc_folder.get(), 
+        file_name= str_save_img_name.get()
+    ))
 
     # Setup File Frame ===================================================================================================================================
     label_frame_setup_file= tk.LabelFrame(notebook_frame_realtime, text= 'Setup Files', background= frame_bg_color_1, fg= labelframe_word_color, font= ('Candara', 11, 'bold'),)
@@ -1411,14 +1502,25 @@ def main_window(scope_ip):
     str_save_scope_folder = tk.StringVar()
     enrty_save_scope_folder = tk.Entry(label_frame_setup_file, width= 40, textvariable= str_save_scope_folder)
 
-    button_scope_folder_browse = tk.Button(label_frame_setup_file, text='Browse', width= 12, height= 1, command= lambda: '')
+    button_scope_folder_browse = tk.Button(label_frame_setup_file, text='Browse', width= 12, height= 1, command= lambda: select_folder(
+        entry_var= str_save_scope_folder.get()
+    ))
 
     label_file_name = tk.Label(label_frame_setup_file, text= 'File Name', background= frame_bg_color_1, fg= label_word_color, font= ('Candara', 11,),)
     str_file_name = tk.StringVar()
     enrty_file_name = tk.Entry(label_frame_setup_file, width= 40, textvariable= str_file_name)
 
-    button_file_name_save = tk.Button(label_frame_setup_file, text='Save', width= 12, height= 1, command= lambda: '')
-    button_file_name_load = tk.Button(label_frame_setup_file, text='Load', width= 12, height= 1, command= lambda: '')
+    button_file_name_save = tk.Button(label_frame_setup_file, text='Save', width= 12, height= 1, command= lambda: uxr.save_setup_file_scope(
+        folder= str_save_scope_folder.get(), 
+        current_file_name= str_file_name.get(), 
+        path_choice= int_setup_location.get()
+    ))
+    button_file_name_load = tk.Button(label_frame_setup_file, text='Load', width= 12, height= 1, command= lambda: uxr.load_setup(
+        folder= str_save_scope_folder.get(), 
+        setup_name= str_file_name.get(), 
+        choose_type= int_label_type.get(), 
+        file_path_choice= int_setup_location.get()
+    ))
 
     boolvar_load_label = tk.BooleanVar()    
     cbheckbutton_setup_label= tk.Checkbutton(label_frame_setup_file, text= 'Label', variable= boolvar_load_label, background= frame_bg_color_1, fg= label_word_color)
