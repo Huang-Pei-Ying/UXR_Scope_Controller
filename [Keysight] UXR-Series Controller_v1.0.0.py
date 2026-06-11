@@ -9,6 +9,9 @@ import re
 import time
 import sys
 import numpy as np
+from PIL import Image
+import random
+import string
 
 window_name= '[Keysight] UXR-Series Controller_v1.0.0'
 
@@ -159,6 +162,39 @@ def main_window(scope_ip):
                 close_window()
                 # sys.exit()
                 
+        ### Display Related ###
+        def display_Chan(self, chan, bookmark, label_choose_type):
+            res= self.inst.query(f':CHANnel{chan}:DISPlay?')
+            time.sleep(0.05)
+            if res == '1\n':
+                self.inst.write(f':CHANnel{chan}:DISPlay OFF')
+                time.sleep(0.05)
+                try:
+                    self.inst.write(f':DISPlay:BOOKmark{chan}:DELete')
+                    time.sleep(0.05)
+                except:
+                    pass
+            else:
+                self.inst.write(f':CHANnel{chan}:DISPlay ON')
+                time.sleep(0.05)
+                self.add_bookmark(label_choose_type= label_choose_type,bookmark= bookmark, chan= chan)
+
+        def get_display_channel(self):
+            
+            for channel in range(1, 5):
+                query_value = self.inst.query(f':CHANnel{channel}:DISPlay?').rstrip('\n')
+                time.sleep(0.1)
+                if query_value == '1' or query_value == 'ON':
+                    return channel
+                else:
+                    return False
+            
+
+        def intensity_check(self, intensity_value):
+            self.inst.write(f'SYSTem:CONTrol "WaveformBrt -1 {intensity_value}"')
+            time.sleep(0.05)
+
+
         ### Acquisition Related ###
         def sampling_rate_acquire(self, rate): # 科學記號
             self.inst.write(f':ACQuire:SRATe:ANALog {rate}')
@@ -168,14 +204,21 @@ def main_window(scope_ip):
             self.inst.write(f':ACQuire:POINts:ANALog {points_value}')
             time.sleep(0.05)
 
+
         ### Scale Related ###
         def voltage_scale_check(self, voltage_scale): # 科學記號
             channel= self.get_display_channel()
+            if channel == False:
+                return
             self.inst.write(f':CHANnel{channel}:SCALe {voltage_scale}')
             time.sleep(0.05)
 
         def voltage_offset_check(self, voltage_offset): # 科學記號
             channel= self.get_display_channel()
+
+            if channel == False:
+                return
+
             self.inst.write(f':CHANnel{channel}:OFFSet {voltage_offset}')
             time.sleep(0.05)
 
@@ -201,57 +244,59 @@ def main_window(scope_ip):
                 self.inst.write(f':CHANnel{trigger_channel}:DISPlay OFF')
                 time.sleep(0.05)
 
-        def intensity_check(self, intensity_value):
-            self.inst.write(f'SYSTem:CONTrol "WaveformBrt -1 {intensity_value}"')
-            time.sleep(0.05)
 
-        ### Display Related ###
-        def display_Chan(self, chan, bookmark, label_choose_type):
-            res= self.inst.query(f':CHANnel{chan}:DISPlay?')
-            time.sleep(0.05)
-            if res == '1\n':
-                self.inst.write(f':CHANnel{chan}:DISPlay OFF')
-                time.sleep(0.05)
-                try:
-                    self.inst.write(f':DISPlay:BOOKmark{chan}:DELete')
-                    time.sleep(0.05)
-                except:
-                    pass
-            else:
-                self.inst.write(f':CHANnel{chan}:DISPlay ON')
-                time.sleep(0.05)
-                self.add_bookmark(label_choose_type= label_choose_type,bookmark= bookmark, chan= chan)
-
-        
         ### Measurement Related ###
         def cdr_rate_measurement(self):
             channel= self.get_display_channel()
+
+            if channel == False:
+                return
+
             self.inst.write(f':MEASure:CDRRate CHANnel{channel}')
             time.sleep(0.1)
             
         def vpp_measurement(self):
             channel= self.get_display_channel()
+
+            if channel == False:
+                return
             self.inst.write(f':MEASure:VPP CHANnel{channel}')
             time.sleep(0.1)
 
         def eye_height_measurement(self):
             channel= self.get_display_channel()
+
+            if channel == False:
+                return
+
             self.inst.write(f':MEASure:CGRade:EHEight MEASured,CHANnel{channel}')
             time.sleep(0.1)
 
         def eye_width_measurement(self):
             channel= self.get_display_channel()
+
+            if channel == False:
+                return
+
             self.inst.write(f':MEASure:CGRade:EWIDth MEASured,CHANnel{channel}')
             time.sleep(0.1)
 
         def vih_measurement(self):
             channel= self.get_display_channel()
-            self.inst.write(f':MEASure:CGRade:EWIDth MEASured,CHANnel{channel}')
+
+            if channel == False:
+                return
+
+            self.inst.write(f':MEASure:VTOP CHANnel{channel}')
             time.sleep(0.1)
             
         def vil_width_measurement(self):
             channel= self.get_display_channel()
-            self.inst.write(f':MEASure:CGRade:EWIDth MEASured,CHANnel{channel}')
+
+            if channel == False:
+                return
+
+            self.inst.write(f':MEASure:VBASe CHANnel{channel}')
             time.sleep(0.1)
 
 
@@ -280,6 +325,7 @@ def main_window(scope_ip):
             self.inst.write(':SYSTem:PRESet DEFault')
             time.sleep(0.05)
 
+
         ### Trigger Related ###
         def trig_type(self):
             res= self.inst.query(f':TRIGger:SWEep?')
@@ -291,6 +337,7 @@ def main_window(scope_ip):
                 self.inst.write(':TRIGger:SWEep AUTO')
                 time.sleep(0.05)
         
+
         ### Measurement Related (label) ###
         def delete_item(self):
             tuple_marker = (boolvar_marker_1, boolvar_marker_2, boolvar_marker_3, boolvar_marker_4, boolvar_marker_5, boolvar_marker_6, 
@@ -301,9 +348,27 @@ def main_window(scope_ip):
                     self.inst.write(f'MEASurement{i+1}:CLEar')
                     time.sleep(0.05)
 
+        def add_label(self, label):
+            channel= self.get_display_channel()
+
+            if channel == False:
+                return
+
+            if label == '':
+                self.inst.write(f':DISPlay:LABel OFF')
+                time.sleep(0.05)
+            else:
+                self.inst.write(f':DISPlay:LABel ON')
+                time.sleep(0.05)
+                self.inst.write(f':CHANnel{channel}:LABel "{label}"')
+                time.sleep(0.05)
+
         def add_bookmark(self, label_choose_type, bookmark):
 
             channel= self.get_display_channel()
+
+            if channel == False:
+                return
 
             if label_choose_type == 1:
                 self.inst.write(f':DISPlay:BOOKmark:DELete:ALL')
@@ -317,7 +382,6 @@ def main_window(scope_ip):
                     self.inst.write(f':DISPlay:BOOKmark{channel}:DELete')
 
                 else:
-                    display_dict= self.judge_chan()    
                     try:
                         is_meas_area= self.inst.query(':MEASure:NAME? MEAS1') 
                         time.sleep(0.05)
@@ -342,9 +406,16 @@ def main_window(scope_ip):
                     self.inst.write(f':DISPlay:BOOKmark{channel}:YPOSition {2+interval*count}E-02')
                     time.sleep(0.05)
 
+        def delete_label(self):
+            self.inst.write(f':DISPlay:LABel OFF')
+            time.sleep(0.05)
+
         def delete_bookmark(self, choose_type):
 
             channel= self.get_display_channel()
+
+            if channel == False:
+                return
 
             if choose_type == 1:
                 self.inst.write(f':DISPlay:LABel OFF')
@@ -393,8 +464,7 @@ def main_window(scope_ip):
                     self.inst.write(f':MARKer{2*c+2}:COLor "{color_list[c]}"')
                     time.sleep(0.05)
                     c+=1
-                    
-        
+                         
         def delete_marker(self):
             tuple_marker = (boolvar_marker_1, boolvar_marker_2, boolvar_marker_3, boolvar_marker_4, boolvar_marker_5, boolvar_marker_6, 
                             # boolvar_marker_7, boolvar_marker_8, boolvar_marker_9, boolvar_marker_10, boolvar_marker_11, boolvar_marker_12, 
@@ -405,21 +475,6 @@ def main_window(scope_ip):
                     self.inst.write(f':MARKer:MEASurement:MEASurement MEASurement{i+1},OFF')
                     time.sleep(0.05)
 
-        def add_label(self, label):
-            channel= self.get_display_channel()
-
-            if label == '':
-                self.inst.write(f':DISPlay:LABel OFF')
-                time.sleep(0.05)
-            else:
-                self.inst.write(f':DISPlay:LABel ON')
-                time.sleep(0.05)
-                self.inst.write(f':CHANnel{channel}:LABel "{label}"')
-                time.sleep(0.05)
-
-        def delete_label(self):
-            self.inst.write(f':DISPlay:LABel OFF')
-            time.sleep(0.05)
 
         ### Save Related ###
         def load_setup(self, folder, setup_name, label_choose_type, file_path_choice):
@@ -464,9 +519,17 @@ def main_window(scope_ip):
                     messagebox.showinfo("Warning", f'檔案未儲存')
                     return     
             
-            f_img = open(f"{pc_folder}/{file_name}.png", "wb")
+            temp_img_name= ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+
+            temp_folder= fr'{os.path.dirname(__file__)}/Temp'
+            if not os.path.exists(temp_folder):
+                os.mkdir(temp_folder) 
+                
+            f_img = open(f"{temp_folder}/{temp_img_name}.png", "wb")
             f_img.write(bytearray(screen_data))
             f_img.close()
+
+            rgba_to_rgb_composite(f"{temp_folder}/{temp_img_name}.png", f"{pc_folder}/{file_name}.png", background=(0,0,0))
 
         def save_setup_file_scope(self, folder, current_file_name, path_choice, file_type_choice):
             # 清空狀態
@@ -526,6 +589,10 @@ def main_window(scope_ip):
 
             if file_type_choice == 1:
                 channel= self.get_display_channel()
+
+                # if channel == False:
+                #     return
+
                 # 使用正則表達式來匹配所有 .bin 檔案名稱
                 files = re.findall(r'\b[\w-]+\.(?:bin)\b', folder_content)
                 ext= 'bin'
@@ -553,17 +620,6 @@ def main_window(scope_ip):
             self.inst.write(command)
             time.sleep(0.05)
 
-        ### Display Related ###
-        def judge_chan(self):
-            display_dict= {'CHANnel': []}
-            for i in range(1, 5):
-                chan_res= self.inst.query(f':CHANnel{i}:DISPlay?')
-                time.sleep(0.05)
-
-                if chan_res == '1\n':
-                    display_dict['CHANnel'].append(i)
-
-            return display_dict
 
         ### Result Related ###
         def get_results(self):
@@ -718,6 +774,7 @@ def main_window(scope_ip):
             text_result2_6.insert(tk.END, f"{result2[5]}")
             text_result2_6.config(state=tk.DISABLED)  # 設置為只讀狀態
 
+
         ### Unit Related ###
         def judge_time_unit(self, value, slew):
             pattern = r'([+-]?\d*\.?\d+)E([+-]?\d+)'
@@ -841,17 +898,13 @@ def main_window(scope_ip):
                 return f"{base} Hz"
 
 
-        def get_display_channel(self):
-            channel = self.inst.query(f':CHANnel<N>:DISPlay?').rstrip('\n')
-            time.sleep(0.1)
-            channel = channel.rstrip('\n')
-            channel = channel.lstrip('CHAN')
-            
-            return channel
-
+        ### Real-time eye ###
         def setup_real_time_eye(self, sampling_rate, acquire_points, frequency):
             
             channel= self.get_display_channel()
+
+            if channel == False:
+                return
 
             self.inst.write(f':AUToscale')
             time.sleep(0.05)
@@ -877,9 +930,14 @@ def main_window(scope_ip):
             self.inst.write(f':MEASure:CLOCk:METHod SOPLL,{frequency}')
             time.sleep(0.1)
 
+
+        ### mask test ###
         def setup_mask_test(self, mask_path, mask_name, ui_counts):
 
             channel= self.get_display_channel()
+
+            if channel == False:
+                return
 
             self.inst.write(f':MTESt:FOLDing ON,CHANnel{channel}')
             time.sleep(0.1)
@@ -922,9 +980,14 @@ def main_window(scope_ip):
             self.inst.write(f':MTESt1:ENABle OFF')
             time.sleep(0.1)
 
+
+        ### histogram test ###
         def setup_histogram(self, top_limit, bottom_limit, left_limit, right_limit):
 
             channel= self.get_display_channel()
+
+            if channel == False:
+                return
 
             self.inst.write(f':HISTogram:WINDow:DEFault')
             time.sleep(0.1)
@@ -948,6 +1011,8 @@ def main_window(scope_ip):
             self.inst.write(f':HISTogram:MODE OFF')
             time.sleep(0.1)
 
+
+        ### pcie clock test ###
         def setup_pcieclock_test(self, sampling_rate, time_required, is_low_pass_filter, voltage_scale):
 
             self.sampling_rate_acquire(rate= sampling_rate)
@@ -961,6 +1026,8 @@ def main_window(scope_ip):
             time.sleep(0.05)
 
             channel= self.get_display_channel()
+            if channel == False:
+                return
 
             self.inst.write(f':CHANnel{channel}:ISIM:BWLimit ON')
             time.sleep(0.05)
@@ -977,18 +1044,7 @@ def main_window(scope_ip):
             time.sleep(0.05)
 
 
-
-
-    def select1_change_label_text():
-        label_result_type_1.config(text= "Mean")
-        label_result_type_2.config(text= "--")
-
-    def select2_change_label_text():
-        label_result_type_1.config(text= "Min")
-        label_result_type_2.config(text= "Max")   
-
-
-
+     ### Close Window Related ###
     def close_window():
         if messagebox.askyesno('Message', 'Exit?'):
             config = configparser.ConfigParser()
@@ -997,7 +1053,7 @@ def main_window(scope_ip):
             
             # config.set('Real_Time_Eye_Wizard', 'RealTimeSourceChannel', str_channel.get())
             config.set('Real_Time_Eye_Wizard_Selected_Values', 'RealTimeFrequency', str_frequency.get())
-            config.set('Real_Time_Eye_Wizard', 'RealTimeSamplingRate', str_sampling_rate.get())
+            config.set('Real_Time_Eye_Wizard_Selected_Values', 'RealTimeSamplingRate', str_sampling_rate.get())
             config.set('Real_Time_Eye_Wizard', 'RealTimeMemoryDepth', str_memory_depth.get())
 
             config.set('Mask_Test', 'ScopeLocation', str(int_mask_location.get()))
@@ -1029,10 +1085,10 @@ def main_window(scope_ip):
             config.set('Real_Time_Setup_Files', 'LoadLabel', str(boolvar_load_label.get()))
 
             # config.set('PCIe_Clock_Config', 'PCIeClockChannel', str_pcieclock_channel.get())
-            config.set('PCIe_Clock_Config', 'PCIeClockSamplingRate', str_pcieclock_samplingrate.get())
+            config.set('PCIe_Clock_Config_Selected_Values', 'PCIeClockSamplingRate', str_pcieclock_samplingrate.get())
             # config.set('PCIe_Clock_Config', 'PCIeClockMemoryDepth', str_pcieclock_memory_depth.get())
-            config.set('PCIe_Clock_Config', 'PCIeClockVoltageScale', str_pcieclock_voltage_scale.get())
-            config.set('PCIe_Clock_Config', 'PCIeClockVoltageOffset', str_pcieclock_voltage_offset.get())
+            config.set('PCIe_Clock_Config_Selected_Values', 'PCIeClockVoltageScale', str_pcieclock_voltage_scale.get())
+            config.set('PCIe_Clock_Config_Selected_Values', 'PCIeClockVoltageOffset', str_pcieclock_voltage_offset.get())
             config.set('PCIe_Clock_Config', 'PCIeClockTimebaseScale', str_pcieclock_timebase_scale.get())
             config.set('PCIe_Clock_Config', 'IsLPF', str(boolvar_5G_LPF.get()))
 
@@ -1047,7 +1103,8 @@ def main_window(scope_ip):
             window.destroy()
             sys.exit()
 
-    
+
+    ### Comobobox and .ini Related ###
     def combo_ini():
         config_initial = configparser.ConfigParser()
         config_initial.optionxform = str
@@ -1129,6 +1186,8 @@ def main_window(scope_ip):
         with open(config_file, 'w') as configfile:
             config.write(configfile)
 
+
+    ### Waveform Color Realted ###
     def update_color(value):
         """根據數值改變文字顏色"""
         if value == 50:
@@ -1173,6 +1232,28 @@ def main_window(scope_ip):
         entry_wfm_intensity.insert(0, str(value))
         update_color(value)
         uxr.intensity_check(intensity_value= 50)
+
+
+    ### Change Label Text Related ###
+    def select1_change_label_text():
+        label_result_type_1.config(text= "Mean")
+        label_result_type_2.config(text= "--")
+
+    def select2_change_label_text():
+        label_result_type_1.config(text= "Min")
+        label_result_type_2.config(text= "Max")   
+
+    def rgba_to_rgb_composite(in_path, out_path, background=(0, 0, 0)):
+        img = Image.open(in_path)
+        # 確保有 alpha 通道用 RGBA
+        if img.mode != 'RGBA':
+            img = img.convert('RGBA')
+        # 建一個同尺寸的背景（含不透明 alpha）
+        bg = Image.new('RGBA', img.size, background + (255,))
+        # 將原圖疊在背景上，並去掉 alpha
+        composed = Image.alpha_composite(bg, img).convert('RGB')
+        composed.save(out_path, format='PNG')
+
 
     class ToolTip:
         def __init__(self, widget, text):
@@ -1986,7 +2067,7 @@ def main_window(scope_ip):
     cbheckbutton_5G_LPF.grid(row= 1, column= 0, padx= 5, pady= 2, sticky= 'w', columnspan= 3)
     # button_pcieclock_calculate.grid(row= 3, column= 3, padx= 5, pady= 2, sticky= 'w')
 
-    button_pcieclock_setup.grid(row= 1, column= 8, padx= 5, pady= 2, sticky= 'w')
+    button_pcieclock_setup.grid(row= 0, column= 8, padx= 5, pady= 2, sticky= 'w', rowspan= 2)
     button_pcieclock_voltage_scale_check.grid(row= 1, column= 4, padx= 5, pady= 2, sticky= 'w', columnspan= 2)
     button_pcieclock_voltage_offset_check.grid(row= 1, column= 6, padx= 5, pady= 2, sticky= 'w', columnspan= 2)
 
